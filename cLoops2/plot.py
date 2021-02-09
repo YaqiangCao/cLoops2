@@ -1150,45 +1150,27 @@ def plotPETsArches(
         bw = pyBigWig.open(bw)
         ys = bw.values(chrom[0], start, end)
         ys = np.nan_to_num(ys)
-        if len(ys) > 1000:
-            ys = getBinMean(ys, 1000)
-        xs = np.arange(len(ys))
-        ax.plot(xs, ys, color=colors[bwcs[i]], label=name, linewidth=0)
-        ax.fill_between(np.arange(len(ys)),
-                        0,
-                        ys,
-                        color=colors[bwcs[i]],
-                        alpha=0.8)
-        ax.set_xticklabels([])
-        ax.set_xlim([np.min(xs), np.max(xs)])
-        #set y-axis lim
-        if bwvs[i][0] is not None and bwvs[i][1] is not None:
-            ax.set_ylim(bwvs[i][0], bwvs[i][1])
-            ax.set_yticks([bwvs[i][0], bwvs[i][1]])
-            ax.set_yticklabels([str(bwvs[i][0]), str(bwvs[i][1])])
-        else:
-            ax.set_yticks([np.min(ys), np.max(ys)])
-            ax.set_yticklabels([str(np.min(ys)), str(np.max(ys))])
-        ax.tick_params(axis='both', which='major', labelsize=4)
-        ax.legend(fontsize=6, fancybox=False, frameon=False)
-
+        plotCoverage(ax,
+                     ys,
+                     colori=bwcs[i],
+                     label=name,
+                     vmin=bwvs[i][0],
+                     vmax=bwvs[i][1])
+        
     #plot 1D signal
     if oneD:
         axi += 1
         ax = fig.add_subplot(gs[axi])
-        if len(sig) > 1000:
-            sig = getBinMean(sig, 1000)
-        xs = np.arange(len(sig))
-        ax.plot(xs, sig, color=colors[3], label="1D signal")
-        ax.fill_between(xs, 0, sig, color=colors[3], alpha=0.5)
-        ax.tick_params(axis='both', which='major', labelsize=4)
-        ax.set_xticklabels([])
-        ax.set_xlim([np.min(xs), np.max(xs)])
         if oneDv != "":
             oneDv = list(map(float, oneDv.split(",")))
-            ax.set_ylim(oneDv[0], oneDv[1])
-        ax.set_ylabel("RPM", fontsize=6)
-        ax.legend(fontsize=6, fancybox=False, frameon=False)
+        else:
+            oneDv = [None, None]
+        plotCoverage(ax,
+                     sig,
+                     colori=3,
+                     label="1D signal",
+                     vmin=oneDv[0],
+                     vmax=oneDv[1])
 
     #plot loops as arches
     nchrom = "-".join(chrom)
