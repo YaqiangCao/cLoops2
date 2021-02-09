@@ -3631,7 +3631,6 @@ def main():
                 return
 
         if cliParser.fixy != "":
-            print("test")
             if not os.path.isfile(cliParser.fixy):
                 logger.info("ERROR! -f assigned %s but not exists. Return."%cliParser.fixy)
                 return
