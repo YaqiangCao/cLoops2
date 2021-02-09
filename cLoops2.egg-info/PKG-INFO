@@ -61,8 +61,6 @@ Description: ## cLoops2: full stack analysis tool for enriched chromatin interac
         ------
         ## Basic Usage and Quick Guide
         ### Example data background introduction 
-        ## Basic Usage and Quick Guide
-        ### Example data background introduction 
         Example data for testing is available at [cLoops2/example/data](https://github.com/YaqiangCao/cLoops2/blob/master/example/data). The BEDPE files were from Hi-Trac experiments mapped to hg38 for chromosome 21 in GM12878 and K562 cell lines, two biological replicates for each cell line. Only intra-chromosomal PETs were kept. Raw FASTQ reads were processed by [tracPre2.py](https://github.com/YaqiangCao/cLoops2/blob/master/scripts/tracPre2.py).       
         
         For other kinds of 3D genomic interaction data such as ChIA-PET, Hi-C, and HiChIP, cLoops2 can also start with provided BEDPE files.     
