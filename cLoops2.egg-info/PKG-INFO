@@ -1,11 +1,12 @@
-Metadata-Version: 1.1
+Metadata-Version: 1.2
 Name: cLoops2
 Version: 1.0.0
 Summary: Loop-calling and peak-calling for sequencing-based interaction data, including related analysis utilities
 Home-page: https://github.com/YaqiangCao/cLoops2
-Author: ['Yaqiang Cao']
-Author-email: ['caoyaqiang0410@gmail.com']
+Author: Yaqiang Cao
+Author-email: caoyaqiang0410@gmail.com
 License: UNKNOWN
+Project-URL: Source, https://github.com/YaqiangCao/cLoops2
 Description: ## cLoops2: full stack analysis tool for enriched chromatin interaction data 
         <p align="center">
         <img align="center" src="https://github.com/YaqiangCao/cLoops2/blob/master/pngs/FlowChart.png">
@@ -1925,8 +1926,10 @@ Description: ## cLoops2: full stack analysis tool for enriched chromatin interac
         
         
         
+Keywords: peak-calling loop-calling Hi-Trac interaction visualization
 Platform: UNKNOWN
 Classifier: Environment :: Console
 Classifier: Operating System :: MacOS :: MacOS X
 Classifier: Operating System :: POSIX
 Classifier: Topic :: Scientific/Engineering :: Bio-Informatics
+Requires-Python: >=3
