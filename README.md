@@ -11,7 +11,7 @@ cLoops2 is an extension of our previous work, [cLoops](https://github.com/Yaqian
 
 cLoops2 is designed with respect reference to [bedtools](https://bedtools.readthedocs.io/en/latest/) and [Samtools](http://www.htslib.org/) for command-line style programming. If you have experience with them, you will find cLoops2 easy and efficient to use and combine commands, integrate as steps in your processing pipeline. 
 
-Please refer to our [Hi-Trac method paper]() for what cLoops2 can do and show in a fancy way. 
+Please refer to our [Hi-Trac method manuscript]() or [cLoops2 manuscript]() for what cLoops2 can do and show. 
 
 If you use cLoops2 in your research (the idea, the algorithm, the analysis scripts or the supplemental data), please give us a star on the GitHub repo page and cite our paper as follows:    
 
