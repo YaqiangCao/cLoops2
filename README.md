@@ -1,14 +1,6 @@
-|Stars| |PyPI| |PyPIDownloadsTotal| 
-
-.. |Stars| image:: https://img.shields.io/github/stars/YaqiangCao/cLoops2?logo=GitHub&color=yellow
-   :target: https://github.com/YaqiangCao/cLoops2/stargazers
-.. |PyPI| image:: https://img.shields.io/pypi/v/cLoops2.svg
-   :target: https://pypi.org/project/cLoops2
-.. |PyPIDownloadsTotal| image:: https://pepy.tech/badge/cLoops2
-    :target: https://pepy.tech/project/cLoops2
-
-[](image:: https://img.shields.io/github/stars/YaqiangCao/cLoops2?logo=GitHub&color=yellow)
-[![Downloads](https://pepy.tech/badge/macs2)](https://pepy.tech/project/cLoops2)
+[![Stars]]
+[![PyPI](https://img.shields.io/pypi/v/cLoops2.svg)](https://pepy.tech/project/cLoops2)
+[![PyPI Downloads Total](https://pepy.tech/badge/cLoops2)](https://pepy.tech/project/cLoops2)
 
 ## cLoops2: full stack analysis tool for enriched chromatin interaction data 
 <p align="center">
