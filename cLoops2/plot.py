@@ -682,6 +682,7 @@ def plotMatHeatmap(
         #set y-axis lim
         if bwvs[i][0] is not None and bwvs[i][1] is not None:
             ax.set_ylim( bwvs[i][0], bwvs[i][1] )
+            ax.set_yticks([ bwvs[i][0],bwvs[i][1] ])
             ax.set_yticklabels([str(bwvs[i][0]),str(bwvs[i][1])])
         else:
             ax.set_yticks([np.min(ys),np.max(ys)])
@@ -705,6 +706,11 @@ def plotMatHeatmap(
         if oneDv != "":
             oneDv = list(map(float,oneDv.split(",")))
             ax.set_ylim(oneDv[0],oneDv[1])
+            ax.set_yticks([oneDv[0],oneDv[1]])
+            ax.set_yticklabels([oneDv[0],oneDv[1]])
+        else:
+            ax.set_yticks([np.min(ys),np.max(ys)])
+            ax.set_yticklabels([str(np.min(ys)),str(np.max(ys))])
         ax.legend(fontsize=6, fancybox=False, frameon=False)
 
     #plot eigenvector
@@ -1100,6 +1106,7 @@ def plotPETsArches(
         #set y-axis lim
         if bwvs[i][0] is not None and bwvs[i][1] is not None:
             ax.set_ylim( bwvs[i][0], bwvs[i][1] )
+            ax.set_yticks([ bwvs[i][0],bwvs[i][1] ])
             ax.set_yticklabels([str(bwvs[i][0]),str(bwvs[i][1])])
         else:
             ax.set_yticks([np.min(ys),np.max(ys)])
@@ -1373,6 +1380,7 @@ def plotProfiles(
         #set y-axis lim
         if bwvs[i][0] is not None and bwvs[i][1] is not None:
             ax.set_ylim( bwvs[i][0], bwvs[i][1] )
+            ax.set_yticks([ bwvs[i][0],bwvs[i][1] ])
             ax.set_yticklabels([str(bwvs[i][0]),str(bwvs[i][1])])
         else:
             ax.set_yticks([np.min(ys),np.max(ys)])
