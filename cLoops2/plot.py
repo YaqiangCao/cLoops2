@@ -1430,31 +1430,18 @@ def plotProfiles(
         bw = pyBigWig.open(bw)
         ys = bw.values(chrom, start, end)
         ys = np.nan_to_num(ys)
-        if len(ys) > 1000:
-            ys = getBinMean(ys, 1000)
-        xs = np.arange(len(ys))
-        ax.plot(xs, ys, color=colors[bwcs[i]], label=name, linewidth=0)
-        ax.fill_between(np.arange(len(ys)),
-                        0,
-                        ys,
-                        color=colors[bwcs[i]],
-                        alpha=0.8)
-        ax.set_xticklabels([])
-        ax.set_xlim([np.min(xs), np.max(xs)])
-        #set y-axis lim
-        if bwvs[i][0] is not None and bwvs[i][1] is not None:
-            ax.set_ylim(bwvs[i][0], bwvs[i][1])
-            ax.set_yticks([bwvs[i][0], bwvs[i][1]])
-            ax.set_yticklabels([str(bwvs[i][0]), str(bwvs[i][1])])
-        else:
-            ax.set_yticks([np.min(ys), np.max(ys)])
-            ax.set_yticklabels([str(np.min(ys)), str(np.max(ys))])
+        ax = plotCoverage(ax,
+                     ys,
+                     colori=bwcs[i],
+                     label=name,
+                     vmin=bwvs[i][0],
+                     vmax=bwvs[i][1])
         if i == 0:
-            sns.despine(ax=ax, bottom=True, right=False, left=False, top=False)
+            ax = sns.despine(ax=ax, bottom=True, right=False, left=False, top=False)
         elif i == len(bws) - 1:
-            sns.despine(ax=ax, bottom=False, right=False, left=False, top=True)
+            ax = sns.despine(ax=ax, bottom=False, right=False, left=False, top=True)
         else:
-            sns.despine(ax=ax, bottom=True, right=False, left=False, top=True)
+            ax = sns.despine(ax=ax, bottom=True, right=False, left=False, top=True)
         ax.tick_params(axis='both', which='major', labelsize=4)
         ax.legend(fontsize=6, fancybox=False, frameon=False)
 
