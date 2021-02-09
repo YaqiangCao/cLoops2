@@ -1,17 +1,13 @@
 Metadata-Version: 2.1
 Name: cLoops2
 Version: 1.0.1
-Summary: Loop-calling and peak-calling for sequencing-based interaction data, including related analysis utilities
+Summary: Loop-calling and peak-calling for sequencing-based interaction data, including related analysis utilities.
 Home-page: https://github.com/YaqiangCao/cLoops2
 Author: Yaqiang Cao
 Author-email: caoyaqiang0410@gmail.com
 License: UNKNOWN
 Project-URL: Source, https://github.com/YaqiangCao/cLoops2
 Description: ## cLoops2: full stack analysis tool for enriched chromatin interaction data 
-        <p align="center">
-        <img align="center" src="https://github.com/YaqiangCao/cLoops2/blob/master/pngs/FlowChart.png">
-        </p>   
-        
         
         -------
         -------
@@ -130,17 +126,6 @@ Description: ## cLoops2: full stack analysis tool for enriched chromatin interac
         --------
         ## cLoops2 updates
         
-        
-        ```
-                         _                            _____           _                            _____ 
-                        | |                          / __  \         | |                          / __  \   
-                     ___| |     ___   ___  _ __  ___ `' / /'      ___| |     ___   ___  _ __  ___ `' / /'
-                    / __| |    / _ \ / _ \| '_ \/ __|  / /       / __| |    / _ \ / _ \| '_ \/ __|  / /  
-                   | (__| |___| (_) | (_) | |_) \__ \./ /___    | (__| |___| (_) | (_) | |_) \__ \./ /___
-                    \___\_____/\___/ \___/| .__/|___/\_____/     \___\_____/\___/ \___/| .__/|___/\_____/
-                                          | |                                          | |           
-                                          |_|                                          |_| 
-        ```
         
 Keywords: peak-calling loop-calling Hi-Trac interaction visualization
 Platform: UNKNOWN

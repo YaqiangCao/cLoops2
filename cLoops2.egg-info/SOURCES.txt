@@ -3,7 +3,6 @@ README.md
 cLoops2.log
 cLoops2_env.yaml
 cLoops2_pip_readme.md
-cLoops2_pip_readme.rst
 setup.py
 cLoops2/__init__.py
 cLoops2/agg.py
@@ -35,6 +34,12 @@ cLoops2/quant.py
 cLoops2/settings.py
 cLoops2/stat.py
 cLoops2/utils.py
+cLoops2.egg-info/PKG-INFO
+cLoops2.egg-info/SOURCES.txt
+cLoops2.egg-info/dependency_links.txt
+cLoops2.egg-info/entry_points.txt
+cLoops2.egg-info/requires.txt
+cLoops2.egg-info/top_level.txt
 cLoops2/__pycache__/__init__.cpython-35.pyc
 cLoops2/__pycache__/__init__.cpython-36.pyc
 cLoops2/__pycache__/__init__.cpython-37.pyc

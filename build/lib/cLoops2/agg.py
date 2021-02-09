@@ -307,7 +307,7 @@ def getBwSig(bw, loops, bins=100, ext=10, skipZeros=False):
         try:
             sx = bw.values(loop.chromX, int(startx), int(endx))
             sx = np.nan_to_num(sx)
-            sx = getBinMean(sx,bins)
+            sx = getBinMean(sx, bins)
             sy = bw.values(loop.chromY, int(starty), int(endy))
             sy = np.nan_to_num(sy)
             sy = getBinMean(sy, bins)
@@ -530,18 +530,19 @@ def aggLoops(predir,
 
 
 ### aggregated viewpoints releated functions
-def getAViewPoints(key,
-                   fixy,
-                   viewPoints,
-                   upExt=100000,
-                   downExt=100000,
-                   bs=1000,
-                   cut=0,
-                   mcut=-1,
-                   skipZeros=False,
-                   oneD=False,
-                   oneBins=200,
-                   ):
+def getAViewPoints(
+        key,
+        fixy,
+        viewPoints,
+        upExt=100000,
+        downExt=100000,
+        bs=1000,
+        cut=0,
+        mcut=-1,
+        skipZeros=False,
+        oneD=False,
+        oneBins=200,
+):
     """
     Get the interaction scores from the view points. 
     """
@@ -559,36 +560,34 @@ def getAViewPoints(key,
     mats = []
     vps = []
     for vp in tqdm(viewPoints):
-        center = (vp[1]+vp[2])/2
-        start = max(0, center-upExt)
+        center = (vp[1] + vp[2]) / 2
+        start = max(0, center - upExt)
         if start == 0:
             continue
-        end = center+downExt
+        end = center + downExt
         rs = xy.queryPeakBoth(start, end)
-        nmat = mat[list(rs),]
-        nmat = getObsMat( nmat, start,end,bs)
-        nmat = nmat[:-1,:-1]
+        nmat = mat[list(rs), ]
+        nmat = getObsMat(nmat, start, end, bs)
+        nmat = nmat[:-1, :-1]
         if skipZeros and np.sum(nmat) == 0:
             continue
-        mats.append( nmat )
-        #prepare for 1d profiles 
-        vps.append( [ vp[0],start,end])
+        mats.append(nmat)
+        #prepare for 1d profiles
+        vps.append([vp[0], start, end])
     mats = np.array(mats)
     if oneD:
-        ss = get1DSigMat( xy, vps, bins=oneBins)
+        ss = get1DSigMat(xy, vps, bins=oneBins)
     else:
         ss = None
     return mats, ss
 
 
-
-def getBwSigV( bw, 
-                viewPoints, 
-                upExt=100000, 
-                downExt=100000, 
-                skipZeros=False, 
-                bins=200
-            ):
+def getBwSigV(bw,
+              viewPoints,
+              upExt=100000,
+              downExt=100000,
+              skipZeros=False,
+              bins=200):
     """
     Get the 1D sig for bigwig around view points.
     """
@@ -598,11 +597,11 @@ def getBwSigV( bw,
     ys = np.zeros(bins)
     c = 0
     for vp in tqdm(viewPoints):
-        center = int( (vp[1]+vp[2])/2)
-        start = max(0, center-upExt)
+        center = int((vp[1] + vp[2]) / 2)
+        start = max(0, center - upExt)
         if start == 0:
             continue
-        end = center+downExt
+        end = center + downExt
         try:
             s = np.array(bw.values(vp[0], start, end))
         except:
@@ -620,52 +619,52 @@ def getBwSigV( bw,
     return name, ys
 
 
-
-def plotAViewPoints( mat, 
-                     fout,
-                     upExt,
-                     downExt,
-                     bs,
-                     ss=None, 
-                     bwSigs=None,
-                     bins=200,
-                     norm=False,
-                     ):
+def plotAViewPoints(
+        mat,
+        fout,
+        upExt,
+        downExt,
+        bs,
+        ss=None,
+        bwSigs=None,
+        bins=200,
+        norm=False,
+):
     """
     bwSigs: {name:signal array}
     """
     n = mat.shape[0]
     #take care of colormap
-    vmin = None 
+    vmin = None
     vmax = None
     center = None
 
     #get the enrichment score
-    p = int(upExt/bs)
+    p = int(upExt / bs)
     es = []
-    for i in range( mat.shape[0] ):
+    for i in range(mat.shape[0]):
         nmat = mat[i]
         ts = []
-        for j in range( nmat.shape[0] ):
-            ts.append( nmat[:j,j].sum() + nmat[j,j:].sum() )
-        if np.sum( ts ) == 0:
+        for j in range(nmat.shape[0]):
+            ts.append(nmat[:j, j].sum() + nmat[j, j:].sum())
+        if np.sum(ts) == 0:
             continue
-        es.append( ts[p] / np.mean( ts ) )
- 
+        es.append(ts[p] / np.mean(ts))
+
     mat = np.log2(mat + 1)
     mat = np.mean(mat, axis=0)
     if norm:
         cmap = cmaps["cool"]
-        mat = mat/np.mean( mat )
+        mat = mat / np.mean(mat)
         mat = np.log2(mat)
         center = 0
         label = "normlized by mean"
     else:
-        mat = np.log2(mat+1)
+        mat = np.log2(mat + 1)
         cmap = cmaps["red"]
         vmin = 0
         label = "log2(PETs+1)"
-    
+
     #1D signal
     if ss is not None:
         ss = np.mean(ss, axis=0)
@@ -691,7 +690,7 @@ def plotAViewPoints( mat,
         fig = pylab.figure(figsize=(2, 2.5))  #the extra 1, 0.5 for 1D signal,
         hr = [2.4, 0.1]
         gs = mpl.gridspec.GridSpec(2, 1, height_ratios=hr)
-    fig.suptitle(title,fontsize=8)
+    fig.suptitle(title, fontsize=8)
 
     xs = list(range(bins))
 
@@ -738,9 +737,15 @@ def plotAViewPoints( mat,
                     'orientation': 'horizontal',
                     "shrink": 0.2,
                 })
-    ax.text( ax.get_xlim()[0], ax.get_ylim()[1]*1.2, "-%.2f kb"%(upExt/1000),fontsize=5)
-    ax.text( ax.get_xlim()[1]*0.8, ax.get_ylim()[1]*1.2, "%.2f kb"%(downExt/1000),fontsize=5)
-    ax.text( p*0.8, ax.get_ylim()[1]*1.2, "view points",fontsize=5)
+    ax.text(ax.get_xlim()[0],
+            ax.get_ylim()[1] * 1.2,
+            "-%.2f kb" % (upExt / 1000),
+            fontsize=5)
+    ax.text(ax.get_xlim()[1] * 0.8,
+            ax.get_ylim()[1] * 1.2,
+            "%.2f kb" % (downExt / 1000),
+            fontsize=5)
+    ax.text(p * 0.8, ax.get_ylim()[1] * 1.2, "view points", fontsize=5)
     cax.tick_params(labelsize=4)
     ax.axvline(x=ax.get_xlim()[0], color="k", linewidth=2)
     ax.axvline(x=ax.get_xlim()[1], color="k", linewidth=2)
@@ -749,23 +754,23 @@ def plotAViewPoints( mat,
     pylab.savefig("%s_aggViewPoints.pdf" % fout)
 
 
-
-def aggViewPoints(predir,
-                  viewPointF,
-                  output,
-                  logger,
-                  bws="",
-                  upExt=100000,
-                  downExt=100000,
-                  bs=5000,
-                  cut=0,
-                  mcut=-1,
-                  cpu=1,
-                  skipZeros=False,
-                  oneD=False,
-                  oneBins=500,
-                  norm=False,
-                  ):
+def aggViewPoints(
+        predir,
+        viewPointF,
+        output,
+        logger,
+        bws="",
+        upExt=100000,
+        downExt=100000,
+        bs=5000,
+        cut=0,
+        mcut=-1,
+        cpu=1,
+        skipZeros=False,
+        oneD=False,
+        oneBins=500,
+        norm=False,
+):
     """
     Aggregated view points analysis. 
     """
@@ -807,12 +812,13 @@ def aggViewPoints(predir,
                       oneBins=oneBins,
                   ) for key in keys)
     #re-complie results
-    #matrix 
+    #matrix
     mat = np.concatenate([d[0] for d in ds if d[0] is not None], axis=0)
     np.savez(output + "_aggViewPoints.npz", mat)
-    logger.info("%s raw interaction contact matrix saved to %s_aggViewPoints.npz" %
-                (mat.shape[0], output))
-    
+    logger.info(
+        "%s raw interaction contact matrix saved to %s_aggViewPoints.npz" %
+        (mat.shape[0], output))
+
     #1D signal
     if oneD:
         ss = pd.concat([d[1] for d in ds if d[1] is not None], axis=0)
@@ -833,34 +839,41 @@ def aggViewPoints(predir,
         logger.info("Getting the 1D bigWig signals.")
         bwSigs = {}
         for bw in bws:
-            bwName, bwSig = getBwSigV(bw,
-                                      vps,
-                                      upExt=upExt,
-                                      downExt=downExt,
-                                      skipZeros=skipZeros,
-                                      bins=oneBins,
-                                      )
+            bwName, bwSig = getBwSigV(
+                bw,
+                vps,
+                upExt=upExt,
+                downExt=downExt,
+                skipZeros=skipZeros,
+                bins=oneBins,
+            )
             bwSigs[bwName] = bwSig
     else:
         bwSigs = None
 
     #plot the data
-    plotAViewPoints(mat, output, upExt, downExt, bs, ss, bwSigs, bins=oneBins, norm=norm)
-
+    plotAViewPoints(mat,
+                    output,
+                    upExt,
+                    downExt,
+                    bs,
+                    ss,
+                    bwSigs,
+                    bins=oneBins,
+                    norm=norm)
 
 
 ### aggregated two anchors releated functions
 def getATwoAnchors(key,
-                fixy,
-                loops,
-                ext=0.25,
-                bs=100,
-                cut=0,
-                mcut=-1,
-                skipZeros=False,
-                oneBins=200,
-                oneD=False
-            ):
+                   fixy,
+                   loops,
+                   ext=0.25,
+                   bs=100,
+                   cut=0,
+                   mcut=-1,
+                   skipZeros=False,
+                   oneBins=200,
+                   oneD=False):
     """
     Get the contact matrix for target regions.
     """
@@ -878,9 +891,9 @@ def getATwoAnchors(key,
     nloops = []
     cabs = []
     for loop in tqdm(loops):
-        start = min( loop.x_start, loop.y_start)
-        end = max( loop.x_end, loop.y_end)
-        size = end - start 
+        start = min(loop.x_start, loop.y_start)
+        end = max(loop.x_end, loop.y_end)
+        size = end - start
         start = start - ext * size
         end = end + ext * size
         if start < 0:
@@ -899,10 +912,12 @@ def getATwoAnchors(key,
                 mat[i][j] = nrab
         if skipZeros and np.sum(mat) == 0:
             continue
-        ca,cb,cab = xy.queryLoop(loop.x_start,loop.x_end,loop.y_start,loop.y_end)
-        cab = float(len(cab)) / (loop.x_end-loop.x_start+loop.y_end-loop.y_start)
-        cabs.append( cab )
-        nloops.append( loop)
+        ca, cb, cab = xy.queryLoop(loop.x_start, loop.x_end, loop.y_start,
+                                   loop.y_end)
+        cab = float(
+            len(cab)) / (loop.x_end - loop.x_start + loop.y_end - loop.y_start)
+        cabs.append(cab)
+        nloops.append(loop)
         mats.append(mat)
         nrs.append([loop.chromX, int(start), int(end)])
     mats = np.array(mats)
@@ -916,16 +931,16 @@ def getATwoAnchors(key,
                 ss[i] = s
     else:
         ss = None
-    return mats, ss,cabs
+    return mats, ss, cabs
 
 
-
-def getBwSigT( bw, 
-                loops, 
-                ext=0.25,
-                skipZeros=False, 
-                bins=200,
-            ):
+def getBwSigT(
+        bw,
+        loops,
+        ext=0.25,
+        skipZeros=False,
+        bins=200,
+):
     """
     Get the 1D sig for bigwig around view points.
     """
@@ -935,13 +950,13 @@ def getBwSigT( bw,
     ys = np.zeros(bins)
     c = 0
     for loop in tqdm(loops):
-        start = min( loop.x_start, loop.y_start)
-        end = max( loop.x_end, loop.y_end)
-        size = end - start 
-        center = (start + end)/2
-        d = (end - start )* (1+ext*2)/2
-        start = int( center -d  )
-        end = int( center + d)
+        start = min(loop.x_start, loop.y_start)
+        end = max(loop.x_end, loop.y_end)
+        size = end - start
+        center = (start + end) / 2
+        d = (end - start) * (1 + ext * 2) / 2
+        start = int(center - d)
+        end = int(center + d)
         #start = int(start - ext * size)
         #end = int(end + ext * size)
         try:
@@ -963,8 +978,14 @@ def getBwSigT( bw,
     return name, ys
 
 
-
-def plotATwoAnchors(mat, cabs, fout, ss=None, bwSigs=None,vmin=None,vmax=None,bins=200):
+def plotATwoAnchors(mat,
+                    cabs,
+                    fout,
+                    ss=None,
+                    bwSigs=None,
+                    vmin=None,
+                    vmax=None,
+                    bins=200):
     """
     Plot the mean border heatmap.
     """
@@ -983,7 +1004,7 @@ def plotATwoAnchors(mat, cabs, fout, ss=None, bwSigs=None,vmin=None,vmax=None,bi
     center = None
     label = "log2(PETs+1)"
 
-    title = "%s loops; %.2f RPKM"%(len(cabs),np.mean(cabs))
+    title = "%s loops; %.2f RPKM" % (len(cabs), np.mean(cabs))
 
     #prepare fig
     if bwSigs is not None and ss is not None:
@@ -1005,7 +1026,7 @@ def plotATwoAnchors(mat, cabs, fout, ss=None, bwSigs=None,vmin=None,vmax=None,bi
         hr = [2.4, 0.1]
         gs = mpl.gridspec.GridSpec(2, 1, height_ratios=hr)
     #gs.update(hspace=0.1)
-    fig.suptitle(title,fontsize=8)
+    fig.suptitle(title, fontsize=8)
 
     xs = list(range(bins))
 
@@ -1061,24 +1082,23 @@ def plotATwoAnchors(mat, cabs, fout, ss=None, bwSigs=None,vmin=None,vmax=None,bi
     pylab.savefig("%s_aggTwoAnchors.pdf" % fout)
 
 
-
 def aggTwoAnchors(
-             predir,
-             loopf,
-             output,
-             logger,
-             bws="",
-             ext=0.25,
-             cut=0,
-             mcut=-1,
-             lcut=0,
-             cpu=1,
-             skipZeros=False,
-             norm=False,
-             oneD=False,
-             vmin=None,
-             vmax=None,
-             ):
+        predir,
+        loopf,
+        output,
+        logger,
+        bws="",
+        ext=0.25,
+        cut=0,
+        mcut=-1,
+        lcut=0,
+        cpu=1,
+        skipZeros=False,
+        norm=False,
+        oneD=False,
+        vmin=None,
+        vmax=None,
+):
     """
     Aggregated two anchors analysis.
     """
@@ -1098,23 +1118,25 @@ def aggTwoAnchors(
     meta = json.loads(open(metaf).read())
     keys = list(meta["data"]["cis"].keys())
     keys = list(set(keys).intersection(set(loops.keys())))
-    ds = Parallel(n_jobs=cpu, backend="multiprocessing")(delayed(getATwoAnchors)(
-        key,
-        meta["data"]["cis"][key]["ixy"],
-        loops[key],
-        ext=ext,
-        cut=cut,
-        mcut=mcut,
-        skipZeros=skipZeros,
-        oneD=oneD,
-    ) for key in keys)
+    ds = Parallel(n_jobs=cpu,
+                  backend="multiprocessing")(delayed(getATwoAnchors)(
+                      key,
+                      meta["data"]["cis"][key]["ixy"],
+                      loops[key],
+                      ext=ext,
+                      cut=cut,
+                      mcut=mcut,
+                      skipZeros=skipZeros,
+                      oneD=oneD,
+                  ) for key in keys)
 
     #matrix
     mat = np.concatenate([d[0] for d in ds if d[0] is not None], axis=0)
     np.savez(output + "_aggTwoAnchors.npz", mat)
-    logger.info("%s raw interaction contact matrix saved to %s_aggTwoAnchors.npz" %
-                (mat.shape[0], output))
-    
+    logger.info(
+        "%s raw interaction contact matrix saved to %s_aggTwoAnchors.npz" %
+        (mat.shape[0], output))
+
     #1D signal
     if oneD:
         ss = pd.concat([d[1] for d in ds if d[1] is not None], axis=0)
@@ -1128,7 +1150,7 @@ def aggTwoAnchors(
     else:
         ss = None
     #loop densities
-    cabs = np.concatenate( [d[2] for d in ds if d[2] is not None],axis=0)
+    cabs = np.concatenate([d[2] for d in ds if d[2] is not None], axis=0)
     total = meta["Unique PETs"]
     cabs = cabs / total * 10**9
 
@@ -1143,8 +1165,13 @@ def aggTwoAnchors(
             bwSigs[bwName] = bwSig
     else:
         bwSigs = None
-    plotATwoAnchors(mat, cabs, output, ss=ss, bwSigs=bwSigs,vmin=vmin,vmax=vmax)
-
+    plotATwoAnchors(mat,
+                    cabs,
+                    output,
+                    ss=ss,
+                    bwSigs=bwSigs,
+                    vmin=vmin,
+                    vmax=vmax)
 
 
 ### aggregated domains releated funcitons
@@ -1238,7 +1265,14 @@ def getADomains(key,
     return mats, ss, es
 
 
-def plotADomains(mat, fout, es, size, ss=None, bwSigs=None,vmin=None,vmax=None):
+def plotADomains(mat,
+                 fout,
+                 es,
+                 size,
+                 ss=None,
+                 bwSigs=None,
+                 vmin=None,
+                 vmax=None):
     """
     Plot the mean border heatmap.
     """
@@ -1265,7 +1299,7 @@ def plotADomains(mat, fout, es, size, ss=None, bwSigs=None,vmin=None,vmax=None):
     cmap = sns.light_palette("red", n_colors=9).as_hex()
     cmap[0] = "#FFFFFF"
     cmap = ListedColormap(cmap)
-    if vmin==None:
+    if vmin == None:
         vmin = 0
 
     title = "%s domains;ES:%.2f;median size:%.2fkb" % (n, es,
@@ -1447,4 +1481,4 @@ def aggDomains(predir,
         bwSigs = None
 
     #plot the aggregated domains
-    plotADomains(mat, output, es, size, ss, bwSigs,vmin,vmax)
+    plotADomains(mat, output, es, size, ss, bwSigs, vmin, vmax)

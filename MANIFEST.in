@@ -3,4 +3,3 @@ prune dist
 prune pngs
 prune backup
 prune build
-prune cLoops2.egg-info

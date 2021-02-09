@@ -25,8 +25,8 @@ setup(
     packages=find_packages(exclude=['tests', 'docs',"example"]),
     long_description=open('cLoops2_pip_readme.md').read(),
     long_description_content_type="text/markdown",
-    #setup_requires=["joblib", "numpy", "seaborn", "pandas", "scipy","scikit-learn","matplotlib","tqdm","pyBigWig"],
-    install_requires=["joblib", "numpy", "seaborn", "pandas", "scipy","scikit-learn","matplotlib","tqdm","pyBigWig"],
+    setup_requires=["joblib", "numpy", "seaborn", "pandas", "scipy","scikit-learn","matplotlib","tqdm","pyBigWig","networkx"],
+    install_requires=["joblib", "numpy", "seaborn", "pandas", "scipy","scikit-learn","matplotlib","tqdm","pyBigWig","networkx"],
     entry_points={
         'console_scripts': [
             'cLoops2=cLoops2.cLoops2:main',
