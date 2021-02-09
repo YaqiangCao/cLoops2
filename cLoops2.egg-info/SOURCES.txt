@@ -4,7 +4,6 @@ README.md
 cLoops2.log
 cLoops2_env.yaml
 setup.py
-cLoops2/.ano.py.swp
 cLoops2/__init__.py
 cLoops2/agg.py
 cLoops2/ano.py
@@ -99,6 +98,7 @@ cLoops2/__pycache__/utils.cpython-36.pyc
 cLoops2/__pycache__/utils.cpython-37.pyc
 data/hg19.chrom.sizes
 data/hg38.chrom.sizes
+dist/cLoops2-1.0.0.tar.gz
 scripts/getBedpeFBed.py
 scripts/getDI.py
 scripts/getFRiF.py

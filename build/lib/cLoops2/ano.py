@@ -11,7 +11,7 @@ Include cLoops2 loops-centric analysis module. Input should be the _loops.txt fi
 - [x] find HUBs through HITS algorithm
 
 2020-11-04: modified to first find overlapped TSS, if no or multiple, then find the closest one.
-2021-01-21: peaks annotation added.
+2021-01-21: peaks annotation going to be added.
 """
 
 #sys
