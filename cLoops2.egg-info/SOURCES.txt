@@ -34,11 +34,6 @@ cLoops2/quant.py
 cLoops2/settings.py
 cLoops2/stat.py
 cLoops2/utils.py
-cLoops2.egg-info/PKG-INFO
-cLoops2.egg-info/SOURCES.txt
-cLoops2.egg-info/dependency_links.txt
-cLoops2.egg-info/entry_points.txt
-cLoops2.egg-info/top_level.txt
 cLoops2/__pycache__/__init__.cpython-35.pyc
 cLoops2/__pycache__/__init__.cpython-36.pyc
 cLoops2/__pycache__/__init__.cpython-37.pyc
@@ -98,7 +93,6 @@ cLoops2/__pycache__/utils.cpython-36.pyc
 cLoops2/__pycache__/utils.cpython-37.pyc
 data/hg19.chrom.sizes
 data/hg38.chrom.sizes
-dist/cLoops2-1.0.0.tar.gz
 scripts/getBedpeFBed.py
 scripts/getDI.py
 scripts/getFRiF.py

@@ -114,6 +114,3 @@
 #convert data to matrix 
 #get the singal distribution
 #getSigDist.py -d test -o test -r 5 -plot -log
-
-
-

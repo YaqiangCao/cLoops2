@@ -1,4 +1,5 @@
 prune example
+prune dist
 prune pngs
 prune backup
 prune build
