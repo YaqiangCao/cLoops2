@@ -7,7 +7,8 @@
 .. |PyPIDownloadsTotal| image:: https://pepy.tech/badge/cLoops2
     :target: https://pepy.tech/project/cLoops2
 
-[![Downloads](https://pepy.tech/badge/macs2)](https://pepy.tech/project/macs2)
+[](image:: https://img.shields.io/github/stars/YaqiangCao/cLoops2?logo=GitHub&color=yellow)
+[![Downloads](https://pepy.tech/badge/macs2)](https://pepy.tech/project/cLoops2)
 
 ## cLoops2: full stack analysis tool for enriched chromatin interaction data 
 <p align="center">
