@@ -423,7 +423,40 @@ def getGenes(f,chrom,start,end):
         g.exons = stichExons( list(g.exons.values()) )
         ngs[n] = g
     return ngs
-    
+
+
+def plotCoverage(ax,ys,colori=1,label="",vmin=None,vmax=None, lencut=1000):
+    """
+    Plot 1D coverage data.
+    @param ax: matplotlib ax
+    @param ys: numpy.array, y-axis coverages
+    @param colori: int, color index
+    @param label: str, name/label for the data
+    @param vmin: float, y-axis vmin
+    @param vmax: float, y-axis vmax
+    @param lencut: int, if the vector of xs/ys is too long, short them by bin averages
+    @return ax: matplotlib ax
+    """
+    if len(ys) > lencut:
+        ys = getBinMean(ys, lencut)
+    xs = np.arange(len(ys))
+    ax.plot(xs, ys, color=colors[ colori ], label=label,linewidth=0)
+    ax.fill_between(np.arange(len(ys)), 0, ys, color=colors[ colori ], alpha=0.8)
+    ax.set_xticklabels([])
+    ax.set_xlim([np.min(xs), np.max(xs)])
+    #set y-axis lim
+    if vmin is not None and vmax is not None:
+        ax.set_ylim( [vmin,vmax] )
+        ax.set_yticks([ vmin, vmax*0.95 ])
+        ax.set_yticklabels([str(vmin),str(vmax)])
+    else:
+        ax.set_ylim([np.min(ys),np.max(ys)])
+        ax.set_yticks([np.min(ys),np.max(ys)*0.95])
+        ax.set_yticklabels([str(np.min(ys)),str(np.max(ys))])
+    ax.tick_params(axis='both', which='major', labelsize=4)
+    ax.legend(fontsize=6, fancybox=False, frameon=False)
+    return ax
+
 
 def plotMatHeatmap(
     f,
@@ -672,6 +705,7 @@ def plotMatHeatmap(
         bw = pyBigWig.open(bw)
         ys = bw.values(chrom[0], start, end)
         ys = np.nan_to_num(ys)
+        """
         if len(ys) > 1000:
             ys = getBinMean(ys, 1000)
         xs = np.arange(len(ys))
@@ -689,11 +723,14 @@ def plotMatHeatmap(
             ax.set_yticklabels([str(np.min(ys)),str(np.max(ys))])
         ax.tick_params(axis='both', which='major', labelsize=4)
         ax.legend(fontsize=6, fancybox=False, frameon=False)
+        """
+        plotCoverage(ax, ys, colori=bwcs[i],label=name,vmin=bwvs[i][0],vmax=bwvs[i][1])
 
     #plot 1D signal
     if oneD:
         axi += 1
         ax = fig.add_subplot(gs[axi])
+        """
         if len(sig) > 1000:
             sig = getBinMean(sig, 1000)
         xs = np.arange(len(sig))
@@ -712,6 +749,12 @@ def plotMatHeatmap(
             ax.set_yticks([np.min(ys),np.max(ys)])
             ax.set_yticklabels([str(np.min(ys)),str(np.max(ys))])
         ax.legend(fontsize=6, fancybox=False, frameon=False)
+        """
+        if oneDv != "":
+            oneDv = list(map(float,oneDv.split(",")))
+        else:
+            oneDv = [None,None]
+        plotCoverage(ax, sig, colori=3,label="1D signal",vmin=oneDv[0],vmax=oneDv[1])
 
     #plot eigenvector
     if eig:
