@@ -3,7 +3,6 @@ MANIFEST.in
 README.md
 cLoops2.log
 cLoops2_env.yaml
-pip_readme.md
 setup.py
 cLoops2/__init__.py
 cLoops2/agg.py

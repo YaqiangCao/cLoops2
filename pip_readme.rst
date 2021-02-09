@@ -22,6 +22,7 @@ Preprint bioRxiv: Yaqiang Cao et al. "Full-stack analysis for enriched 3D genomi
 ------
 ## cLoops2 Main Functions
 Run ***cLoops2*** or ***cLoops2 -h*** can show the main functions of cLoops2 with short descriptions and examples.     
+
 ```
 An enhanced, accurate and flexible peak/domain/loop-calling and analysis tool 
 for 3D genomic interaction data.
