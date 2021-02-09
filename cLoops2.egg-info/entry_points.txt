@@ -1,0 +1,3 @@
+[console_scripts]
+cLoops2 = cLoops2.cLoops2:main
+
