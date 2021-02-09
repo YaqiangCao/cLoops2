@@ -427,6 +427,80 @@ def getGenes(f, chrom, start, end):
     return ngs
 
 
+def plotGene(ax,n,g,start,end):
+    """
+    Plot one genes.
+    @param ax: maplotlib ax
+    @param n: str, gene name
+    @param g: cLoops2:ds:Gene object
+    @param start: int, start region for plotting
+    @param end: int, end region for plotting
+
+    """
+    ax.axis("off")
+    ax.set_xlim([start, end])
+    ax.set_ylim([0, 1])
+    #plot intron as line, exon as block
+    for i, exon in enumerate(g.exons):
+        c = "k"
+        if g.strand == "+" and i == 0:
+            #c = "green"
+            c = colors[1]
+        if g.strand == "-" and i == len(g.exons) - 1:
+            #c = "red"
+            c = colors[3]
+        p = patches.Rectangle((exon.start, 0.1),
+                              exon.end - exon.start,
+                              0.8,
+                              fill=True,
+                              color=c,
+                              alpha=1)
+        ax.add_patch(p)
+        if i > 0:
+            ax.plot([g.exons[i - 1].end, exon.start], [0.5, 0.5],
+                    color="gray",
+                    linewidth=0.5,
+                    linestyle="--")
+    #plot direction and name
+    if len(g.exons) > 1:
+        if g.strand == "+":
+            #c = "green"
+            c = colors[1]
+            ax.plot([g.exons[0].end, g.exons[1].start], [0.5, 0.5],
+                    color=c,
+                    linewidth=1,
+                    linestyle="-")
+            #ax.text(g.exons[0].start, 0.3, n, color=c, fontsize=5)
+            p = g.exons[0].start 
+            p = start +  (p - start)*0.95
+            ax.text(p, 0.15, n, color=c, fontsize=5)
+        else:
+            #c = "red"
+            c = colors[3]
+            ax.plot([g.exons[-2].end, g.exons[-1].start], [0.5, 0.5],
+                    color=c,
+                    linewidth=1,
+                    linestyle="-")
+            #ax.text(g.exons[-1].end, 0.3, n, color=c, fontsize=5)
+            p = g.exons[-1].end
+            p = start +  (p - start)*1.05
+            ax.text(p, 0.15, n, color=c, fontsize=5)
+    else:
+        if g.strand == "+":
+            c = colors[1]
+            #ax.text(g.exons[0].start, 0.3, n, color=c, fontsize=5)
+            p = g.exons[0].start 
+            p = start +  (p - start)*0.95
+            ax.text(p, 0.15, n, color=c, fontsize=5)
+        else:
+            c = colors[3]
+            #ax.text(g.exons[-1].end, 0.3, n, color=c, fontsize=5)
+            p = g.exons[-1].end
+            p = start +  (p - start)*1.05
+            ax.text(p, 0.15, n, color=c, fontsize=5)
+    return ax
+
+
 def plotCoverage(ax, ys, colori=1, label="", vmin=None, vmax=None,
                  lencut=1000):
     """
@@ -450,11 +524,14 @@ def plotCoverage(ax, ys, colori=1, label="", vmin=None, vmax=None,
     #set y-axis lim
     if vmin is not None and vmax is not None:
         ax.set_ylim([vmin, vmax])
-        ax.set_yticks([vmin, vmax * 0.95])
+        p = (vmax - vmin)*0.15
+        ax.set_yticks([vmin, vmax -p])
         ax.set_yticklabels([str(vmin), str(vmax)])
     else:
-        ax.set_ylim([np.min(ys), np.max(ys)])
-        ax.set_yticks([np.min(ys), np.max(ys) * 0.95])
+        vmin, vmax = np.min(ys),np.max(ys)
+        p = (vmax - vmin)*0.15
+        ax.set_yticks([vmin, vmax -p])
+        ax.set_yticklabels([str(vmin), str(vmax)])
         ax.set_yticklabels([str(np.min(ys)), str(np.max(ys))])
     ax.tick_params(axis='both', which='major', labelsize=4)
     ax.legend(fontsize=6, fancybox=False, frameon=False)
@@ -646,56 +723,8 @@ def plotMatHeatmap(
         for n, g in genes.items():
             axi += 1
             ax = fig.add_subplot(gs[axi])
-            ax.axis("off")
-            ax.set_xlim([start, end])
-            ax.set_ylim([0, 1])
-            #plot intron as line, exon as block
-            for i, exon in enumerate(g.exons):
-                c = "k"
-                if g.strand == "+" and i == 0:
-                    #c = "green"
-                    c = colors[1]
-                if g.strand == "-" and i == len(g.exons) - 1:
-                    #c = "red"
-                    c = colors[3]
-                p = patches.Rectangle((exon.start, 0.1),
-                                      exon.end - exon.start,
-                                      0.8,
-                                      fill=True,
-                                      color=c,
-                                      alpha=1)
-                ax.add_patch(p)
-                if i > 0:
-                    ax.plot([g.exons[i - 1].end, exon.start], [0.5, 0.5],
-                            color="gray",
-                            linewidth=0.5,
-                            linestyle="--")
-            #plot direction and name
-            if len(g.exons) > 1:
-                if g.strand == "+":
-                    #c = "green"
-                    c = colors[1]
-                    ax.plot([g.exons[0].end, g.exons[1].start], [0.5, 0.5],
-                            color=c,
-                            linewidth=1,
-                            linestyle="-")
-                    ax.text(g.exons[0].start, 0.5, n, color=c, fontsize=5)
-                else:
-                    #c = "red"
-                    c = colors[3]
-                    ax.plot([g.exons[-2].end, g.exons[-1].start], [0.5, 0.5],
-                            color=c,
-                            linewidth=1,
-                            linestyle="-")
-                    ax.text(g.exons[-1].end, 0.5, n, color=c, fontsize=5)
-            else:
-                if g.strand == "+":
-                    c = colors[1]
-                    ax.text(g.exons[0].start, 0.5, n, color=c, fontsize=5)
-                else:
-                    c = colors[3]
-                    ax.text(g.exons[-1].end, 0.5, n, color=c, fontsize=5)
-
+            plotGene( ax, n,g, start,end)
+            
     #plot bigWig
     #prepare y-axis limitations
     if bwvs == "":
@@ -1072,56 +1101,8 @@ def plotPETsArches(
         for n, g in genes.items():
             axi += 1
             ax = fig.add_subplot(gs[axi])
-            ax.axis("off")
-            ax.set_xlim([start, end])
-            ax.set_ylim([0, 1])
-            #plot intron as line, exon as block
-            for i, exon in enumerate(g.exons):
-                c = "k"
-                if g.strand == "+" and i == 0:
-                    #c = "green"
-                    c = colors[1]
-                if g.strand == "-" and i == len(g.exons) - 1:
-                    #c = "red"
-                    c = colors[3]
-                p = patches.Rectangle((exon.start, 0.1),
-                                      exon.end - exon.start,
-                                      0.8,
-                                      fill=True,
-                                      color=c,
-                                      alpha=1)
-                ax.add_patch(p)
-                if i > 0:
-                    ax.plot([g.exons[i - 1].end, exon.start], [0.5, 0.5],
-                            color="gray",
-                            linewidth=0.5,
-                            linestyle="--")
-            #plot direction and name
-            if len(g.exons) > 1:
-                if g.strand == "+":
-                    #c = "green"
-                    c = colors[1]
-                    ax.plot([g.exons[0].end, g.exons[1].start], [0.5, 0.5],
-                            color=c,
-                            linewidth=1,
-                            linestyle="-")
-                    ax.text(g.exons[0].start, 0.5, n, color=c, fontsize=5)
-                else:
-                    #c = "red"
-                    c = colors[3]
-                    ax.plot([g.exons[-2].end, g.exons[-1].start], [0.5, 0.5],
-                            color=c,
-                            linewidth=1,
-                            linestyle="-")
-                    ax.text(g.exons[-1].end, 0.5, n, color=c, fontsize=5)
-            else:
-                if g.strand == "+":
-                    c = colors[1]
-                    ax.text(g.exons[0].start, 0.5, n, color=c, fontsize=5)
-                else:
-                    c = colors[3]
-                    ax.text(g.exons[-1].end, 0.5, n, color=c, fontsize=5)
-
+            plotGene( ax, n,g, start,end)
+            
     #plot bigWig
     if bwvs == "":
         bwvs = []
@@ -1156,7 +1137,7 @@ def plotPETsArches(
                      label=name,
                      vmin=bwvs[i][0],
                      vmax=bwvs[i][1])
-        
+
     #plot 1D signal
     if oneD:
         axi += 1
@@ -1339,68 +1320,18 @@ def plotProfiles(
         left=0.1,
         right=0.9,
         wspace=0.0,
-        hspace=0.05,
+        hspace=0.1,
     )
     pylab.suptitle("%.2f kb,%s:%s-%s" %
                    (float(end - start) / 1000.0, chrom, start, end),
                    fontsize=8)
     axi = -1
-
     #plot gene
     if gtf != "":
         for n, g in genes.items():
             axi += 1
             ax = fig.add_subplot(gs[axi])
-            ax.axis("off")
-            ax.set_xlim([start, end])
-            ax.set_ylim([0, 1])
-            #plot intron as line, exon as block
-            for i, exon in enumerate(g.exons):
-                c = "k"
-                if g.strand == "+" and i == 0:
-                    #c = "green"
-                    c = colors[1]
-                if g.strand == "-" and i == len(g.exons) - 1:
-                    #c = "red"
-                    c = colors[3]
-                p = patches.Rectangle((exon.start, 0.1),
-                                      exon.end - exon.start,
-                                      0.8,
-                                      fill=True,
-                                      color=c,
-                                      alpha=1)
-                ax.add_patch(p)
-                if i > 0:
-                    ax.plot([g.exons[i - 1].end, exon.start], [0.5, 0.5],
-                            color="gray",
-                            linewidth=0.5,
-                            linestyle="--")
-            #plot direction and name
-            if len(g.exons) > 1:
-                if g.strand == "+":
-                    #c = "green"
-                    c = colors[1]
-                    ax.plot([g.exons[0].end, g.exons[1].start], [0.5, 0.5],
-                            color=c,
-                            linewidth=1,
-                            linestyle="-")
-                    ax.text(g.exons[0].start, 0.5, n, color=c, fontsize=5)
-                else:
-                    #c = "red"
-                    c = colors[3]
-                    ax.plot([g.exons[-2].end, g.exons[-1].start], [0.5, 0.5],
-                            color=c,
-                            linewidth=1,
-                            linestyle="-")
-                    ax.text(g.exons[-1].end, 0.5, n, color=c, fontsize=5)
-            else:
-                if g.strand == "+":
-                    c = colors[1]
-                    ax.text(g.exons[0].start, 0.5, n, color=c, fontsize=5)
-                else:
-                    c = colors[3]
-                    ax.text(g.exons[-1].end, 0.5, n, color=c, fontsize=5)
-
+            plotGene( ax, n,g, start,end)
     #plot bigWig
     #yaxis limitaitons
     if bwvs == "":
@@ -1431,19 +1362,17 @@ def plotProfiles(
         ys = bw.values(chrom, start, end)
         ys = np.nan_to_num(ys)
         ax = plotCoverage(ax,
-                     ys,
-                     colori=bwcs[i],
-                     label=name,
-                     vmin=bwvs[i][0],
-                     vmax=bwvs[i][1])
+                          ys,
+                          colori=bwcs[i],
+                          label=name,
+                          vmin=bwvs[i][0],
+                          vmax=bwvs[i][1])
         if i == 0:
-            ax = sns.despine(ax=ax, bottom=True, right=False, left=False, top=False)
+            sns.despine(ax=ax, bottom=True, right=False, left=False, top=False)
         elif i == len(bws) - 1:
-            ax = sns.despine(ax=ax, bottom=False, right=False, left=False, top=True)
+            sns.despine(ax=ax, bottom=False, right=False, left=False, top=True)
         else:
-            ax = sns.despine(ax=ax, bottom=True, right=False, left=False, top=True)
-        ax.tick_params(axis='both', which='major', labelsize=4)
-        ax.legend(fontsize=6, fancybox=False, frameon=False)
+            sns.despine(ax=ax, bottom=True, right=False, left=False, top=True)
 
     #plot loops as arches
     nchrom = chrom + "-" + chrom
