@@ -1,8 +1,4 @@
 ## cLoops2: full stack analysis tool for enriched chromatin interaction data 
-<p align="center">
-<img align="center" src="https://github.com/YaqiangCao/cLoops2/blob/master/pngs/FlowChart.png">
-</p>   
-
 
 -------
 -------
@@ -121,14 +117,3 @@ caoyaqiang0410@gmail.com or yaqiang.cao@nih.gov. Thank you.
 --------
 ## cLoops2 updates
 
-
-```
-                 _                            _____           _                            _____ 
-                | |                          / __  \         | |                          / __  \   
-             ___| |     ___   ___  _ __  ___ `' / /'      ___| |     ___   ___  _ __  ___ `' / /'
-            / __| |    / _ \ / _ \| '_ \/ __|  / /       / __| |    / _ \ / _ \| '_ \/ __|  / /  
-           | (__| |___| (_) | (_) | |_) \__ \./ /___    | (__| |___| (_) | (_) | |_) \__ \./ /___
-            \___\_____/\___/ \___/| .__/|___/\_____/     \___\_____/\___/ \___/| .__/|___/\_____/
-                                  | |                                          | |           
-                                  |_|                                          |_| 
-```
