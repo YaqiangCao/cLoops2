@@ -21,7 +21,7 @@ __author__ = "CAO Yaqiang"
 __date__ = ""
 __modified__ = ""
 __email__ = "caoyaqiang0410@gmail.com"
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 
 #sys library
 import warnings

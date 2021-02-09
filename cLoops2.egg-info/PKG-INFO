@@ -1,6 +1,6 @@
-Metadata-Version: 1.2
+Metadata-Version: 2.1
 Name: cLoops2
-Version: 1.0.0
+Version: 1.0.1
 Summary: Loop-calling and peak-calling for sequencing-based interaction data, including related analysis utilities
 Home-page: https://github.com/YaqiangCao/cLoops2
 Author: Yaqiang Cao
@@ -149,3 +149,4 @@ Classifier: Operating System :: MacOS :: MacOS X
 Classifier: Operating System :: POSIX
 Classifier: Topic :: Scientific/Engineering :: Bio-Informatics
 Requires-Python: >=3
+Description-Content-Type: text/markdown

@@ -23,7 +23,8 @@ setup(
                     'Source': 'https://github.com/YaqiangCao/cLoops2',
     },
     packages=find_packages(exclude=['tests', 'docs',"example"]),
-    long_description=open('pip_readme.rst').read(),
+    long_description=open('cLoops2_pip_readme.md').read(),
+    long_description_content_type="text/markdown",
     #setup_requires=["joblib", "numpy", "seaborn", "pandas", "scipy","scikit-learn","matplotlib","tqdm","pyBigWig"],
     install_requires=["joblib", "numpy", "seaborn", "pandas", "scipy","scikit-learn","matplotlib","tqdm","pyBigWig"],
     entry_points={
