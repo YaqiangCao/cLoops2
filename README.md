@@ -1,4 +1,5 @@
-[![PyPI](https://img.shields.io/pypi/v/cLoops2.svg)](https://pepy.tech/project/cLoops2)
+[![PyPI](https://img.shields.io/pypi/v/cLoops2.svg)](https://pepy.tech/project/cLoops2) 
+
 [![Downloads](https://pepy.tech/badge/cLoops2)](https://pepy.tech/project/cLoops2)
 
 ## cLoops2: full stack analysis tool for enriched chromatin interaction data 
