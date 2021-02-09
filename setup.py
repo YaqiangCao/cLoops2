@@ -12,7 +12,7 @@ setup(
     author_email='caoyaqiang0410@gmail.com',
     url='https://github.com/YaqiangCao/cLoops2',
     keywords='peak-calling loop-calling Hi-Trac interaction visualization',
-    description='Loop-calling and peak-calling for sequencing-based interaction data, including related analysis utilities',
+    description='Loop-calling and peak-calling for sequencing-based interaction data, including related analysis utilities.',
     classifiers=[
         'Environment :: Console',
         'Operating System :: MacOS :: MacOS X',
