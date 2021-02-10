@@ -28,7 +28,6 @@ Python3 is requried.
 ```
 pip install cLoops2
 ```
-cLoops2 then is available. We suggest to use to clone and install which provide test examples.
 
 -------
 #### 2. Install from source with test data for latest version
