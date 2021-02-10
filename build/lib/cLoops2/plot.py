@@ -427,6 +427,28 @@ def getGenes(f, chrom, start, end):
     return ngs
 
 
+def parseBwvs(bws,bwvs=""):
+    """
+    Parse input bigwig values limts.
+    """
+    if bwvs == "":
+        bwvs = []
+        for i in range(len(bws)):
+            bwvs.append([None, None])
+    else:
+        bwvs = bwvs.split(";")
+        nbwvs = []
+        for t in bwvs:
+            if t == "":
+                nbwvs.append([None, None])
+            else:
+                t = t.split(",")
+                t = list(map(float, t))
+                nbwvs.append(t)
+        bwvs = nbwvs
+    return bwvs
+ 
+
 def plotGene(ax,n,g,start,end,space=0.02):
     """
     Plot one genes.
@@ -470,7 +492,7 @@ def plotGene(ax,n,g,start,end,space=0.02):
                     color=c,
                     linewidth=1,
                     linestyle="-")
-            p = g.exons[0].start - (end-start) * (space*1.5)
+            p = g.exons[0].start - (end-start) * (space*2)
             ax.text(p, 0.15, n, color=c, fontsize=5)
         else:
             #c = "red"
@@ -484,7 +506,7 @@ def plotGene(ax,n,g,start,end,space=0.02):
     else:
         if g.strand == "+":
             c = colors[1]
-            p = g.exons[0].start - (end-start) * (space*1.5)
+            p = g.exons[0].start - (end-start) * (space*2)
             ax.text(p, 0.15, n, color=c, fontsize=5)
         else:
             c = colors[3]
@@ -552,7 +574,6 @@ def plotRegion(ax,rs, start, end, colori=1, label=""):
     ax.axis("off")
     ax.set_xlim([start, end])
     return ax
-
 
 
 
@@ -745,6 +766,7 @@ def plotMatHeatmap(
             
     #plot bigWig
     #prepare y-axis limitations
+    """
     if bwvs == "":
         bwvs = []
         for i in range(len(bws)):
@@ -760,6 +782,8 @@ def plotMatHeatmap(
                 t = list(map(float, t))
                 nbwvs.append(t)
         bwvs = nbwvs
+    """
+    bwvs = parseBwvs( bws, bwvs)
     #colors
     if bwcs == "":
         bwcs = range(len(bws))
@@ -899,20 +923,8 @@ def plotMatHeatmap(
         name = bed.split("/")[-1].split(".bed")[0]
         ax = fig.add_subplot(gs[axi])
         rs = getBedRegion(bed, chrom[0], start, end)
-        for r in rs:
-            p = patches.Rectangle((r[0], 0.2),
-                                  r[1] - r[0],
-                                  0.6,
-                                  fill=True,
-                                  color=colors[i],
-                                  alpha=0.8)
-            #ax.plot([r[0], r[1]], [0.2, 0.2], color=colors[i], linewidth=3)
-            ax.add_patch(p)
-        ax.set_ylim([0, 1])
-        ax.text((start + end) / 2, 0.5, name, fontsize=6)
-        ax.axis("off")
-        ax.set_xlim([np.min(xs), np.max(xs)])
-
+        plotRegion(ax, rs, start,end, i,label=name)
+        
     #plot the heatmap
     ax = fig.add_subplot(gs[-2])
     cax = fig.add_subplot(gs[-1])
@@ -1235,18 +1247,7 @@ def plotPETsArches(
         name = bed.split("/")[-1].split(".bed")[0]
         ax = fig.add_subplot(gs[axi])
         rs = getBedRegion(bed, chrom[0], start, end)
-        for r in rs:
-            p = patches.Rectangle((r[0], 0.2),
-                                  r[1] - r[0],
-                                  0.6,
-                                  fill=True,
-                                  color=colors[i],
-                                  alpha=0.8)
-            ax.add_patch(p)
-        ax.set_ylim([0, 1])
-        ax.text((start + end) / 2, 0.5, name, fontsize=6)
-        ax.axis("off")
-        ax.set_xlim([np.min(xs), np.max(xs)])
+        plotRegion(ax, rs, start,end, i,label=name)
 
     #plot PETs as arches
     axi += 1
@@ -1352,21 +1353,7 @@ def plotProfiles(
             plotGene( ax, n,g, start,end)
     #plot bigWig
     #yaxis limitaitons
-    if bwvs == "":
-        bwvs = []
-        for i in range(len(bws)):
-            bwvs.append([None, None])
-    else:
-        bwvs = bwvs.split(";")
-        nbwvs = []
-        for t in bwvs:
-            if t == "":
-                nbwvs.append([None, None])
-            else:
-                t = t.split(",")
-                t = list(map(float, t))
-                nbwvs.append(t)
-        bwvs = nbwvs
+    bwvs = parseBwvs( bws, bwvs)
     #colors
     if bwcs == "":
         bwcs = range(len(bws))
@@ -1450,26 +1437,10 @@ def plotProfiles(
         ax.set_xticklabels([])
 
     #plot genomic features
-    xs = np.arange(start, end)
     for i, bed in enumerate(beds):
         axi += 1
         name = bed.split("/")[-1].split(".bed")[0]
         ax = fig.add_subplot(gs[axi])
         rs = getBedRegion(bed, chrom, start, end)
         plotRegion(ax, rs, start,end, i,label=name)
-        """
-        for r in rs:
-            p = patches.Rectangle((r[0], 0.2),
-                                  r[1] - r[0],
-                                  0.6,
-                                  fill=True,
-                                  color=colors[i],
-                                  alpha=0.8)
-            ax.add_patch(p)
-        ax.set_ylim([0, 1])
-        ax.text((start + end) / 2, 0.2, name, fontsize=6)
-        ax.axis("off")
-        ax.set_xlim([np.min(xs), np.max(xs)])
-        """
-
     pylab.savefig(fo + "_profiles.pdf")

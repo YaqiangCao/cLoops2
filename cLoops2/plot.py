@@ -427,6 +427,28 @@ def getGenes(f, chrom, start, end):
     return ngs
 
 
+def parseBwvs(bws,bwvs=""):
+    """
+    Parse input bigwig values limts.
+    """
+    if bwvs == "":
+        bwvs = []
+        for i in range(len(bws)):
+            bwvs.append([None, None])
+    else:
+        bwvs = bwvs.split(";")
+        nbwvs = []
+        for t in bwvs:
+            if t == "":
+                nbwvs.append([None, None])
+            else:
+                t = t.split(",")
+                t = list(map(float, t))
+                nbwvs.append(t)
+        bwvs = nbwvs
+    return bwvs
+ 
+
 def plotGene(ax,n,g,start,end,space=0.02):
     """
     Plot one genes.
@@ -444,10 +466,8 @@ def plotGene(ax,n,g,start,end,space=0.02):
     for i, exon in enumerate(g.exons):
         c = "k"
         if g.strand == "+" and i == 0:
-            #c = "green"
             c = colors[1]
         if g.strand == "-" and i == len(g.exons) - 1:
-            #c = "red"
             c = colors[3]
         p = patches.Rectangle((exon.start, 0.1),
                               exon.end - exon.start,
@@ -470,7 +490,7 @@ def plotGene(ax,n,g,start,end,space=0.02):
                     color=c,
                     linewidth=1,
                     linestyle="-")
-            p = g.exons[0].start - (end-start) * (space*1.5)
+            p = g.exons[0].start - (end-start) * (space*2)
             ax.text(p, 0.15, n, color=c, fontsize=5)
         else:
             #c = "red"
@@ -484,7 +504,7 @@ def plotGene(ax,n,g,start,end,space=0.02):
     else:
         if g.strand == "+":
             c = colors[1]
-            p = g.exons[0].start - (end-start) * (space*1.5)
+            p = g.exons[0].start - (end-start) * (space*2)
             ax.text(p, 0.15, n, color=c, fontsize=5)
         else:
             c = colors[3]
@@ -744,6 +764,7 @@ def plotMatHeatmap(
             
     #plot bigWig
     #prepare y-axis limitations
+    """
     if bwvs == "":
         bwvs = []
         for i in range(len(bws)):
@@ -759,6 +780,8 @@ def plotMatHeatmap(
                 t = list(map(float, t))
                 nbwvs.append(t)
         bwvs = nbwvs
+    """
+    bwvs = parseBwvs( bws, bwvs)
     #colors
     if bwcs == "":
         bwcs = range(len(bws))
@@ -1328,21 +1351,7 @@ def plotProfiles(
             plotGene( ax, n,g, start,end)
     #plot bigWig
     #yaxis limitaitons
-    if bwvs == "":
-        bwvs = []
-        for i in range(len(bws)):
-            bwvs.append([None, None])
-    else:
-        bwvs = bwvs.split(";")
-        nbwvs = []
-        for t in bwvs:
-            if t == "":
-                nbwvs.append([None, None])
-            else:
-                t = t.split(",")
-                t = list(map(float, t))
-                nbwvs.append(t)
-        bwvs = nbwvs
+    bwvs = parseBwvs( bws, bwvs)
     #colors
     if bwcs == "":
         bwcs = range(len(bws))
