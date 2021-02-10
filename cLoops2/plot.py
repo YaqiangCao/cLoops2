@@ -764,23 +764,6 @@ def plotMatHeatmap(
             
     #plot bigWig
     #prepare y-axis limitations
-    """
-    if bwvs == "":
-        bwvs = []
-        for i in range(len(bws)):
-            bwvs.append([None, None])
-    else:
-        bwvs = bwvs.split(";")
-        nbwvs = []
-        for t in bwvs:
-            if t == "":
-                nbwvs.append([None, None])
-            else:
-                t = t.split(",")
-                t = list(map(float, t))
-                nbwvs.append(t)
-        bwvs = nbwvs
-    """
     bwvs = parseBwvs( bws, bwvs)
     #colors
     if bwcs == "":
@@ -1132,21 +1115,8 @@ def plotPETsArches(
             plotGene( ax, n,g, start,end)
             
     #plot bigWig
-    if bwvs == "":
-        bwvs = []
-        for i in range(len(bws)):
-            bwvs.append([None, None])
-    else:
-        bwvs = bwvs.split(";")
-        nbwvs = []
-        for t in bwvs:
-            if t == "":
-                nbwvs.append([None, None])
-            else:
-                t = t.split(",")
-                t = list(map(float, t))
-                nbwvs.append(t)
-        bwvs = nbwvs
+    #yaxis limitaitons
+    bwvs = parseBwvs( bws, bwvs)
     #colors
     if bwcs == "":
         bwcs = range(len(bws))
