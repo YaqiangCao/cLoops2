@@ -8,7 +8,7 @@
 ##get directory seperately for GM12878, only target chromosome chr21
 #cLoops2 pre -f ../data/GM_HiTrac_bio1.bedpe.gz -o gm_bio1 -c chr21
 #cLoops2 pre -f ../data/GM_HiTrac_bio2.bedpe.gz -o gm_bio2 -c chr21 
-##get the combined data for GM12878
+#get the combined data for GM12878
 #cLoops2 pre -f ../data/GM_HiTrac_bio1.bedpe.gz,../data/GM_HiTrac_bio2.bedpe.gz -o gm -c chr21
 ##get the directory seperately for K562 first
 #cLoops2 pre -f ../data/K562_HiTrac_bio1.bedpe.gz -o k562_bio1 -c chr21
@@ -59,7 +59,8 @@
 #cLoops2 plot -f ./gm/chr21-chr21.ixy -o gm_domain_example -bs 5000 -start 35800000 -end 36700000 -domains gm_domains.bed -log -bw ../data/GM12878_CTCF_chr21.bw -1D -corr
 
 #show enhancer-promoter loops
-#cLoops2 plot -f gm/chr21-chr21.ixy -o gm_example -bs 500 -start 38752604 -end 38839334 -triu -bw ../data/GM12878_ATAC_chr21.bw,../data/GM12878_CTCF_chr21.bw -1D -loops gm_loops.txt -beds ../data/GM12878_RoadMap_hg38_Enh_chr21.bed,../data/GM12878_RoadMap_hg38_Tss_chr21.bed,gm_peaks.bed -m obs -log -gtf ../data/gencode_v30_chr21.gtf -vmax 1
+cLoops2 plot -f gm/chr21-chr21.ixy -o gm_example -bs 500 -start 38752604 -end 38839334 -triu -bws ../data/GM12878_ATAC_chr21.bw,../data/GM12878_CTCF_chr21.bw -1D -loops gm_loops.txt -beds ../data/GM12878_RoadMap_hg38_Enh_chr21.bed,../data/GM12878_RoadMap_hg38_Tss_chr21.bed,gm_peaks.bed -m obs -log -gtf ../data/gencode_v30_chr21.gtf -vmax 1
+cLoops2 plot -o gm_example -bs 500 -chrom chr21 -start 38752604 -end 38839334 -bws ../data/GM12878_ATAC_chr21.bw,../data/GM12878_CTCF_chr21.bw -1D -loops gm_loops.txt -beds ../data/GM12878_RoadMap_hg38_Enh_chr21.bed,../data/GM12878_RoadMap_hg38_Tss_chr21.bed,gm_peaks.bed -gtf ../data/gencode_v30_chr21.gtf 
 #filter data 
 #cLoops2 filterPETs -d gm -loops gm_loops.txt -o gm_filtered
 #cLoops2 plot -f gm_filtered/chr21-chr21.ixy -o gm_filtered_example -bs 500 -start 38752604 -end 38839334 -triu -loops gm_loops.txt -log -1D

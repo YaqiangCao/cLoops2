@@ -1,0 +1,1 @@
+{"Total PETs": 509304, "High Mapq(>=10) PETs": 509304, "Total Trans PETs": 0, "Total Cis PETs": 509304, "Filtered too close (<0) PETs": 0, "Filtered too distant (>-1) PETs": 0, "Unique PETs": 504994, "Cis PETs Redundancy": 0.008462529255611528, "data": {"cis": {"chr21-chr21": {"ixy": "/home/caoy7/code/cLoops2/example/test_run/gm_bio2/chr21-chr21.ixy"}}, "trans": {}}}

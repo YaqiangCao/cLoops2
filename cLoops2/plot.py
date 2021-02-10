@@ -11,6 +11,7 @@ Plotting related functions for cLoops2.
 2020-09-13: refine virtual4C plot
 2020-10-30: adding plotting PETs as arches
 2021-02-04: adding option for not requring heatmps/arches
+2021-02-09: refine some details of code
 """
 
 __author__ = "CAO Yaqiang"
@@ -427,7 +428,7 @@ def getGenes(f, chrom, start, end):
     return ngs
 
 
-def parseBwvs(bws,bwvs=""):
+def parseBwvs(bws, bwvs=""):
     """
     Parse input bigwig values limts.
     """
@@ -447,9 +448,9 @@ def parseBwvs(bws,bwvs=""):
                 nbwvs.append(t)
         bwvs = nbwvs
     return bwvs
- 
 
-def plotGene(ax,n,g,start,end,space=0.02):
+
+def plotGene(ax, n, g, start, end, space=0.02):
     """
     Plot one genes.
     @param ax: maplotlib ax
@@ -490,7 +491,7 @@ def plotGene(ax,n,g,start,end,space=0.02):
                     color=c,
                     linewidth=1,
                     linestyle="-")
-            p = g.exons[0].start - (end-start) * (space*2)
+            p = g.exons[0].start - (end - start) * (space * 2)
             ax.text(p, 0.15, n, color=c, fontsize=5)
         else:
             #c = "red"
@@ -499,16 +500,16 @@ def plotGene(ax,n,g,start,end,space=0.02):
                     color=c,
                     linewidth=1,
                     linestyle="-")
-            p = g.exons[-1].end + (end-start)*space
+            p = g.exons[-1].end + (end - start) * space
             ax.text(p, 0.15, n, color=c, fontsize=5)
     else:
         if g.strand == "+":
             c = colors[1]
-            p = g.exons[0].start - (end-start) * (space*2)
+            p = g.exons[0].start - (end - start) * (space * 2)
             ax.text(p, 0.15, n, color=c, fontsize=5)
         else:
             c = colors[3]
-            p = g.exons[-1].end + (end-start)*space
+            p = g.exons[-1].end + (end - start) * space
             ax.text(p, 0.15, n, color=c, fontsize=5)
     return ax
 
@@ -534,24 +535,21 @@ def plotCoverage(ax, ys, colori=1, label="", vmin=None, vmax=None,
     ax.set_xticklabels([])
     ax.set_xlim([np.min(xs), np.max(xs)])
     #set y-axis lim
-    if vmin is not None and vmax is not None:
-        ax.set_ylim([vmin, vmax])
-        p = (vmax - vmin)*0.15
-        ax.set_yticks([vmin, vmax -p])
-        ax.set_yticklabels([str(vmin), str(vmax)])
-    else:
-        vmin, vmax = np.min(ys),np.max(ys)
-        p = (vmax - vmin)*0.15
-        ax.set_yticks([vmin, vmax -p])
-        ax.set_yticklabels([str(vmin), str(vmax)])
-        ax.set_yticklabels([str(np.min(ys)), str(np.max(ys))])
+    if vmin is None:
+        vmin = np.min(ys)
+    if vmax is None:
+        vmax = np.max(ys)
+    vmin = float("%.3f"%vmin)
+    vmax = float("%.3f"%vmax)
+    p = (vmax - vmin) * 0.15
+    ax.set_yticks([vmin, vmax - p])
+    ax.set_yticklabels([str(vmin), str(vmax)])
     ax.tick_params(axis='both', which='major', labelsize=4)
     ax.legend(fontsize=6, fancybox=False, frameon=False)
     return ax
 
 
-
-def plotRegion(ax,rs, start, end, colori=1, label=""):
+def plotRegion(ax, rs, start, end, colori=1, label=""):
     """
     Plot genomic region.
     @param ax: matplotlib ax
@@ -561,11 +559,11 @@ def plotRegion(ax,rs, start, end, colori=1, label=""):
     """
     for r in rs:
         p = patches.Rectangle((r[0], 0.2),
-                                  r[1] - r[0],
-                                  0.6,
-                                  fill=True,
-                                  color=colors[ colori ],
-                                  alpha=0.8)
+                              r[1] - r[0],
+                              0.6,
+                              fill=True,
+                              color=colors[colori],
+                              alpha=0.8)
         ax.add_patch(p)
     ax.set_ylim([0, 1])
     ax.text((start + end) / 2, 0.2, label, fontsize=6)
@@ -573,6 +571,66 @@ def plotRegion(ax,rs, start, end, colori=1, label=""):
     ax.set_xlim([start, end])
     return ax
 
+
+def plotLoops(ax, loops, nchrom, start, end,xy2=None):
+    """
+    Plot loops as arches
+    """
+    cabs = []
+    nloops = []
+    for loop in loops[nchrom]:
+        s = min(loop.x_start, loop.y_start)
+        e = max(loop.x_end, loop.y_end)
+        if start < s and e < end:
+            nloops.append(loop)
+            #query from the data for number of PETs
+            if xy2 is not None:
+                ca, cb, cab = xy2.queryLoop(loop.x_start, loop.x_end,
+                                        loop.y_start, loop.y_end)
+            else:
+                cab = [1]
+            cabs.append(len(cab))
+    #start plot
+    ncabs = [c for c in cabs if c > 0]
+    if len(ncabs) > 0:
+        minCab = np.min(ncabs)
+        #modify line width for arches , just in case the line too wide
+        lws = [c / minCab for c in cabs]
+        if max(lws) > 10:
+            lws = [1] * len(lws)
+        pa = 0
+        pb = 1.0
+        ymax = 0
+        for i, loop in enumerate(nloops):
+            ca = (loop.x_start + loop.x_end) / 2
+            cb = (loop.y_start + loop.y_end) / 2
+            cc = (ca + cb) / 2
+            npa = float(ca - start) / (end - start) * (pb - pa)
+            npb = float(cb - start) / (end - start) * (pb - pa)
+            npc = float(cc - start) / (end - start) * (pb - pa)
+            a = npb - npa  #a is x axis size for eclipse
+            b = a / 2  #b is y axis size for eclipse
+            if b > ymax:
+                ymax = b
+            if cabs[i] < 1:
+                continue
+            ax.add_patch(
+                Arc(
+                    (npc, 0),
+                    a,
+                    b,
+                    theta1=0,
+                    theta2=180,
+                    edgecolor=colors[1],
+                    lw=lws[i],
+                ))
+            if xy2 is not None:
+                ax.text(npc, b / 2, cabs[i], fontsize=5)
+        ax.set_xlim([0, 1])
+        ax.set_ylim([0, ymax * 0.6])
+    ax.set_yticklabels([])
+    ax.set_xticklabels([])
+    return ax
 
 
 def plotMatHeatmap(
@@ -760,11 +818,11 @@ def plotMatHeatmap(
         for n, g in genes.items():
             axi += 1
             ax = fig.add_subplot(gs[axi])
-            plotGene( ax, n,g, start,end)
-            
+            plotGene(ax, n, g, start, end)
+
     #plot bigWig
     #prepare y-axis limitations
-    bwvs = parseBwvs( bws, bwvs)
+    bwvs = parseBwvs(bws, bwvs)
     #colors
     if bwcs == "":
         bwcs = range(len(bws))
@@ -846,66 +904,16 @@ def plotMatHeatmap(
         axi += 1
         ax = fig.add_subplot(gs[axi])
         #plot the arch and annotate the PETs support the loop
-        #get the minal PETs number as linewidth 1,others are fold
-        cabs = []
-        nloops = []
-        for loop in loops[nchrom]:
-            s = min(loop.x_start, loop.y_start)
-            e = max(loop.x_end, loop.y_end)
-            if start < s and e < end:
-                nloops.append(loop)
-                ca, cb, cab = xy2.queryLoop(loop.x_start, loop.x_end,
-                                            loop.y_start, loop.y_end)
-                cabs.append(len(cab))
-        #start plot
-        ncabs = [c for c in cabs if c > 0]
-        if len(ncabs) > 0:
-            minCab = np.min(ncabs)
-            #modify line width for arches , just in case the line too wide
-            lws = [c / minCab for c in cabs]
-            if max(lws) > 10:
-                lws = [1] * len(lws)
-            pa = 0
-            pb = 1.0
-            ymax = 0
-            for i, loop in enumerate(nloops):
-                ca = (loop.x_start + loop.x_end) / 2
-                cb = (loop.y_start + loop.y_end) / 2
-                cc = (ca + cb) / 2
-                npa = float(ca - start) / (end - start) * (pb - pa)
-                npb = float(cb - start) / (end - start) * (pb - pa)
-                npc = float(cc - start) / (end - start) * (pb - pa)
-                a = npb - npa  #a is x axis size for eclipse
-                b = a / 2  #b is y axis size for eclipse
-                if b > ymax:
-                    ymax = b
-                if cabs[i] < 1:
-                    continue
-                ax.add_patch(
-                    Arc(
-                        (npc, 0),
-                        a,
-                        b,
-                        theta1=0,
-                        theta2=180,
-                        edgecolor=colors[1],
-                        lw=lws[i],
-                    ))
-                ax.text(npc, b / 2, cabs[i], fontsize=5)
-            ax.set_xlim([0, 1])
-            ax.set_ylim([0, ymax * 0.6])
-        ax.set_yticklabels([])
-        ax.set_xticklabels([])
-
+        plotLoops(ax, loops, nchrom,start,end,xy2=xy2)
+        
     #plot genomic features
-    xs = np.arange(start, end)
     for i, bed in enumerate(beds):
         axi += 1
         name = bed.split("/")[-1].split(".bed")[0]
         ax = fig.add_subplot(gs[axi])
         rs = getBedRegion(bed, chrom[0], start, end)
-        plotRegion(ax, rs, start,end, i,label=name)
-        
+        plotRegion(ax, rs, start, end, i, label=name)
+
     #plot the heatmap
     ax = fig.add_subplot(gs[-2])
     cax = fig.add_subplot(gs[-1])
@@ -1112,11 +1120,11 @@ def plotPETsArches(
         for n, g in genes.items():
             axi += 1
             ax = fig.add_subplot(gs[axi])
-            plotGene( ax, n,g, start,end)
-            
+            plotGene(ax, n, g, start, end)
+
     #plot bigWig
     #yaxis limitaitons
-    bwvs = parseBwvs( bws, bwvs)
+    bwvs = parseBwvs(bws, bwvs)
     #colors
     if bwcs == "":
         bwcs = range(len(bws))
@@ -1158,64 +1166,15 @@ def plotPETsArches(
         ax = fig.add_subplot(gs[axi])
         #plot the arch and annotate the PETs support the loop
         #get the minal PETs number as linewidth 1,others are fold
-        cabs = []
-        nloops = []
-        for loop in loops[nchrom]:
-            s = min(loop.x_start, loop.y_start)
-            e = max(loop.x_end, loop.y_end)
-            if start < s and e < end:
-                nloops.append(loop)
-                ca, cb, cab = xy2.queryLoop(loop.x_start, loop.x_end,
-                                            loop.y_start, loop.y_end)
-                cabs.append(len(cab))
-        #start plot
-        ncabs = [c for c in cabs if c > 0]
-        if len(ncabs) > 0:
-            minCab = np.min(ncabs)
-            #modify line width for arches , just in case the line too wide
-            lws = [c / minCab for c in cabs]
-            if max(lws) > 10:
-                lws = [1] * len(lws)
-            pa = 0
-            pb = 1.0
-            ymax = 0
-            for i, loop in enumerate(nloops):
-                ca = (loop.x_start + loop.x_end) / 2
-                cb = (loop.y_start + loop.y_end) / 2
-                cc = (ca + cb) / 2
-                npa = float(ca - start) / (end - start) * (pb - pa)
-                npb = float(cb - start) / (end - start) * (pb - pa)
-                npc = float(cc - start) / (end - start) * (pb - pa)
-                a = npb - npa  #a is x axis size for eclipse
-                b = a / 2  #b is y axis size for eclipse
-                if b > ymax:
-                    ymax = b
-                if cabs[i] < 1:
-                    continue
-                ax.add_patch(
-                    Arc(
-                        (npc, 0),
-                        a,
-                        b,
-                        theta1=0,
-                        theta2=180,
-                        edgecolor=colors[1],
-                        lw=lws[i],
-                    ))
-                ax.text(npc, b / 2, cabs[i], fontsize=5)
-            ax.set_xlim([0, 1])
-            ax.set_ylim([0, ymax * 0.6])
-        ax.set_yticklabels([])
-        ax.set_xticklabels([])
-
+        plotLoops(ax, loops, nchrom,start,end,xy2=xy2)
+       
     #plot genomic features
-    xs = np.arange(start, end)
     for i, bed in enumerate(beds):
         axi += 1
         name = bed.split("/")[-1].split(".bed")[0]
         ax = fig.add_subplot(gs[axi])
         rs = getBedRegion(bed, chrom[0], start, end)
-        plotRegion(ax, rs, start,end, i,label=name)
+        plotRegion(ax, rs, start, end, i, label=name)
 
     #plot PETs as arches
     axi += 1
@@ -1307,7 +1266,7 @@ def plotProfiles(
         left=0.1,
         right=0.9,
         wspace=0.0,
-        hspace=0.1,
+        hspace=0.05,
     )
     pylab.suptitle("%.2f kb,%s:%s-%s" %
                    (float(end - start) / 1000.0, chrom, start, end),
@@ -1318,10 +1277,10 @@ def plotProfiles(
         for n, g in genes.items():
             axi += 1
             ax = fig.add_subplot(gs[axi])
-            plotGene( ax, n,g, start,end)
+            plotGene(ax, n, g, start, end)
     #plot bigWig
     #yaxis limitaitons
-    bwvs = parseBwvs( bws, bwvs)
+    bwvs = parseBwvs(bws, bwvs)
     #colors
     if bwcs == "":
         bwcs = range(len(bws))
@@ -1352,57 +1311,8 @@ def plotProfiles(
     if loops is not None and nchrom in loops and len(loops[nchrom]) > 0:
         axi += 1
         ax = fig.add_subplot(gs[axi])
-        #plot the arch and annotate the PETs support the loop
-        #get the minal PETs number as linewidth 1,others are fold
-        cabs = []
-        nloops = []
-        for loop in loops[nchrom]:
-            s = min(loop.x_start, loop.y_start)
-            e = max(loop.x_end, loop.y_end)
-            if start < s and e < end:
-                nloops.append(loop)
-                ca, cb, cab = xy2.queryLoop(loop.x_start, loop.x_end,
-                                            loop.y_start, loop.y_end)
-                cabs.append(len(cab))
-        #start plot
-        ncabs = [c for c in cabs if c > 0]
-        if len(ncabs) > 0:
-            minCab = np.min(ncabs)
-            #modify line width for arches , just in case the line too wide
-            lws = [c / minCab for c in cabs]
-            if max(lws) > 10:
-                lws = [1] * len(lws)
-            pa = 0
-            pb = 1.0
-            ymax = 0
-            for i, loop in enumerate(nloops):
-                ca = (loop.x_start + loop.x_end) / 2
-                cb = (loop.y_start + loop.y_end) / 2
-                cc = (ca + cb) / 2
-                npa = float(ca - start) / (end - start) * (pb - pa)
-                npb = float(cb - start) / (end - start) * (pb - pa)
-                npc = float(cc - start) / (end - start) * (pb - pa)
-                a = npb - npa  #a is x axis size for eclipse
-                b = a / 2  #b is y axis size for eclipse
-                if b > ymax:
-                    ymax = b
-                if cabs[i] < 1:
-                    continue
-                ax.add_patch(
-                    Arc(
-                        (npc, 0),
-                        a,
-                        b,
-                        theta1=0,
-                        theta2=180,
-                        edgecolor=colors[1],
-                        lw=lws[i],
-                    ))
-                ax.text(npc, b / 2, cabs[i], fontsize=5)
-            ax.set_xlim([0, 1])
-            ax.set_ylim([0, ymax * 0.6])
-        ax.set_yticklabels([])
-        ax.set_xticklabels([])
+        #plot the arch for loops, all same width
+        plotLoops(ax, loops, nchrom,start,end)
 
     #plot genomic features
     for i, bed in enumerate(beds):
@@ -1410,5 +1320,5 @@ def plotProfiles(
         name = bed.split("/")[-1].split(".bed")[0]
         ax = fig.add_subplot(gs[axi])
         rs = getBedRegion(bed, chrom, start, end)
-        plotRegion(ax, rs, start,end, i,label=name)
+        plotRegion(ax, rs, start, end, i, label=name)
     pylab.savefig(fo + "_profiles.pdf")

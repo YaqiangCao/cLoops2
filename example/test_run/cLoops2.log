@@ -1,0 +1,121 @@
+2021-02-09 19:34:39 cLoops2 INFO     Command: cLoops2 pre -f ../data/GM_HiTrac_bio1.bedpe.gz -o gm_bio1 -p 1 -c chr21 -cut 0 -mcut -1 -mapq 10 -trans False
+2021-02-09 19:34:39 cLoops2 INFO     Parsing PETs from ../data/GM_HiTrac_bio1.bedpe.gz, requiring initial distance cutoff >0 and <-1
+2021-02-09 19:34:45 cLoops2 INFO     Totaly 660024 PETs in target chromosomes from ../data/GM_HiTrac_bio1.bedpe.gz, in which 653771 high quality unqiue PETs
+2021-02-09 19:34:45 cLoops2 INFO     writing .ixy files
+2021-02-09 19:34:47 cLoops2 INFO     cLoops2 pre finished. Used time: 0:00:08.390798.
+
+
+
+2021-02-09 19:34:49 cLoops2 INFO     Command: cLoops2 pre -f ../data/GM_HiTrac_bio2.bedpe.gz -o gm_bio2 -p 1 -c chr21 -cut 0 -mcut -1 -mapq 10 -trans False
+2021-02-09 19:34:49 cLoops2 INFO     Parsing PETs from ../data/GM_HiTrac_bio2.bedpe.gz, requiring initial distance cutoff >0 and <-1
+2021-02-09 19:34:54 cLoops2 INFO     Totaly 509304 PETs in target chromosomes from ../data/GM_HiTrac_bio2.bedpe.gz, in which 504994 high quality unqiue PETs
+2021-02-09 19:34:54 cLoops2 INFO     writing .ixy files
+2021-02-09 19:34:55 cLoops2 INFO     cLoops2 pre finished. Used time: 0:00:05.932024.
+
+
+
+2021-02-09 19:34:57 cLoops2 INFO     Command: cLoops2 callPeaks -d gm -cut 0 -mcut 1000 -eps 50,100 -minPts 10 -pcut 0.01 -p 1 -o gm -bgd  -bgm lf -pseudo 1 -sen False -split True -splitExt 50
+2021-02-09 19:34:57 cLoops2 ERROR    gm not exists! Return.
+2021-02-09 19:34:59 cLoops2 INFO     Command: cLoops2 callLoops -d gm -eps 200,500,1000 -minPts 10 -p 1 -o gm -cut 0 -mcut -1 -filter False -i False -j True -w True -hic False -max_cut False -trans False -emPair False
+2021-02-09 19:34:59 cLoops2 ERROR    gm not exists! Return.
+2021-02-09 19:35:19 cLoops2 INFO     Command: cLoops2 pre -f ../data/GM_HiTrac_bio1.bedpe.gz -o gm_bio1 -p 1 -c chr21 -cut 0 -mcut -1 -mapq 10 -trans False
+2021-02-09 19:35:19 cLoops2 ERROR    working directory gm_bio1 exists and not empty.
+2021-02-09 19:35:21 cLoops2 INFO     Command: cLoops2 pre -f ../data/GM_HiTrac_bio2.bedpe.gz -o gm_bio2 -p 1 -c chr21 -cut 0 -mcut -1 -mapq 10 -trans False
+2021-02-09 19:35:21 cLoops2 ERROR    working directory gm_bio2 exists and not empty.
+2021-02-09 19:35:23 cLoops2 INFO     Command: cLoops2 pre -f ../data/GM_HiTrac_bio1.bedpe.gz,../data/GM_HiTrac_bio2.bedpe.gz -o gm -p 1 -c chr21 -cut 0 -mcut -1 -mapq 10 -trans False
+2021-02-09 19:35:23 cLoops2 INFO     Parsing PETs from ../data/GM_HiTrac_bio1.bedpe.gz, requiring initial distance cutoff >0 and <-1
+2021-02-09 19:35:28 cLoops2 INFO     Parsing PETs from ../data/GM_HiTrac_bio2.bedpe.gz, requiring initial distance cutoff >0 and <-1
+2021-02-09 19:35:34 cLoops2 INFO     Totaly 1169328 PETs in target chromosomes from ../data/GM_HiTrac_bio1.bedpe.gz,../data/GM_HiTrac_bio2.bedpe.gz, in which 1148724 high quality unqiue PETs
+2021-02-09 19:35:34 cLoops2 INFO     writing .ixy files
+2021-02-09 19:35:37 cLoops2 INFO     cLoops2 pre finished. Used time: 0:00:14.171174.
+
+
+
+2021-02-09 19:35:39 cLoops2 INFO     Command: cLoops2 callPeaks -d gm -cut 0 -mcut 1000 -eps 50,100 -minPts 10 -pcut 0.01 -p 1 -o gm -bgd  -bgm lf -pseudo 1 -sen False -split True -splitExt 50
+2021-02-09 19:35:40 cLoops2 INFO     Clustering chr21 to find candidate peaks using eps as 50, minPts as 10.
+2021-02-09 19:35:46 numexpr.utils INFO     Note: NumExpr detected 64 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+2021-02-09 19:35:46 numexpr.utils INFO     NumExpr defaulting to 8 threads.
+2021-02-09 19:35:55 cLoops2 INFO     Clustering chr21 finished. Estimated 46202 PETs in candidate 2125 peaks.
+2021-02-09 19:35:55 cLoops2 INFO     Stiching chr21 candidate close 2125 peaks.
+2021-02-09 19:35:55 cLoops2 INFO     Merged chr21 1836 peaks
+2021-02-09 19:35:56 cLoops2 INFO     Clustering chr21 to find candidate peaks using eps as 100, minPts as 10.
+2021-02-09 19:36:18 cLoops2 INFO     Clustering chr21 finished. Estimated 144532 PETs in candidate 7206 peaks.
+2021-02-09 19:36:18 cLoops2 INFO     Stiching chr21 candidate close 7206 peaks.
+2021-02-09 19:36:18 cLoops2 INFO     Merged chr21 4725 peaks
+2021-02-09 19:36:20 cLoops2 INFO     Estimating chr21 significance with /home/caoy7/code/cLoops2/example/test_run/gm/chr21-chr21.ixy, and control None
+2021-02-09 19:36:29 cLoops2 INFO     Getting the chr21 most significant peaks for overlapped peaks.
+2021-02-09 19:36:41 cLoops2 INFO     Calling significant peaks finished for chr21, 4069 non-overlapped peaks. 
+2021-02-09 19:36:41 cLoops2 INFO     Carrying Bonferroni correction for p-values and further filtering.
+2021-02-09 19:36:41 cLoops2 INFO     Output 1444 peaks to gm_peaks.txt and gm_peaks.bed
+2021-02-09 19:36:41 cLoops2 INFO     cLoops2 callPeaks finished for gm. Used time: 0:01:02.767043.
+
+
+
+2021-02-09 19:36:43 cLoops2 INFO     Command: cLoops2 callLoops -d gm -eps 200,500,1000 -minPts 10 -p 1 -o gm -cut 0 -mcut -1 -filter False -i False -j True -w True -hic False -max_cut False -trans False -emPair False
+2021-02-09 19:36:43 cLoops2 INFO     Clustering chr21 and chr21 using eps 200, minPts 10,pre-set distance cutoff > 0
+2021-02-09 19:37:02 numexpr.utils INFO     Note: NumExpr detected 64 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+2021-02-09 19:37:02 numexpr.utils INFO     NumExpr defaulting to 8 threads.
+2021-02-09 19:37:08 cLoops2 INFO     Clustering chr21 and chr21 finished. Estimated 33402 self-ligation reads and 55105 inter-ligation reads, 2623 candidate loops.
+2021-02-09 19:37:08 cLoops2 INFO     Estimated inter-ligation and self-ligation distance cutoff > 846 for eps=200,minPts=10
+2021-02-09 19:37:09 cLoops2 INFO     Clustering chr21 and chr21 using eps 500, minPts 10,pre-set distance cutoff > 846
+2021-02-09 19:37:42 cLoops2 INFO     Clustering chr21 and chr21 finished. Estimated 128813 self-ligation reads and 85429 inter-ligation reads, 4542 candidate loops.
+2021-02-09 19:37:42 cLoops2 INFO     Estimated inter-ligation and self-ligation distance cutoff > 809 for eps=500,minPts=10
+2021-02-09 19:37:42 cLoops2 INFO     Clustering chr21 and chr21 using eps 1000, minPts 10,pre-set distance cutoff > 809
+2021-02-09 19:38:18 cLoops2 INFO     Clustering chr21 and chr21 finished. Estimated 391045 self-ligation reads and 38018 inter-ligation reads, 2030 candidate loops.
+2021-02-09 19:38:18 cLoops2 INFO     Estimated inter-ligation and self-ligation distance cutoff > 10970 for eps=1000,minPts=10
+2021-02-09 19:38:18 cLoops2 INFO     Estimating loop statstical significance.
+2021-02-09 19:38:20 cLoops2 INFO     Estimate significance for 7175 candidate interactions in chr21-chr21 with 1148724 PETs distance > =0 and <=-1,requring minPts >=10.
+2021-02-09 19:46:31 cLoops2 INFO     Selecting the most significant loops of overlapped ones. 
+2021-02-09 19:46:35 cLoops2 INFO     Output 1506 loops to gm_loops.txt
+2021-02-09 19:46:35 cLoops2 INFO     cLoops2 callLoops finished. Used time: 0:09:51.705711.
+
+
+
+2021-02-09 19:51:10 cLoops2 INFO     Command cLoops2 plot -f gm/chr21-chr21.ixy -o gm_example -chrom  -start 38752604 -end 38839334 -bs 500 -cut 0 -mcut -1 -log True -m obs -corr False -triu True -norm False -bws ../data/GM12878_ATAC_chr21.bw,../data/GM12878_CTCF_chr21.bw -bwvs  -bwcs  -beds ../data/GM12878_RoadMap_hg38_Enh_chr21.bed,../data/GM12878_RoadMap_hg38_Tss_chr21.bed,gm_peaks.bed -gtf ../data/gencode_v30_chr21.gtf -1D True -1Dv  -loops gm_loops.txt -domains  -vmin None -vmax 1.0 -virtual4C False -view_start 0 -view_end -1 -arch False -aw 1 -ac 4 -eig False -eig_r False
+2021-02-09 19:51:17 cLoops2 INFO     cLoops2 plot finished. Used time: 0:00:07.306178.
+
+
+
+2021-02-09 19:55:03 cLoops2 INFO     Command cLoops2 plot -f gm/chr21-chr21.ixy -o gm_example -chrom  -start 38752604 -end 38839334 -bs 500 -cut 0 -mcut -1 -log True -m obs -corr False -triu True -norm False -bws ../data/GM12878_ATAC_chr21.bw,../data/GM12878_CTCF_chr21.bw -bwvs  -bwcs  -beds ../data/GM12878_RoadMap_hg38_Enh_chr21.bed,../data/GM12878_RoadMap_hg38_Tss_chr21.bed,gm_peaks.bed -gtf ../data/gencode_v30_chr21.gtf -1D True -1Dv  -loops gm_loops.txt -domains  -vmin None -vmax 1.0 -virtual4C False -view_start 0 -view_end -1 -arch False -aw 1 -ac 4 -eig False -eig_r False
+2021-02-09 19:55:11 cLoops2 INFO     cLoops2 plot finished. Used time: 0:00:07.324881.
+
+
+
+2021-02-09 19:55:36 cLoops2 INFO     Command cLoops2 plot -f gm/chr21-chr21.ixy -o gm_example -chrom  -start 38752604 -end 38839334 -bs 500 -cut 0 -mcut -1 -log True -m obs -corr False -triu True -norm False -bws ../data/GM12878_ATAC_chr21.bw,../data/GM12878_CTCF_chr21.bw -bwvs  -bwcs  -beds ../data/GM12878_RoadMap_hg38_Enh_chr21.bed,../data/GM12878_RoadMap_hg38_Tss_chr21.bed,gm_peaks.bed -gtf ../data/gencode_v30_chr21.gtf -1D True -1Dv  -loops gm_loops.txt -domains  -vmin None -vmax 1.0 -virtual4C False -view_start 0 -view_end -1 -arch False -aw 1 -ac 4 -eig False -eig_r False
+2021-02-09 19:55:44 cLoops2 INFO     cLoops2 plot finished. Used time: 0:00:07.259825.
+
+
+
+2021-02-09 19:56:34 cLoops2 INFO     Command cLoops2 plot -f gm/chr21-chr21.ixy -o gm_example -chrom  -start 38752604 -end 38839334 -bs 500 -cut 0 -mcut -1 -log True -m obs -corr False -triu True -norm False -bws ../data/GM12878_ATAC_chr21.bw,../data/GM12878_CTCF_chr21.bw -bwvs  -bwcs  -beds ../data/GM12878_RoadMap_hg38_Enh_chr21.bed,../data/GM12878_RoadMap_hg38_Tss_chr21.bed,gm_peaks.bed -gtf ../data/gencode_v30_chr21.gtf -1D True -1Dv  -loops gm_loops.txt -domains  -vmin None -vmax 1.0 -virtual4C False -view_start 0 -view_end -1 -arch False -aw 1 -ac 4 -eig False -eig_r False
+2021-02-09 19:56:41 cLoops2 INFO     cLoops2 plot finished. Used time: 0:00:07.195790.
+
+
+
+2021-02-09 19:59:01 cLoops2 INFO     Command cLoops2 plot -f gm/chr21-chr21.ixy -o gm_example -chrom  -start 38752604 -end 38839334 -bs 500 -cut 0 -mcut -1 -log True -m obs -corr False -triu True -norm False -bws ../data/GM12878_ATAC_chr21.bw,../data/GM12878_CTCF_chr21.bw -bwvs  -bwcs  -beds ../data/GM12878_RoadMap_hg38_Enh_chr21.bed,../data/GM12878_RoadMap_hg38_Tss_chr21.bed,gm_peaks.bed -gtf ../data/gencode_v30_chr21.gtf -1D True -1Dv  -loops gm_loops.txt -domains  -vmin None -vmax 1.0 -virtual4C False -view_start 0 -view_end -1 -arch False -aw 1 -ac 4 -eig False -eig_r False
+2021-02-09 19:59:08 cLoops2 INFO     cLoops2 plot finished. Used time: 0:00:07.125659.
+
+
+
+2021-02-09 20:01:06 cLoops2 INFO     Command cLoops2 plot -f gm/chr21-chr21.ixy -o gm_example -chrom  -start 38752604 -end 38839334 -bs 500 -cut 0 -mcut -1 -log True -m obs -corr False -triu True -norm False -bws ../data/GM12878_ATAC_chr21.bw,../data/GM12878_CTCF_chr21.bw -bwvs  -bwcs  -beds ../data/GM12878_RoadMap_hg38_Enh_chr21.bed,../data/GM12878_RoadMap_hg38_Tss_chr21.bed,gm_peaks.bed -gtf ../data/gencode_v30_chr21.gtf -1D True -1Dv  -loops gm_loops.txt -domains  -vmin None -vmax 1.0 -virtual4C False -view_start 0 -view_end -1 -arch False -aw 1 -ac 4 -eig False -eig_r False
+2021-02-09 20:02:27 cLoops2 INFO     Command cLoops2 plot -f gm/chr21-chr21.ixy -o gm_example -chrom  -start 38752604 -end 38839334 -bs 500 -cut 0 -mcut -1 -log True -m obs -corr False -triu True -norm False -bws ../data/GM12878_ATAC_chr21.bw,../data/GM12878_CTCF_chr21.bw -bwvs  -bwcs  -beds ../data/GM12878_RoadMap_hg38_Enh_chr21.bed,../data/GM12878_RoadMap_hg38_Tss_chr21.bed,gm_peaks.bed -gtf ../data/gencode_v30_chr21.gtf -1D True -1Dv  -loops gm_loops.txt -domains  -vmin None -vmax 1.0 -virtual4C False -view_start 0 -view_end -1 -arch False -aw 1 -ac 4 -eig False -eig_r False
+2021-02-09 20:02:34 cLoops2 INFO     cLoops2 plot finished. Used time: 0:00:07.103562.
+
+
+
+2021-02-09 20:08:50 cLoops2 INFO     Command cLoops2 plot -f  -o gm_example -chrom chr21 -start 38752604 -end 38839334 -bs 500 -cut 0 -mcut -1 -log False -m obs -corr False -triu False -norm False -bws ../data/GM12878_ATAC_chr21.bw,../data/GM12878_CTCF_chr21.bw -bwvs  -bwcs  -beds ../data/GM12878_RoadMap_hg38_Enh_chr21.bed,../data/GM12878_RoadMap_hg38_Tss_chr21.bed,gm_peaks.bed -gtf ../data/gencode_v30_chr21.gtf -1D True -1Dv  -loops gm_loops.txt -domains  -vmin None -vmax None -virtual4C False -view_start 0 -view_end -1 -arch False -aw 1 -ac 4 -eig False -eig_r False
+2021-02-09 20:09:17 cLoops2 INFO     Command cLoops2 plot -f  -o gm_example -chrom chr21 -start 38752604 -end 38839334 -bs 500 -cut 0 -mcut -1 -log False -m obs -corr False -triu False -norm False -bws ../data/GM12878_ATAC_chr21.bw,../data/GM12878_CTCF_chr21.bw -bwvs  -bwcs  -beds ../data/GM12878_RoadMap_hg38_Enh_chr21.bed,../data/GM12878_RoadMap_hg38_Tss_chr21.bed,gm_peaks.bed -gtf ../data/gencode_v30_chr21.gtf -1D True -1Dv  -loops gm_loops.txt -domains  -vmin None -vmax None -virtual4C False -view_start 0 -view_end -1 -arch False -aw 1 -ac 4 -eig False -eig_r False
+2021-02-09 20:09:40 cLoops2 INFO     Command cLoops2 plot -f  -o gm_example -chrom chr21 -start 38752604 -end 38839334 -bs 500 -cut 0 -mcut -1 -log False -m obs -corr False -triu False -norm False -bws ../data/GM12878_ATAC_chr21.bw,../data/GM12878_CTCF_chr21.bw -bwvs  -bwcs  -beds ../data/GM12878_RoadMap_hg38_Enh_chr21.bed,../data/GM12878_RoadMap_hg38_Tss_chr21.bed,gm_peaks.bed -gtf ../data/gencode_v30_chr21.gtf -1D True -1Dv  -loops gm_loops.txt -domains  -vmin None -vmax None -virtual4C False -view_start 0 -view_end -1 -arch False -aw 1 -ac 4 -eig False -eig_r False
+2021-02-09 20:09:41 cLoops2 INFO     cLoops2 plot finished. Used time: 0:00:00.906472.
+
+
+
+2021-02-09 20:12:08 cLoops2 INFO     Command cLoops2 plot -f gm/chr21-chr21.ixy -o gm_example -chrom  -start 38752604 -end 38839334 -bs 500 -cut 0 -mcut -1 -log True -m obs -corr False -triu True -norm False -bws ../data/GM12878_ATAC_chr21.bw,../data/GM12878_CTCF_chr21.bw -bwvs  -bwcs  -beds ../data/GM12878_RoadMap_hg38_Enh_chr21.bed,../data/GM12878_RoadMap_hg38_Tss_chr21.bed,gm_peaks.bed -gtf ../data/gencode_v30_chr21.gtf -1D True -1Dv  -loops gm_loops.txt -domains  -vmin None -vmax 1.0 -virtual4C False -view_start 0 -view_end -1 -arch False -aw 1 -ac 4 -eig False -eig_r False
+2021-02-09 20:12:15 cLoops2 INFO     cLoops2 plot finished. Used time: 0:00:07.538643.
+
+
+
+2021-02-09 20:12:17 cLoops2 INFO     Command cLoops2 plot -f  -o gm_example -chrom chr21 -start 38752604 -end 38839334 -bs 500 -cut 0 -mcut -1 -log False -m obs -corr False -triu False -norm False -bws ../data/GM12878_ATAC_chr21.bw,../data/GM12878_CTCF_chr21.bw -bwvs  -bwcs  -beds ../data/GM12878_RoadMap_hg38_Enh_chr21.bed,../data/GM12878_RoadMap_hg38_Tss_chr21.bed,gm_peaks.bed -gtf ../data/gencode_v30_chr21.gtf -1D True -1Dv  -loops gm_loops.txt -domains  -vmin None -vmax None -virtual4C False -view_start 0 -view_end -1 -arch False -aw 1 -ac 4 -eig False -eig_r False
+2021-02-09 20:12:18 cLoops2 INFO     cLoops2 plot finished. Used time: 0:00:00.888139.
+
+
+
