@@ -89,10 +89,6 @@ def getObsMat(xy, start, end, r):
     """
     ps = np.where(xy[:, 0] >= start)[0]
     xy = xy[ps, ]
-    #ps = np.where(xy[:, 0] <= end)[0]
-    #xy = xy[ps, ]
-    #ps = np.where(xy[:, 1] >= start)[0]
-    #xy = xy[ps, ]
     ps = np.where(xy[:, 1] <= end)[0]
     xy = xy[ps, ]
     mat = xy2dict(xy, s=start, e=end, r=r)
@@ -115,7 +111,6 @@ def getExpMat(xy, shape, start, end, r, repeats=5):
         b = xy[:, 1]
         np.random.shuffle(a)
         np.random.shuffle(b)
-        #old shuffling
         xy[:, 0] = a
         xy[:, 1] = b
         s = b-a

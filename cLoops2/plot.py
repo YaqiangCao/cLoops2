@@ -935,6 +935,8 @@ def plotMatHeatmap(
                              'label': ano,
                              'orientation': 'horizontal',
                              "shrink": 0.5,
+                             "fraction": 0.2,
+                             "anchor": (0.0, 1.0)
                          })
 
     else:
