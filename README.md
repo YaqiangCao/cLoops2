@@ -1,4 +1,5 @@
-[![Stars](https://img.shields.io/github/stars/YaqiangCao/cLoops2?logo=GitHub&color=yellow)](https://github.com/YaqiangCao/cLoops2/stargazers) [![PyPI](https://img.shields.io/pypi/v/cLoops2.svg)](https://pypi.org/project/cLoops2) [![Downloads](https://pepy.tech/badge/cLoops2)](https://pepy.tech/project/cLoops2)
+[![Language](https://img.shields.io/github/languages/top/YaqiangCao/cLoops2)](https://img.shields.io/github/languages/top/YaqiangCao/cLoops2) [![Stars](https://img.shields.io/github/stars/YaqiangCao/cLoops2?logo=GitHub&color=yellow)](https://github.com/YaqiangCao/cLoops2/stargazers) [![PyPI](https://img.shields.io/pypi/v/cLoops2.svg)](https://pypi.org/project/cLoops2) [![PyPI Downloads](https://pepy.tech/badge/cLoops2)](https://pepy.tech/project/cLoops2)
+
 
 ## cLoops2: full stack analysis tool for enriched chromatin interaction data 
 <p align="center">
@@ -122,7 +123,7 @@ The main output is a figure as follows.
 
 ### Rountine analysis step 4: estimate significant interaction distance limitation    
 ```
-#cLoops2 estDis -d gm -o gm -bs 1000 -p 10 -plot
+cLoops2 estDis -d gm -o gm -bs 1000 -p 10 -plot
 ```
 
 The main output is a figure as follows. The plot indicates Hi-Trac data may detect significant interactions within 1MB. 
@@ -219,11 +220,11 @@ For Hi-Trac, we expect the aggregated domains pattern as above (maybe better cle
 - small domains.  
 
 ### Rountine analysis step 12: visualization 
-***cLoops2 plot*** can show the interaction contact matrix (observed, observed/expected, correlation) at any resolution, with genes (-gtf option), 1D annotations (-bws optin), domains (-dominas option), loops (-loops option).
+***cLoops2 plot*** can show the interaction contact matrix (observed, observed/expected, correlation) at any resolution, with genes (-gtf option), 1D annotations (-bws option), domains (-dominas option), loops (-loops option).
 
 #### a.show big regions such as domains
 ```
-cLoops2 plot -f ./gm/chr21-chr21.ixy -o gm_domain_example -bs 5000 -start 35830000 -end 36950000 -domains gm_domains.bed -log -bw ../data/GM12878_CTCF_chr21.bw -1D -corr
+cLoops2 plot -f ./gm/chr21-chr21.ixy -o gm_domain_example -bs 5000 -start 35830000 -end 36950000 -domains gm_domains.bed -log -bws ../data/GM12878_CTCF_chr21.bw -1D -corr
 ```
 <p align="center">
 <img align="center" width="400" height="500" src="https://github.com/YaqiangCao/cLoops2/blob/master/pngs/gm_domain_example_matrix.png">
@@ -424,10 +425,10 @@ Examples:
     cLoops2 callDomains -d trac -o trac -bs 10000 -ws 200000
     cLoops2 plot -f test/chr21-chr21.ixy -o test -bs 500 -start 34840000 \
                  -end 34895000 -triu -1D -loop test_loops.txt -log \
-                 -gtf hg38.gtf -bw ctcf.bw -beds enhancer.bed
+                 -gtf hg38.gtf -bws ctcf.bw -beds enhancer.bed
     cLoops2 montage -f test/chr21-chr21.ixy -o test -bed test.bed
     cLoops2 agg -d trac -loops trac.loop -peaks trac_peaks.bed \
-                -domains hic_domains.bed -bw CTCF.bw,ATAC.bw -p 20 -o trac 
+                -domains hic_domains.bed -bws CTCF.bw,ATAC.bw -p 20 -o trac 
     cLoops2 quant -d trac -peaks trac_peaks.bed -loops trac.loop \
                   -domains trac_domain.txt -p 20 -o trac
     cLoops2 anaLoops -loops test_loop.txt -gtf gene.gtf -net -o test
@@ -1218,7 +1219,7 @@ Examples:
        track
         cLoops2 plot -f test/chr21-chr21.ixy -o test_domain -bs 10000 \
                      -start 34600000 -end 35500000 -domains HiC_TAD.bed -log \
-                    -triu -bw GM12878_CTCF_chr21.bw
+                    -triu -bws GM12878_CTCF_chr21.bw
 
     3. plot the heatmap as upper triangle with 1D signal track and filter the 
        PETs shorter than 1kb
@@ -1235,7 +1236,7 @@ Examples:
     6. plot upper triangle interaction heatmap together with genes, bigWig 
        files, peaks, loops, domains, control the heatmap scale
         cLoops2 plot -f test/chr21-chr21.ixy -o test -bs 500 -start 34840000 \
-                     -end 34895000 -triu -bw ATAC.bw,CTCF.bw -1D \
+                     -end 34895000 -triu -bws ATAC.bw,CTCF.bw -1D \
                      -loop test_loops.txt -beds Enh.bed,Tss.bed \
                      -domains tad.bed -m obs -log -vmin 0.2 -vmax 2 -gtf genes.gtf
     

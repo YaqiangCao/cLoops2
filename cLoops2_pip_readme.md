@@ -7,7 +7,7 @@ cLoops2 is an extension of our previous work, [cLoops](https://github.com/Yaqian
 
 cLoops2 is designed with respect reference to [bedtools](https://bedtools.readthedocs.io/en/latest/) and [Samtools](http://www.htslib.org/) for command-line style programming. If you have experience with them, you will find cLoops2 easy and efficient to use and combine commands, integrate as steps in your processing pipeline. 
 
-Please refer to our [Hi-Trac method manuscript]() or [cLoops2 manuscript]() for what cLoops2 can do and show. 
+Please refer to our in-preparing [Hi-Trac method manuscript]() or [cLoops2 manuscript]() for what cLoops2 can do and show. 
 
 If you use cLoops2 in your research (the idea, the algorithm, the analysis scripts or the supplemental data), please give us a star on the GitHub repo page and cite our paper as follows:    
 
@@ -79,10 +79,10 @@ Examples:
     cLoops2 callDomains -d trac -o trac -bs 10000 -ws 200000
     cLoops2 plot -f test/chr21-chr21.ixy -o test -bs 500 -start 34840000 \
                  -end 34895000 -triu -1D -loop test_loops.txt -log \
-                 -gtf hg38.gtf -bw ctcf.bw -beds enhancer.bed
+                 -gtf hg38.gtf -bws ctcf.bw -beds enhancer.bed
     cLoops2 montage -f test/chr21-chr21.ixy -o test -bed test.bed
     cLoops2 agg -d trac -loops trac.loop -peaks trac_peaks.bed \
-                -domains hic_domains.bed -bw CTCF.bw,ATAC.bw -p 20 -o trac 
+                -domains hic_domains.bed -bws CTCF.bw,ATAC.bw -p 20 -o trac 
     cLoops2 quant -d trac -peaks trac_peaks.bed -loops trac.loop \
                   -domains trac_domain.txt -p 20 -o trac
     cLoops2 anaLoops -loops test_loop.txt -gtf gene.gtf -net -o test

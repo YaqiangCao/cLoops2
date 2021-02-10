@@ -1,0 +1,16 @@
+pdftoppm ../example/test_run/test_step4_PCC.pdf test_step4_PCC -png -r 300 -singlefile 
+pdftoppm ../example/test_run/gm_aggDomains.pdf gm_aggDomains -png -r 300 -singlefile 
+pdftoppm ../example/test_run/gm_aggLoops.pdf gm_aggLoops -png -r 300 -singlefile 
+pdftoppm ../example/test_run/gm_aggPeaks.pdf gm_aggPeaks -png -r 300 -singlefile 
+pdftoppm ../example/test_run/gm_domain_example_matrix.pdf gm_domain_example_matrix -png -r 300 -singlefile 
+pdftoppm ../example/test_run/gm_estRes.pdf gm_estRes -png -r 300 -singlefile 
+pdftoppm ../example/test_run/gm_example_arches.pdf gm_example_arches -png -r 300 -singlefile 
+pdftoppm ../example/test_run/gm_example_matrix.pdf gm_example_matrix -png -r 300 -singlefile 
+pdftoppm ../example/test_run/gm_filtered_example_matrix.pdf gm_filtered_example_matrix -png -r 300 -singlefile 
+pdftoppm ../example/test_run/gm_loops_ep_net_largest_components.pdf gm_loops_ep_net_largest_components -png -r 300 -singlefile 
+pdftoppm ../example/test_run/gm_obsExpDisFreq_obsExp.pdf gm_obsExpDisFreq_obsExp -png -r 300 -singlefile 
+pdftoppm ../example/test_run/gm_runx1_all_rehoboam.pdf gm_runx1_all_rehoboam -png -r 300 -singlefile 
+pdftoppm ../example/test_run/gm_runx1_vp_rehoboam.pdf gm_runx1_vp_rehoboam -png -r 300 -singlefile 
+pdftoppm ../example/test_run/gm_vs_k562_diffAggLoops.pdf gm_vs_k562_diffAggLoops -png -r 300 -singlefile 
+pdftoppm ../example/test_run/k562_runx1_all_rehoboam.pdf k562_runx1_all_rehoboam -png -r 300 -singlefile 
+pdftoppm ../example/test_run/k562_runx1_vp_rehoboam.pdf k562_runx1_vp_rehoboam -png -r 300 -singlefile 

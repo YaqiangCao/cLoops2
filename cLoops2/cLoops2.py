@@ -21,7 +21,7 @@ __author__ = "CAO Yaqiang"
 __date__ = ""
 __modified__ = ""
 __email__ = "caoyaqiang0410@gmail.com"
-__version__ = "1.0.1"
+__version__ = "0.0.1"
 
 #sys library
 import warnings
@@ -162,10 +162,10 @@ Examples:
     cLoops2 callDomains -d trac -o trac -bs 10000 -ws 200000
     cLoops2 plot -f test/chr21-chr21.ixy -o test -bs 500 -start 34840000 \\
                  -end 34895000 -triu -1D -loop test_loops.txt -log \\
-                 -gtf hg38.gtf -bw ctcf.bw -beds enhancer.bed
+                 -gtf hg38.gtf -bws ctcf.bw -beds enhancer.bed
     cLoops2 montage -f test/chr21-chr21.ixy -o test -bed test.bed
     cLoops2 agg -d trac -loops trac.loop -peaks trac_peaks.bed \\
-                -domains hic_domains.bed -bw CTCF.bw,ATAC.bw -p 20 -o trac 
+                -domains hic_domains.bed -bws CTCF.bw,ATAC.bw -p 20 -o trac 
     cLoops2 quant -d trac -peaks trac_peaks.bed -loops trac.loop \\
                   -domains trac_domain.txt -p 20 -o trac
     cLoops2 anaLoops -loops test_loop.txt -gtf gene.gtf -net -o test
@@ -1647,7 +1647,7 @@ Examples:
        track
         cLoops2 plot -f test/chr21-chr21.ixy -o test_domain -bs 10000 \\
                      -start 34600000 -end 35500000 -domains HiC_TAD.bed -log \\
-                    -triu -bw GM12878_CTCF_chr21.bw
+                    -triu -bws GM12878_CTCF_chr21.bw
 
     3. plot the heatmap as upper triangle with 1D signal track and filter the 
        PETs shorter than 1kb
@@ -1664,7 +1664,7 @@ Examples:
     6. plot upper triangle interaction heatmap together with genes, bigWig 
        files, peaks, loops, domains, control the heatmap scale
         cLoops2 plot -f test/chr21-chr21.ixy -o test -bs 500 -start 34840000 \\
-                     -end 34895000 -triu -bw ATAC.bw,CTCF.bw -1D \\
+                     -end 34895000 -triu -bws ATAC.bw,CTCF.bw -1D \\
                      -loop test_loops.txt -beds Enh.bed,Tss.bed \\
                      -domains tad.bed -m obs -log -vmin 0.2 -vmax 2 -gtf genes.gtf
     

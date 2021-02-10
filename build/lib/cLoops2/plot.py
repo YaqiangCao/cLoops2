@@ -1053,7 +1053,6 @@ def plotPETsArches(
     """
     Plot the interacting PETs as arches, showing the raw data. 
     """
-
     chrom, xy = parseIxy(f, cut=cut, mcut=mcut)
     xy2 = XY(xy[:, 0], xy[:, 1])  #XY object
 
@@ -1278,6 +1277,7 @@ def plotProfiles(
             axi += 1
             ax = fig.add_subplot(gs[axi])
             plotGene(ax, n, g, start, end)
+
     #plot bigWig
     #yaxis limitaitons
     bwvs = parseBwvs(bws, bwvs)
