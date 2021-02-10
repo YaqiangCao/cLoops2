@@ -23,7 +23,7 @@ Preprint bioRxiv: Yaqiang Cao et al. "Full-stack analysis for enriched 3D genomi
 -------
 -------
 ## Install
-### Easy way through pip
+#### 1. Easy way through pip for stable version
 Python3 is requried.  
 ```
 pip install cLoops2
@@ -31,7 +31,7 @@ pip install cLoops2
 cLoops2 then is available. We suggest to use to clone and install which provide test examples.
 
 -------
-### Clone and install from source
+#### 2. Install from source with test data for latest version
 cLoops2 is written purely in Python3 (cLoops was written in Python2). If you are familiar with [conda](https://docs.conda.io/en/latest/), cLoops2 can be installed easily with the following Linux shell commands (also tested well in win10 ubuntu subsystem, MacOS). 
 ```
 # for most updated code, or download the release version 

@@ -1166,56 +1166,8 @@ def plotPETsArches(
         ax = fig.add_subplot(gs[axi])
         #plot the arch and annotate the PETs support the loop
         #get the minal PETs number as linewidth 1,others are fold
-        cabs = []
-        nloops = []
-        for loop in loops[nchrom]:
-            s = min(loop.x_start, loop.y_start)
-            e = max(loop.x_end, loop.y_end)
-            if start < s and e < end:
-                nloops.append(loop)
-                ca, cb, cab = xy2.queryLoop(loop.x_start, loop.x_end,
-                                            loop.y_start, loop.y_end)
-                cabs.append(len(cab))
-        #start plot
-        ncabs = [c for c in cabs if c > 0]
-        if len(ncabs) > 0:
-            minCab = np.min(ncabs)
-            #modify line width for arches , just in case the line too wide
-            lws = [c / minCab for c in cabs]
-            if max(lws) > 10:
-                lws = [1] * len(lws)
-            pa = 0
-            pb = 1.0
-            ymax = 0
-            for i, loop in enumerate(nloops):
-                ca = (loop.x_start + loop.x_end) / 2
-                cb = (loop.y_start + loop.y_end) / 2
-                cc = (ca + cb) / 2
-                npa = float(ca - start) / (end - start) * (pb - pa)
-                npb = float(cb - start) / (end - start) * (pb - pa)
-                npc = float(cc - start) / (end - start) * (pb - pa)
-                a = npb - npa  #a is x axis size for eclipse
-                b = a / 2  #b is y axis size for eclipse
-                if b > ymax:
-                    ymax = b
-                if cabs[i] < 1:
-                    continue
-                ax.add_patch(
-                    Arc(
-                        (npc, 0),
-                        a,
-                        b,
-                        theta1=0,
-                        theta2=180,
-                        edgecolor=colors[1],
-                        lw=lws[i],
-                    ))
-                ax.text(npc, b / 2, cabs[i], fontsize=5)
-            ax.set_xlim([0, 1])
-            ax.set_ylim([0, ymax * 0.6])
-        ax.set_yticklabels([])
-        ax.set_xticklabels([])
-
+        plotLoops(ax, loops, nchrom,start,end,xy2=xy2)
+       
     #plot genomic features
     for i, bed in enumerate(beds):
         axi += 1
