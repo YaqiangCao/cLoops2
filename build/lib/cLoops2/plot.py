@@ -427,7 +427,7 @@ def getGenes(f, chrom, start, end):
     return ngs
 
 
-def plotGene(ax,n,g,start,end):
+def plotGene(ax,n,g,start,end,space=0.02):
     """
     Plot one genes.
     @param ax: maplotlib ax
@@ -435,7 +435,7 @@ def plotGene(ax,n,g,start,end):
     @param g: cLoops2:ds:Gene object
     @param start: int, start region for plotting
     @param end: int, end region for plotting
-
+    @param space: float, name and gene distance releative
     """
     ax.axis("off")
     ax.set_xlim([start, end])
@@ -470,9 +470,7 @@ def plotGene(ax,n,g,start,end):
                     color=c,
                     linewidth=1,
                     linestyle="-")
-            #ax.text(g.exons[0].start, 0.3, n, color=c, fontsize=5)
-            p = g.exons[0].start 
-            p = start +  (p - start)*0.95
+            p = g.exons[0].start - (end-start) * (space*1.5)
             ax.text(p, 0.15, n, color=c, fontsize=5)
         else:
             #c = "red"
@@ -481,22 +479,16 @@ def plotGene(ax,n,g,start,end):
                     color=c,
                     linewidth=1,
                     linestyle="-")
-            #ax.text(g.exons[-1].end, 0.3, n, color=c, fontsize=5)
-            p = g.exons[-1].end
-            p = start +  (p - start)*1.05
+            p = g.exons[-1].end + (end-start)*space
             ax.text(p, 0.15, n, color=c, fontsize=5)
     else:
         if g.strand == "+":
             c = colors[1]
-            #ax.text(g.exons[0].start, 0.3, n, color=c, fontsize=5)
-            p = g.exons[0].start 
-            p = start +  (p - start)*0.95
+            p = g.exons[0].start - (end-start) * (space*1.5)
             ax.text(p, 0.15, n, color=c, fontsize=5)
         else:
             c = colors[3]
-            #ax.text(g.exons[-1].end, 0.3, n, color=c, fontsize=5)
-            p = g.exons[-1].end
-            p = start +  (p - start)*1.05
+            p = g.exons[-1].end + (end-start)*space
             ax.text(p, 0.15, n, color=c, fontsize=5)
     return ax
 
@@ -536,6 +528,32 @@ def plotCoverage(ax, ys, colori=1, label="", vmin=None, vmax=None,
     ax.tick_params(axis='both', which='major', labelsize=4)
     ax.legend(fontsize=6, fancybox=False, frameon=False)
     return ax
+
+
+
+def plotRegion(ax,rs, start, end, colori=1, label=""):
+    """
+    Plot genomic region.
+    @param ax: matplotlib ax
+    @param rs: [start,end], both start and end are ints
+    @param colori: int, color index
+    @param label: str, name/label for the data
+    """
+    for r in rs:
+        p = patches.Rectangle((r[0], 0.2),
+                                  r[1] - r[0],
+                                  0.6,
+                                  fill=True,
+                                  color=colors[ colori ],
+                                  alpha=0.8)
+        ax.add_patch(p)
+    ax.set_ylim([0, 1])
+    ax.text((start + end) / 2, 0.2, label, fontsize=6)
+    ax.axis("off")
+    ax.set_xlim([start, end])
+    return ax
+
+
 
 
 def plotMatHeatmap(
@@ -1438,6 +1456,8 @@ def plotProfiles(
         name = bed.split("/")[-1].split(".bed")[0]
         ax = fig.add_subplot(gs[axi])
         rs = getBedRegion(bed, chrom, start, end)
+        plotRegion(ax, rs, start,end, i,label=name)
+        """
         for r in rs:
             p = patches.Rectangle((r[0], 0.2),
                                   r[1] - r[0],
@@ -1450,5 +1470,6 @@ def plotProfiles(
         ax.text((start + end) / 2, 0.2, name, fontsize=6)
         ax.axis("off")
         ax.set_xlim([np.min(xs), np.max(xs)])
+        """
 
     pylab.savefig(fo + "_profiles.pdf")
