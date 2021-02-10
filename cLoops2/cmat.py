@@ -118,10 +118,10 @@ def getExpMat(xy, shape, start, end, r, repeats=5):
         #old shuffling
         xy[:, 0] = a
         xy[:, 1] = b
-        #new shuffling, not work well, even for Fei's Capture data
-        #xy[:, 1] = a
-        #xy[:, 0] = b
-        nmat = getObsMat(xy, start, end, r)
+        s = b-a
+        s = np.where( s > 0)[0]
+        nxy = xy[s,] 
+        nmat = getObsMat(nxy, start, end, r)
         if nmat.shape == shape:
             mat.append(nmat)
             i += 1

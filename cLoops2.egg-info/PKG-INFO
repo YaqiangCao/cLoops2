@@ -88,10 +88,10 @@ Description: ## cLoops2: full stack analysis tool for enriched chromatin interac
             cLoops2 callDomains -d trac -o trac -bs 10000 -ws 200000
             cLoops2 plot -f test/chr21-chr21.ixy -o test -bs 500 -start 34840000 \
                          -end 34895000 -triu -1D -loop test_loops.txt -log \
-                         -gtf hg38.gtf -bw ctcf.bw -beds enhancer.bed
+                         -gtf hg38.gtf -bws ctcf.bw -beds enhancer.bed
             cLoops2 montage -f test/chr21-chr21.ixy -o test -bed test.bed
             cLoops2 agg -d trac -loops trac.loop -peaks trac_peaks.bed \
-                        -domains hic_domains.bed -bw CTCF.bw,ATAC.bw -p 20 -o trac 
+                        -domains hic_domains.bed -bws CTCF.bw,ATAC.bw -p 20 -o trac 
             cLoops2 quant -d trac -peaks trac_peaks.bed -loops trac.loop \
                           -domains trac_domain.txt -p 20 -o trac
             cLoops2 anaLoops -loops test_loop.txt -gtf gene.gtf -net -o test
