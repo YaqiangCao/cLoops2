@@ -233,7 +233,7 @@ Examples:
         "-v",
         dest="version",
         action="version",
-        version="cLoops v%s" % __version__,
+        version="cLoops2 v%s" % __version__,
         help = "Show cLoops2 verison number and exit."
     )
     #just used to seperate general options and specific options
