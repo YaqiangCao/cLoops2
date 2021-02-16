@@ -4,7 +4,6 @@ cLoops2.log
 cLoops2_env.yaml
 cLoops2_pip_readme.md
 setup.py
-cLoops2/.plot.py.swp
 cLoops2/__init__.py
 cLoops2/agg.py
 cLoops2/ano.py
@@ -138,6 +137,7 @@ scripts/getSigDist.py
 scripts/getSigEnrich.py
 scripts/hicpro2bedpe.py
 scripts/juicerLong2bedpe.py
+scripts/plotDiffHeatmap.py
 scripts/tow.py
 scripts/tracPre.py
 scripts/tracPre2.py
