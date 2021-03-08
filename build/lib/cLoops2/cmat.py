@@ -138,7 +138,7 @@ def get1DSig(xy, start, end, ext=50):
     for i in range(l_idx, r_idx):
         x = xy.xs[i]
         pa = max(0, x - start - ext)
-        pb = min(max(0, x - start + ext), end)
+        pb = min(max(0, x - start + ext), end-start) #fix max
         ss[pa:pb] += 1
     l_idx = np.searchsorted(xy.ys, start, side="left")
     r_idx = np.searchsorted(xy.ys, end, side="right")

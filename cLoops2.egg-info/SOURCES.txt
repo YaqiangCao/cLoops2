@@ -9,7 +9,6 @@ cLoops2/agg.py
 cLoops2/ano.py
 cLoops2/blockDBSCAN.py
 cLoops2/cDBSCAN2.py
-cLoops2/cLoops2.log
 cLoops2/cLoops2.py
 cLoops2/callCisLoops.py
 cLoops2/callDiffLoops.py
