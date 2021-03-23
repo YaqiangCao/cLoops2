@@ -18,6 +18,7 @@ callCisLoops.py
 2020-03-11: remove the pseudo for estimate p-values of loops, for Trac-looping, it could at least >= 6 is pseudo =1 for poisson p < 1e-6, make the setting of minPts meanless
 2020-11-22: using cDBSCAN2 for Hi-C data
 2020-11-25: observed from Hi-C data, for overlapped loops, higher enrichment score,better
+2021-03-23: change HIC P2LLcut to 1 and binomial p-value cut to 1e-3 as using cDBSCAN2; previouse cutoffs for HIC P2LLcut >=2 binomial p<=1e-5
 """
 
 #sys
@@ -239,7 +240,6 @@ def estLoopSig(
         peakPcut=1e-5,
         win=5,
         countDiffCut=20,
-        p2llcut=2,
         hic=False,
 ):
     """
@@ -249,7 +249,7 @@ def estLoopSig(
     @param hic: bool, if True, will skip anchor examazaiton and carry P2LL examazation
     """
     if hic:
-        p2llcut = 2
+        p2llcut = 1
     else:
         p2llcut = 1 
     xy = ixy2pet(fixy, cut=cut,mcut=mcut)
@@ -338,7 +338,7 @@ def markSigLoops(key, loops, hic=False):
     for loop in loops:
         if sig(loop):
             if hic:
-                if loop.binomial_p_value < 1e-5:
+                if loop.binomial_p_value < 1e-3:
                     loop.significant = 1
                 else:
                     loop.significant = 0
