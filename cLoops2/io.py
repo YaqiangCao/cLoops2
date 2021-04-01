@@ -320,7 +320,7 @@ def peaks2txt(peaks, fout):
     """
     with open(fout, "w") as fo:
         header = [
-            "peakId", "chr", "start", "end", "length", "counts", "RPKM",
+            "peakId", "chr", "start", "end", "summit", "length", "counts", "RPKM",
             "enrichmentScore", "poissonPvalue", "controlCounts", "controlRPKM",
             "controlScaledCounts", "enrichmentScoreVsControl",
             "poissonPvalueVsControl", "pValueHarmonicMean","significant"
@@ -328,8 +328,8 @@ def peaks2txt(peaks, fout):
         fo.write("\t".join(header) + "\n")
         for i, peak in enumerate(peaks):
             line = [
-                "peak_%s" % i, peak.chrom, peak.start, peak.end, peak.length,
-                peak.counts, peak.density, peak.enrichment_score,
+                "peak_%s" % i, peak.chrom, peak.start, peak.end, peak.summit, 
+                peak.length, peak.counts, peak.density, peak.enrichment_score,
                 peak.poisson_p_value
             ]
             if hasattr(peak, "control_counts"):
@@ -353,8 +353,8 @@ def peaks2bed(peaks, fout, sig=True):
     """
     with open(fout, "w") as fo:
         for i, peak in enumerate(peaks):
-            info = "peak_%s;%sbp;%s reads;p-value:%s" % (
-                i, peak.length, peak.counts, peak.poisson_p_value)
+            info = "peak_%s;%sbp;%s reads;summit:%s;p-value:%s" % (
+                i, peak.length, peak.counts, peak.summit, peak.poisson_p_value)
             if hasattr(peak, "control_counts"):
                 info += ";control_counts:%s;enrichment_score_vs_control:%s;control_scaled_counts:%s;p-value_vs_control:%s" % (
                     peak.control_counts, peak.enrichment_score_vs_control,
@@ -618,6 +618,7 @@ def parseTxt2Loops(f, cut=0):
     return loops
 
 
+
 def dloops2txt(dloops, fout):
     """
     Converting list of cLoops2.ds.DiffLoops objects into txt file.
@@ -766,6 +767,7 @@ def dloops2juiceTxt(loops, fout, significant=1):
             f.write("\t".join(list(map(str, nline))) + "\n")
     print("Converting to Juicebox 2D annotation feature finished for %s." %
           fout)
+
 
 
 def dloops2NewWashuTxt(loops, fout, significant=1):

@@ -19,6 +19,7 @@ callPeaks.py
 2020-04-23: sensitive mode added. 
 2020-07-29: -cut and -mcut integrated. -split added, only using single-end as bed for calling peaks, sometimes usefule for Trac-looping or HiChIP
 2020-12-17: refined re-search of significant peaks.
+2021-04-01: adding summit
 """
 
 #sys
@@ -38,8 +39,9 @@ from joblib import Parallel, delayed
 from cLoops2.est import estSf
 from cLoops2.ds import Peak, XY
 from cLoops2.geo import stichPeaks, checkPeakOverlap
-from cLoops2.blockDBSCAN import blockDBSCAN as DBSCAN
 from cLoops2.io import parseIxy, ixy2pet, peaks2txt, peaks2bed
+from cLoops2.blockDBSCAN import blockDBSCAN as DBSCAN
+from cLoops2.cmat import get1DSig
 
 #gloabl settings
 logger = None
@@ -228,7 +230,7 @@ def findSigPeaks(
     #remove identical peaks
     peaks = removeSamePeaks(peaks)
 
-    key, mat = parseIxy(fixy, cut=cut,mcut=mcut)
+    key, mat = parseIxy(fixy, cut=cut, mcut=mcut)
     if split:
         mat = getSplitMat( mat, splitExt)
     xy = XY(mat[:, 0], mat[:, 1])
@@ -263,7 +265,12 @@ def findSigPeaks(
         counts = len(xy.queryPeakBoth(peak.start, peak.end))
         peak.counts = counts
         if peak.counts < max(minPts):
-            continue
+            continue    
+        #summit 
+        sig = get1DSig(xy, peak.start, peak.end)
+        p = np.argmax( sig )
+        peak.summit = peak.start + p
+
         peak.density = counts / 1.0 / peak.length / totalPets * 10.0**9  #RPKM
         peak.poisson_p_value = []
         peak.enrichment_score = []

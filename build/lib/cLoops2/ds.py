@@ -3,7 +3,9 @@
 """
 ds.py
 Defined data structure used in cLoops2.
+
 2020-04-20: update the xy.queryLoop, changed to old way, preiviouse one (lefta,leftb, righta,righb), if rightb < lefta, will call 0
+2021-04-01: add summit for peak
 """
 
 __author__ = "CAO Yaqiang"
@@ -165,6 +167,7 @@ class Peak(object):
         "chrom",
         "start",
         "end",
+        "summit",
         "counts",
         "length",
         "density",  #RPKM

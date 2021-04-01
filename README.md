@@ -1728,17 +1728,18 @@ column | name | explanation
 1th | chrom | chromosomal for the peak 
 2th | start | genomic coordinate of the start site
 3th | end | genomic coordinate of the end site 
-4th | length | length of the peak
-5th | counts | observed reads number in the peak 
-6th | RPKM | RPKM for the reads density in the peak
-7th | enrichmentScore | enrichment score for the peak, calculated by observed PETs number divided by the mean PETs number of nearby 10 fold and 20 fold regions
-8th | poissonPvalue | Poisson test p-value for the loop after Bonferroni correction
-9th | controlCounts| if control data such as input/IgG is assigned, the observed reads number in peak region for control data
-10th | controlRPKM | if control data assigned, RPKM for the reads density in the peak region for control data
-11th | controlScaledCount | if control data assigned, the scaled expected counts used for Poisson test/enrichment score against control data
-12th | enrichmentScoreVsControl | if control data assigned, enrichment score of target vs. control
-13th | poissonPvalueVsControl | if control data assigned, Poisson test p-value of target vs. control after Bonferroni correction
-14th | significant | 1 or 0, 1 means we think the peak is significant compared to local background and control (if assigned)
+4th | summit | genomic coordinate of peak summit
+5th | length | length of the peak
+6th | counts | observed reads number in the peak 
+7th | RPKM | RPKM for the reads density in the peak
+8th | enrichmentScore | enrichment score for the peak, calculated by observed PETs number divided by the mean PETs number of nearby 10 fold and 20 fold regions
+9th | poissonPvalue | Poisson test p-value for the loop after Bonferroni correction
+10th | controlCounts| if control data such as input/IgG is assigned, the observed reads number in peak region for control data
+11th | controlRPKM | if control data assigned, RPKM for the reads density in the peak region for control data
+12th | controlScaledCount | if control data assigned, the scaled expected counts used for Poisson test/enrichment score against control data
+13th | enrichmentScoreVsControl | if control data assigned, enrichment score of target vs. control
+14th | poissonPvalueVsControl | if control data assigned, Poisson test p-value of target vs. control after Bonferroni correction
+15th | significant | 1 or 0, 1 means we think the peak is significant compared to local background and control (if assigned)
 
 ------
 <a name="_loops.txt"></a>
