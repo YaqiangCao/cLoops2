@@ -445,6 +445,7 @@ def parseBwvs(bws, bwvs=""):
             else:
                 t = t.split(",")
                 t = list(map(float, t))
+                t.sort()
                 nbwvs.append(t)
         bwvs = nbwvs
     return bwvs
@@ -544,6 +545,7 @@ def plotCoverage(ax, ys, colori=1, label="", vmin=None, vmax=None,
     p = (vmax - vmin) * 0.15
     ax.set_yticks([vmin, vmax - p])
     ax.set_yticklabels([str(vmin), str(vmax)])
+    ax.set_ylim([vmin,vmax])
     ax.tick_params(axis='both', which='major', labelsize=4)
     ax.legend(fontsize=6, fancybox=False, frameon=False)
     return ax
@@ -1302,11 +1304,12 @@ def plotProfiles(
                           vmin=bwvs[i][0],
                           vmax=bwvs[i][1])
         if i == 0:
-            sns.despine(ax=ax, bottom=True, right=False, left=False, top=False)
+            sns.despine(ax=ax, bottom=False, right=False, left=False, top=False)
         elif i == len(bws) - 1:
             sns.despine(ax=ax, bottom=False, right=False, left=False, top=True)
         else:
-            sns.despine(ax=ax, bottom=True, right=False, left=False, top=True)
+            #sns.despine(ax=ax, bottom=True, right=False, left=False, top=True)
+            sns.despine(ax=ax, bottom=False, right=False, left=False, top=True)
 
     #plot loops as arches
     nchrom = chrom + "-" + chrom

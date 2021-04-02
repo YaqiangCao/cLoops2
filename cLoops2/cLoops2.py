@@ -1785,7 +1785,9 @@ Examples:
         help=
         "BigWig tracks y-axis limitations. Default is atuo-determined. Assign\n"\
         "as 'vmin,vmax;vmin,vmax;vmin,vmax'. For example, '0,1;;0,1' for three\n"\
-        "bigWig tracks, as the second track kept atuo-determined."
+        "bigWig tracks, as the second track kept atuo-determined. Due to\n"\
+        "argparse limitation for parsing minus value, also can be assigned as\n"\
+        "vmax,vmin."
     )
     plot.add_argument(
         "-bwcs",
@@ -2075,6 +2077,16 @@ Examples:
         default=1,
         type=float,
         help="Line width for each PET if -simple is not selected. Default is 1."
+    )
+    montage.add_argument(
+        "-no1D",
+        dest="noOneD",
+        default=False,
+        required=False,
+        action="store_true",
+        help=
+        "Whether to not plot 1D profiles. Default is plot. Set this for Hi-C\n"\
+        "like data."
     )
  
  
@@ -3711,7 +3723,7 @@ def main():
     if cmd == "montage":
         start = datetime.now()
 
-        report = "Command cLoops2 {cmd} -f {f} -bed {bed} -ext {ext} -o {output} -cut {cut} -mcut {mcut} -simple {simple} -viewPoint {viewPoint} -vmin {vmin} -vmax {vmax} -ppmw {ppmw} -aw {aw}".format(
+        report = "Command cLoops2 {cmd} -f {f} -bed {bed} -ext {ext} -o {output} -cut {cut} -mcut {mcut} -simple {simple} -viewPoint {viewPoint} -vmin {vmin} -vmax {vmax} -ppmw {ppmw} -aw {aw} -no1D {noOneD}".format(
             cmd=cmd,
             f=cliParser.fixy,
             bed=cliParser.bed,
@@ -3725,8 +3737,14 @@ def main():
             vmax=cliParser.vmax,
             ppmw=cliParser.ppmw,
             aw=cliParser.aw,
+            noOneD=cliParser.noOneD,
         )
         logger.info(report)
+        
+        if cliParser.noOneD:
+            oneD = False
+        else:
+            oneD = True
 
         #run analysis
         montage(
@@ -3742,6 +3760,7 @@ def main():
             vmax=cliParser.vmax,
             ppmw=cliParser.ppmw,
             aw=cliParser.aw,
+            oneD=oneD,
         )
 
         end = datetime.now()

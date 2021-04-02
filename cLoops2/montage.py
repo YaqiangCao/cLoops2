@@ -7,6 +7,7 @@ Mostly inspired by https://github.com/tsznxx/PyCircos.
 2020-08-11: updated as line width for strength
 2020-08-12: try to highlight target specific regions, basically finished. If following time available, add text annotation. 1D data bin/smooth needed. 
 2020-08-16: updated as adding single region plot
+2021-04-02: add option no 1D signal
 """
 #sys
 import json
@@ -262,6 +263,7 @@ def montage(
         simple=True,
         ppmw=10,
         aw=0.5,
+        oneD=True,
 ):
     """
     Montage analysis of specific regions
@@ -272,6 +274,7 @@ def montage(
     @param vmin: float, minal scale for 1D 
     @param vmax: float, maxial scale for 1D
     @param ppmw: int, 1 PETs per million width
+    @param oneD: bool, whether to plot 1D profile. For data like Hi-C, better not.
     """
     #step 0, basic settings
     rad = 2.5
@@ -455,47 +458,50 @@ def montage(
                          color="purple",
                          label="1 PET")
     
-    #step 5, plot 1D
-    covData = {}
-    i = 0
-    for rid in regions.index:
-        s = get1DSig(xy2, int(regions.loc[rid, "extStart"]),
-                     int(regions.loc[rid, "extEnd"]))
-        s = mergeCov(s)
-        for k, v in s.items():
-            covData[i] = {
-                "rid": rid,
-                "start": v["start"],
-                "end": v["end"],
-                "cov": v["cov"]
-            }
-            i += 1
-    #normalization the 1D signal
-    covData = pd.DataFrame(covData).T
-    s = covData["cov"] / tot
-    covData["cov"] = s
-    if vmin is not None:
-        vmin = vmin
+    if oneD:
+        #step 5, plot 1D
+        covData = {}
+        i = 0
+        for rid in regions.index:
+            s = get1DSig(xy2, int(regions.loc[rid, "extStart"]),
+                         int(regions.loc[rid, "extEnd"]))
+            s = mergeCov(s)
+            for k, v in s.items():
+                covData[i] = {
+                    "rid": rid,
+                    "start": v["start"],
+                    "end": v["end"],
+                    "cov": v["cov"]
+                }
+                i += 1
+        #normalization the 1D signal
+        covData = pd.DataFrame(covData).T
+        s = covData["cov"] / tot
+        covData["cov"] = s
+        if vmin is not None:
+            vmin = vmin
+        else:
+            vmin = 0
+        if vmax is not None:
+            vmax = vmax
+        else:
+            vmax = covData["cov"].max()
+        label = "1D scale (RPM):[%.3f, %.3f]" % (vmin, vmax)
+        cr.fill_between(rad + scaffoldw,
+                        covData,
+                        gid="rid",
+                        start="start",
+                        end="end",
+                        score="cov",
+                        color=colors[1],
+                        alpha=0.8,
+                        scale=oneDscale,
+                        vmin=vmin,
+                        vmax=vmax,
+                        label=label)
+        rad = rad + scaffoldw + oneDscale
     else:
-        vmin = 0
-    if vmax is not None:
-        vmax = vmax
-    else:
-        vmax = covData["cov"].max()
-    label = "1D scale (RPM):[%.3f, %.3f]" % (vmin, vmax)
-    cr.fill_between(rad + scaffoldw,
-                    covData,
-                    gid="rid",
-                    start="start",
-                    end="end",
-                    score="cov",
-                    color=colors[1],
-                    alpha=0.8,
-                    scale=oneDscale,
-                    vmin=vmin,
-                    vmax=vmax,
-                    label=label)
-    rad = rad + scaffoldw + oneDscale
+        rad = rad + scaffoldw
 
     #step 6, plot region ids
     cr.draw_scaffold_ids(rad, inside=False, fontsize=8)
