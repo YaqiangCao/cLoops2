@@ -1211,10 +1211,10 @@ optional arguments:
 ### 14. Plot the interaction heatmap, 1D signals, peaks, loops and domains
 Run **cLoops2 plot -h** to see details.
 ```
-Plot the interaction data as a heatmap (or arches) with additional of virtual 
-4C view point, 1D tracks (bigWig files), 1D annotations (peaks, genes) and 2D 
-annotations (domains). If -f is not assigned, will just plot profiles from 
-bigWig file or bed files.
+Plot the interaction data as a heatmap (or arches/scatter) with additional of 
+virtual 4C view point, 1D tracks (bigWig files), 1D annotations (peaks, genes) 
+and 2D annotations (domains). If -f is not assigned, will just plot profiles 
+from bigWig file or bed files.
 
 Examples:
     1. plot the simple square heatmap for a specific region with 1kb resolution 
@@ -1251,7 +1251,11 @@ Examples:
         cLoops2 plot -f test/chr21-chr21.ixy -o test -start 46228500 \
                      -end 46290000 -1D -loops gm_loops.txt -arch -aw 0.05
 
-    8. plot Hi-C compartments and eigenvector  
+    8. plot small regions interacting PETs as scatter plot
+        cLoops2 plot -f test/chr21-chr21.ixy -o test -start 46228500 \
+                     -end 46290000 -1D -loops gm_loops.txt -scatter
+
+    9. plot Hi-C compartments and eigenvector  
         cLoops2 plot -f test/chr21-chr21.ixy -o test -bs 100000 -log -corr -eig  
 
 optional arguments:
@@ -1288,7 +1292,9 @@ optional arguments:
                         from file name, for example a.bw,b.bw,c.bw. 
   -bwvs BWVS            BigWig tracks y-axis limitations. Default is atuo-determined. Assign
                         as 'vmin,vmax;vmin,vmax;vmin,vmax'. For example, '0,1;;0,1' for three
-                        bigWig tracks, as the second track kept atuo-determined.
+                        bigWig tracks, as the second track kept atuo-determined. Due to
+                        argparse limitation for parsing minus value, also can be assigned as
+                        vmax,vmin.
   -bwcs BWCS            BigWig tracks colors. Default is atuo-determined. Assign as 
                         0,1,2 for three bigWig tracks. Values seperated by comma.
   -log                  Whether to log transform the matrix.
@@ -1320,8 +1326,16 @@ optional arguments:
                         small region for raw data, especially when heatmap is not clear.
   -aw AW                Line width for each PET in arches plot. Default is 1. Try to
                         change it if too many or few PETs.
-  -ac AC                Line color for each PET in arches plot. Default is 1. Try to
+  -ac AC                Line color for each PET in arches plot. Default is 4. Try to
                         change it see how many colors are supported by cLoops2.
+  -scatter              Whether to plot interacting PETs as scatter dots. Default is not.
+                        If set, only original one PET one dot will be shown. Usefule to check
+                        raw data, especially when heatmap is not clear that -vmax is too small.
+  -ss SS                Dot size for each PET in scatter plot. Default is 1. Try to
+                        change it to optimize the plot.
+  -sc SC                Dot color for each PET in scatter plot. Default is 0. Try to
+                        change it see how many colors are supported by cLoops2.
+  -sa SA                Alpha to control dot color saturation. Default is 1.
   -eig                  Whether to plot the PC1 of correlation matirx to show compartments
                         Default is not. Only work well for big regions such as resolution
                         of 100k.

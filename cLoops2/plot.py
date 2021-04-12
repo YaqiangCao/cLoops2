@@ -1217,6 +1217,181 @@ def plotPETsArches(
     pylab.savefig(fo + "_arches.pdf")
 
 
+def plotPETsScatter(
+        f,
+        fo,
+        start=0,
+        end=-1,
+        cut=0,
+        mcut=-1,
+        oneD=False,
+        oneDv="",
+        bws=[],
+        bwvs="",
+        bwcs="",
+        beds=[],
+        loops=None,
+        gtf="",
+        ss = 1,
+        sc = 0,
+        sa = 0.5,
+        triu=False,
+):
+    """
+    Plot the interacting PETs as scatter, showing the raw data. 
+    """
+    chrom, xy = parseIxy(f, cut=cut, mcut=mcut)
+    xy2 = XY(xy[:, 0], xy[:, 1])  #XY object
+
+    if start == 0:
+        start = np.min(xy)
+    if end == -1:
+        end = np.max(xy)
+    if oneD:
+        predir = os.path.dirname(os.path.realpath(f))
+        metaf = predir + "/petMeta.json"
+        meta = json.loads(open(metaf).read())
+        total = meta["Unique PETs"] * 2
+        sig = get1DSig(xy2, start, end)
+        sig = sig / total * 10**6
+    hights = 0
+    #heights ratio
+    hr = []
+    if gtf != "":
+        genes = getGenes(gtf, chrom[0], start, end)
+        if len(genes) > 20:
+            print(
+                "More than 20 genes in the target region, only plot random 20."
+            )
+            ns = list(genes.keys())[:20]
+            ng = {}
+            for n in ns:
+                ng[n] = genes[n]
+            genes = ng
+        hights += len(genes) * 0.1
+        hr.extend([0.1] * len(genes))
+    if len(bws) > 0:
+        hights += len(bws) * 0.5
+        hr.extend([1] * len(bws))
+    if oneD:
+        hights += 0.5
+        hr.append(1)
+    if loops is not None:
+        hights += 0.5
+        hr.append(1)
+    if len(beds) > 0:
+        hights += len(beds) * 0.2
+        hr.extend([0.2] * len(beds))
+    #scatter plot
+    hights += 2
+    hr.append(2.5)
+    if triu:
+        hights += 3
+        square = False
+    else:
+        hights += 4
+        square = False
+  
+    #prepare figure
+    fig = pylab.figure(figsize=(4, hights))
+    gs = mpl.gridspec.GridSpec(len(hr),
+                               1,
+                               height_ratios=hr,
+                               top=0.9,
+                               bottom=0.05,
+                               left=0.1,
+                               right=0.9,
+                               wspace=0.05)
+    pylab.suptitle("%.2f kb,%s:%s-%s" %
+                   (float(end - start) / 1000.0, chrom[0], start, end),
+                   fontsize=8)
+    axi = -1
+
+    #plot gene
+    if gtf != "":
+        for n, g in genes.items():
+            axi += 1
+            ax = fig.add_subplot(gs[axi])
+            plotGene(ax, n, g, start, end)
+
+    #plot bigWig
+    #yaxis limitaitons
+    bwvs = parseBwvs(bws, bwvs)
+    #colors
+    if bwcs == "":
+        bwcs = range(len(bws))
+    else:
+        bwcs = list(map(int, bwcs.split(",")))
+    for i, bw in enumerate(bws):
+        axi += 1
+        ax = fig.add_subplot(gs[axi])
+        name = bw.split("/")[-1].split(".bw")[0]
+        bw = pyBigWig.open(bw)
+        ys = bw.values(chrom[0], start, end)
+        ys = np.nan_to_num(ys)
+        plotCoverage(ax,
+                     ys,
+                     colori=bwcs[i],
+                     label=name,
+                     vmin=bwvs[i][0],
+                     vmax=bwvs[i][1])
+
+    #plot 1D signal
+    if oneD:
+        axi += 1
+        ax = fig.add_subplot(gs[axi])
+        if oneDv != "":
+            oneDv = list(map(float, oneDv.split(",")))
+        else:
+            oneDv = [None, None]
+        plotCoverage(ax,
+                     sig,
+                     colori=3,
+                     label="1D signal",
+                     vmin=oneDv[0],
+                     vmax=oneDv[1])
+
+    #plot loops as arches
+    nchrom = "-".join(chrom)
+    if loops is not None and nchrom in loops and len(loops[nchrom]) > 0:
+        axi += 1
+        ax = fig.add_subplot(gs[axi])
+        #plot the arch and annotate the PETs support the loop
+        #get the minal PETs number as linewidth 1,others are fold
+        plotLoops(ax, loops, nchrom,start,end,xy2=xy2)
+       
+    #plot genomic features
+    for i, bed in enumerate(beds):
+        axi += 1
+        name = bed.split("/")[-1].split(".bed")[0]
+        ax = fig.add_subplot(gs[axi])
+        rs = getBedRegion(bed, chrom[0], start, end)
+        plotRegion(ax, rs, start, end, i, label=name)
+
+    #plot PETs as dos
+    axi += 1
+    ax = fig.add_subplot(gs[axi])
+    ps = xy2.queryPeakBoth(start, end)
+    mat = xy[list(ps)] 
+    mat = mat - start
+    if triu:
+        #caculating the rotate coordinates
+        x = mat[:,0]*np.cos( -np.pi/4 ) - mat[:,1]*np.sin( -np.pi/4 )
+        y = mat[:,1]*np.cos( -np.pi/4 ) + mat[:,0]*np.sin( -np.pi/4 )
+        ax.set_xlim([0, np.max(x)])
+        ax.set_ylim([np.min(y),np.max(y)])
+        ax.scatter( x,y, s =ss, color=colors[sc], alpha=sa)
+    else:
+        ax.scatter( mat[:,0], mat[:,1], s =ss, color=colors[sc], alpha=sa)
+        ax.scatter( mat[:,1], mat[:,0], s =ss, color=colors[sc], alpha=sa)
+        ax.set_xlim([0, end-start])
+        ax.set_ylim([0, end-start])
+    ax.set_xticks([])
+    ax.set_yticks([])
+    ax.invert_yaxis()
+    pylab.savefig(fo + "_scatter.pdf")
+
+
 def plotProfiles(
         fo,
         chrom="",

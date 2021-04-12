@@ -45,7 +45,7 @@ from cLoops2.est import estRes, estSat  #estimate reasonable resolution, sequenc
 from cLoops2.agg import aggPeaks, aggLoops, aggViewPoints, aggDomains, aggTwoAnchors  #aggreate analysis of peaks,loops, viewPoints, domains
 from cLoops2.est import getXyDis, getGmmLabelsEps, getKDis, getKDisKneeEps  #estimate eps
 from cLoops2.dump import ixy2bed,ixy2bedpe,ixy2hic,ixy2washU,ixy2ucsc,ixy2bdg,ixy2mat #dump files to others
-from cLoops2.plot import plotGmmEst, plotKDis, plotKDisE, plotMatHeatmap, plotPETsArches,plotProfiles  #plot
+from cLoops2.plot import plotGmmEst, plotKDis, plotKDisE, plotMatHeatmap,plotPETsScatter,plotPETsArches,plotProfiles  #plot
 from cLoops2.utils import getLogger  #logger and other utilities
 from cLoops2.quant import quantPeaks, quantLoops, quantDomains #quantification of features
 from cLoops2.estSim import estSim #estimate similarities 
@@ -1632,10 +1632,10 @@ Examples:
  
     #plot function
     plotDes = """
-Plot the interaction data as a heatmap (or arches) with additional of virtual 
-4C view point, 1D tracks (bigWig files), 1D annotations (peaks, genes) and 2D 
-annotations (domains). If -f is not assigned, will just plot profiles from 
-bigWig file or bed files.
+Plot the interaction data as a heatmap (or arches/scatter) with additional of 
+virtual 4C view point, 1D tracks (bigWig files), 1D annotations (peaks, genes) 
+and 2D annotations (domains). If -f is not assigned, will just plot profiles 
+from bigWig file or bed files.
 
 Examples:
     1. plot the simple square heatmap for a specific region with 1kb resolution 
@@ -1672,7 +1672,11 @@ Examples:
         cLoops2 plot -f test/chr21-chr21.ixy -o test -start 46228500 \\
                      -end 46290000 -1D -loops gm_loops.txt -arch -aw 0.05
 
-    8. plot Hi-C compartments and eigenvector  
+    8. plot small regions interacting PETs as scatter plot
+        cLoops2 plot -f test/chr21-chr21.ixy -o test -start 46228500 \\
+                     -end 46290000 -1D -loops gm_loops.txt -scatter
+
+    9. plot Hi-C compartments and eigenvector  
         cLoops2 plot -f test/chr21-chr21.ixy -o test -bs 100000 -log -corr -eig  
 """
     plot = subparsers.add_parser(
@@ -1939,8 +1943,44 @@ Examples:
         required=False,
         default=4,
         type=int,
-        help="Line color for each PET in arches plot. Default is 1. Try to\n"\
+        help="Line color for each PET in arches plot. Default is 4. Try to\n"\
         "change it see how many colors are supported by cLoops2."
+    )
+    plot.add_argument(
+        "-scatter",
+        dest="scatter",
+        required=False,
+        action="store_true",
+        default=False,
+        help="Whether to plot interacting PETs as scatter dots. Default is not.\n"\
+        "If set, only original one PET one dot will be shown. Usefule to check\n"\
+        "raw data, especially when heatmap is not clear that -vmax is too small."
+    )
+    plot.add_argument(
+        "-ss",
+        dest="ss",
+        required=False,
+        default=1,
+        type=float,
+        help="Dot size for each PET in scatter plot. Default is 1. Try to\n"\
+        "change it to optimize the plot."
+    )
+    plot.add_argument(
+        "-sc",
+        dest="sc",
+        required=False,
+        default=0,
+        type=int,
+        help="Dot color for each PET in scatter plot. Default is 0. Try to\n"\
+        "change it see how many colors are supported by cLoops2."
+    )
+    plot.add_argument(
+        "-sa",
+        dest="sa",
+        required=False,
+        default=1,
+        type=float,
+        help="Alpha to control dot color saturation. Default is 1."
     )
     plot.add_argument(
         "-eig",
@@ -3552,7 +3592,7 @@ def main():
     if cmd == "plot":
         start = datetime.now()
 
-        report = "Command cLoops2 {cmd} -f {f} -o {output} -chrom {chrom} -start {start} -end {end} -bs {r} -cut {cut} -mcut {mcut} -log {log} -m {method} -corr {corr} -triu {triu} -norm {norm} -bws {bws} -bwvs {bwvs} -bwcs {bwcs} -beds {beds} -gtf {gtf} -1D {oneD} -1Dv {oneDv} -loops {floop} -domains {fdomain} -vmin {vmin} -vmax {vmax} -virtual4C {virtual4C} -view_start {viewStart} -view_end {viewEnd} -arch {arch} -aw {aw} -ac {ac} -eig {eig} -eig_r {eig_r}".format(
+        report = "Command cLoops2 {cmd} -f {f} -o {output} -chrom {chrom} -start {start} -end {end} -bs {r} -cut {cut} -mcut {mcut} -log {log} -m {method} -corr {corr} -triu {triu} -norm {norm} -bws {bws} -bwvs {bwvs} -bwcs {bwcs} -beds {beds} -gtf {gtf} -1D {oneD} -1Dv {oneDv} -loops {floop} -domains {fdomain} -vmin {vmin} -vmax {vmax} -virtual4C {virtual4C} -view_start {viewStart} -view_end {viewEnd} -arch {arch} -aw {aw} -ac {ac} -scatter {scatter} -ss {ss} -sa {sa} -sc {sc} -eig {eig} -eig_r {eig_r}".format(
             cmd=cmd,
             f=cliParser.fixy,
             output=cliParser.fnOut,
@@ -3584,6 +3624,10 @@ def main():
             arch=cliParser.arch,
             aw=cliParser.aw,
             ac=cliParser.ac,
+            scatter=cliParser.scatter,
+            ss=cliParser.ss,
+            sa=cliParser.sa,
+            sc=cliParser.sc,
             eig=cliParser.eig,
             eig_r=cliParser.eig_r,
         )
@@ -3647,7 +3691,7 @@ def main():
                 logger.info("ERROR! -f assigned %s but not exists. Return."%cliParser.fixy)
                 return
             #plot heatmap
-            if cliParser.arch == False:
+            if cliParser.arch == False and cliParser.scatter == False:
                 plotMatHeatmap(
                     cliParser.fixy,
                     cliParser.fnOut,
@@ -3679,24 +3723,46 @@ def main():
                     eig_r=cliParser.eig_r
                 )
             else:
-                plotPETsArches( 
-                    cliParser.fixy,
-                    cliParser.fnOut, 
-                    start=cliParser.start, 
-                    end=cliParser.end, 
-                    cut=cliParser.cut, 
-                    mcut=cliParser.mcut, 
-                    oneD=cliParser.oneD, 
-                    oneDv=cliParser.oneDv,
-                    bws=bws, 
-                    bwvs=cliParser.bwvs,
-                    bwcs=cliParser.bwcs,
-                    beds=beds, 
-                    loops=loops, 
-                    gtf=cliParser.gtf, 
-                    aw=cliParser.aw,
-                    ac=cliParser.ac,
-                )
+                if cliParser.arch:
+                    plotPETsArches( 
+                        cliParser.fixy,
+                        cliParser.fnOut, 
+                        start=cliParser.start, 
+                        end=cliParser.end, 
+                        cut=cliParser.cut, 
+                        mcut=cliParser.mcut, 
+                        oneD=cliParser.oneD, 
+                        oneDv=cliParser.oneDv,
+                        bws=bws, 
+                        bwvs=cliParser.bwvs,
+                        bwcs=cliParser.bwcs,
+                        beds=beds, 
+                        loops=loops, 
+                        gtf=cliParser.gtf, 
+                        aw=cliParser.aw,
+                        ac=cliParser.ac,
+                    )
+                if cliParser.scatter:
+                    plotPETsScatter( 
+                        cliParser.fixy,
+                        cliParser.fnOut, 
+                        start=cliParser.start, 
+                        end=cliParser.end, 
+                        cut=cliParser.cut, 
+                        mcut=cliParser.mcut, 
+                        oneD=cliParser.oneD, 
+                        oneDv=cliParser.oneDv,
+                        bws=bws, 
+                        bwvs=cliParser.bwvs,
+                        bwcs=cliParser.bwcs,
+                        beds=beds, 
+                        loops=loops, 
+                        gtf=cliParser.gtf, 
+                        ss=cliParser.ss,
+                        sc=cliParser.sc,
+                        sa=cliParser.sa,
+                        triu=cliParser.triu,
+                    )
         else:
             if cliParser.chrom !="":
                 plotProfiles( 
