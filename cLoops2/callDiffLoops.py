@@ -628,7 +628,6 @@ def callDiffLoops(
         cd,
         output,
         cut=0,
-        acut=-1,
         mcut=-1,
         cpu=1,
         pcut=1e-2,
@@ -652,8 +651,8 @@ def callDiffLoops(
     @param pcut: float, p-value cutoffs after Bon correction
     @param fdrcut: float, fdrcut for background to estimate Mcut and Acut
     @param customize: binary, if true, use user provided MA M cut and A cut
-    @param acut: float, if customize, used
-    @param mcut: float, if customize, used
+    @param cacut: float, if customize, used, A for MA plot
+    @param cmcut: float, if customize, used, M for MA plot
     """
     #data name
     if td.endswith("/"):
@@ -709,7 +708,7 @@ def callDiffLoops(
     sf, acut, mcut = getBgNorm(cs, ts, output, fdrcut=fdrcut)
     # check whether to use customized cutoffs
     if customize:
-        acut = caut 
+        acut = cacut 
         mcut = cmcut
 
     # step 4, estimate the difference significance
