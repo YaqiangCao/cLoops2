@@ -1500,8 +1500,14 @@ for the loop and loop anchors. For example, if transformed PETs for target is
 p-value.
 
 Example:
-    cLoops2 callDiffLoops -tloop target_loop.txt -cloop control_loop.txt \\
+    1. classical usage 
+        cLoops2 callDiffLoops -tloop target_loop.txt -cloop control_loop.txt \\
                           -td ./target -cd ./control -o target_diff
+
+    2. customize MA cutoffs 
+        cLoops2 callDiffLoops -tloop target_loop.txt -cloop control_loop.txt \\
+                          -td ./target -cd ./control -o target_diff -cutomize \\
+                          -acut 5 -mcut 0.5
     """
     callDiffLoops = subparsers.add_parser(
         'callDiffLoops',
@@ -1570,6 +1576,35 @@ Example:
         help=
         "Whether to save tracks of loops to visualize in legacy and new washU.\n"\
         "Default is not, set this flag to save two files."
+    )
+    callDiffLoops.add_argument(
+        "-customize",
+        dest="customize",
+        required=False,
+        action="store_true",
+        help=
+        "Whether to use cutomized cutoffs of MA plot. Defulat is not. If enable\n"\
+        "-acut and -mcut is needed."
+    )
+    callDiffLoops.add_argument(
+        "-cacut",
+        dest="cacut",
+        required=False,
+        type=float,
+        default=0.0,
+        help=
+        "Average cutoff for MA plot of normalized PETs of loops. Assign when\n"\
+        "-customize option used."
+    )
+    callDiffLoops.add_argument(
+        "-cmcut",
+        dest="cmcut",
+        required=False,
+        type=float,
+        default=0.0,
+        help=
+        "Fold change cutoff for MA plot of normalized PETs of loops. Assign when\n"\
+        "-customize option used."
     )
  
     #call domain function
@@ -3475,7 +3510,7 @@ def main():
     if cmd == "callDiffLoops":
         start = datetime.now()
 
-        report = "Command: cLoops2 {} -tloop {} -cloop {} -td {} -cd {} -pcut {} -fdr {} -o {} -p {} -j {} -w {}".format(
+        report = "Command: cLoops2 {} -tloop {} -cloop {} -td {} -cd {} -pcut {} -fdr {} -o {} -p {} -j {} -w {} -customize {} -cacut {} -cmcut {}".format(
                cmd, 
                cliParser.tloop, 
                cliParser.cloop, 
@@ -3487,6 +3522,9 @@ def main():
                cliParser.cpu,
                cliParser.juicebox,
                cliParser.washU,
+               cliParser.customize,
+               cliParser.cacut,
+               cliParser.cmcut,
         )   
         logger.info(report)
 
@@ -3523,6 +3561,10 @@ def main():
             r = "-cd %s not exists! Return." % cliParser.cpred
             logger.error(r)
             return
+        if cliParser.customize:
+            if cliParser.cacut == 0.0 and cliParser.cmcut == 0.0:
+                r = "-customize option used, but -cacut and -cmcut not assigned! Return."
+                logger.error(r)
 
         #run the call differentially enriched loops function
         callDiffLoops(
@@ -3538,6 +3580,9 @@ def main():
             fdrcut=cliParser.fdr,
             juicebox=cliParser.juicebox,
             washU=cliParser.washU,
+            customize=cliParser.customize,
+            cacut=cliParser.cacut,
+            cmcut=cliParser.cmcut,
         )
 
         end = datetime.now()

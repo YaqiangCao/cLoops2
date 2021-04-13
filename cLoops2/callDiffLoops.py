@@ -12,6 +12,7 @@ Well tested for Trac-looping data.
 2020-05-20: try to add the shift of background to foreground, too strigenet
 2020-06-24: try to add the estimation of anchors
 2020-07-30: try to add the estimation of anchors, and seperated loops. acut and mcut estimated from background already very strong. win size may not affect, so for efficient consideration set to 1. Alsoadd p-values to bg estimation.
+2021-04-12: cutomize parameters for acut and mcut for MA plot added
 """
 
 __date__ = ""
@@ -233,7 +234,8 @@ def getBgNorm(cs,
               acut=0,
               step=0.1,
               fdrcut=0.05,
-              pseudocut=1.0):
+              pseudocut=1.0
+    ):
     """ 
     Do the MANorm with background data and estimate the cutoffs.
     @param cs: [], list of background counts of control data
@@ -633,6 +635,9 @@ def callDiffLoops(
         fdrcut=0.05,
         juicebox=False,
         washU=False,
+        customize=False,
+        cacut=0.0,
+        cmcut=0.0,
 ):
     """
     Call differentially enriched loops 
@@ -646,8 +651,15 @@ def callDiffLoops(
     @param cpu: int, number of cpus used 
     @param pcut: float, p-value cutoffs after Bon correction
     @param fdrcut: float, fdrcut for background to estimate Mcut and Acut
+    @param customize: binary, if true, use user provided MA M cut and A cut
+    @param acut: float, if customize, used
+    @param mcut: float, if customize, used
     """
     #data name
+    if td.endswith("/"):
+        td = td[:-1]
+    if cd.endswith("/"):
+        cd = cd[:-1]
     tname = td.split("/")[-1]
     cname = cd.split("/")[-1]
 
@@ -695,6 +707,10 @@ def callDiffLoops(
 
     # step 3, estimate the fitting parameters, cutoffs based on MANorm
     sf, acut, mcut = getBgNorm(cs, ts, output, fdrcut=fdrcut)
+    # check whether to use customized cutoffs
+    if customize:
+        acut = caut 
+        mcut = cmcut
 
     # step 4, estimate the difference significance
     ds = Parallel(n_jobs=cpu,
