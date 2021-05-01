@@ -8,7 +8,7 @@ Mostly inspired by https://github.com/tsznxx/PyCircos.
 2020-08-12: try to highlight target specific regions, basically finished. If following time available, add text annotation. 1D data bin/smooth needed. 
 2020-08-16: updated as adding single region plot
 2021-04-02: add option no 1D signal
-2021-04-28: modified view point mode for arches
+2021-04-28: update view point mode
 """
 #sys
 import json
@@ -431,37 +431,58 @@ def montage(
             for ra in regions.index:
                 if viewPoint != "" and ra not in viewPoint:
                     continue
-                #print(ra, viewPoint)
                 for rb in regions.index:
                     if ra == rb:
                         continue
-                    #print(rb)
-                    ca, cb, cab = xy2.queryLoop(regions.loc[ra,"rawStart"],
-                                                regions.loc[ra,"rawEnd"],
-                                                regions.loc[rb,"rawStart"],
-                                                regions.loc[rb,"rawEnd"])
-                    cab = list(cab)
-                    cab = [ t for t in cab if t not in cors ]
-                    cors.update(cab)
-                    for x, y in xy[cab, ]:
-                        if regions.loc[ra,"rawStart"] < regions.loc[rb,"rawStart"]:
+                    if viewPoint == "":
+                        ### important!!! always keep lefta,righta, leftb,rightb, righta <=leftb
+                        if regions.loc[rb, "rawStart"] < regions.loc[ra, "rawEnd"]:
+                            continue
+                        ca, cb, cab = xy2.queryLoop(regions.loc[ra,"rawStart"],
+                                                    regions.loc[ra,"rawEnd"],
+                                                    regions.loc[rb,"rawStart"],
+                                                    regions.loc[rb,"rawEnd"])
+                        cab = list(cab)
+                        for x, y in xy[cab, ]:
                             nx = x - regions.loc[ra, "extStart"]
                             ny = y - regions.loc[rb, "extStart"]
                             cr.draw_link(rad, [ra, rb],
-                                     nx,
-                                     ny,
-                                     lw=aw,
-                                     alpha=0.5,
-                                     color="purple")
+                                         nx,
+                                         ny,
+                                         #lw=0.5,
+                                         lw=aw,
+                                         alpha=0.5,
+                                         color="purple")
+                    else:
+                        ca, cb, cab = xy2.queryLoop(regions.loc[ra,"rawStart"],
+                                                    regions.loc[ra,"rawEnd"],
+                                                    regions.loc[rb,"rawStart"],
+                                                    regions.loc[rb,"rawEnd"])
+                        cab = list(cab)
+                        cab = [ t for t in cab if t not in cors]
+                        cors.update(cab)
+                        if regions.loc[ra,"rawStart"] < regions.loc[rb,"rawStart"]:
+                            for x, y in xy[cab, ]:
+                                nx = x - regions.loc[ra, "extStart"]
+                                ny = y - regions.loc[rb, "extStart"]
+                                cr.draw_link(rad, [ra, rb],
+                                             nx,
+                                             ny,
+                                             #lw=0.5,
+                                             lw=aw,
+                                             alpha=0.5,
+                                             color="purple")
                         else:
-                            nx = x - regions.loc[rb, "extStart"]
-                            ny = y - regions.loc[ra, "extStart"]
-                            cr.draw_link(rad, [rb, ra],
-                                     nx,
-                                     ny,
-                                     lw=aw,
-                                     alpha=0.5,
-                                     color="purple")
+                            for x, y in xy[cab, ]:
+                                nx = x - regions.loc[rb, "extStart"]
+                                ny = y - regions.loc[ra, "extStart"]
+                                cr.draw_link(rad, [rb, ra],
+                                             nx,
+                                             ny,
+                                             #lw=0.5,
+                                             lw=aw,
+                                             alpha=0.5,
+                                             color="purple")
             cr.draw_link(0, [ra, ra],
                          0,
                          0,

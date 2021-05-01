@@ -327,7 +327,16 @@ def getBwSig(bw, loops, bins=100, ext=10, skipZeros=False):
     return name, ys
 
 
-def plotALoops(mat, fout, ss=None, bwSigs=None, bins=100, norm=False):
+def plotALoops( 
+                mat, 
+                fout, 
+                ss=None, 
+                bwSigs=None, 
+                bins=100, 
+                norm=False,
+                vmin=None,
+                vmax=None,
+            ):
     """
     Plot the mean loop heatmap.
     bwSigs: {name:signal array}
@@ -410,13 +419,13 @@ def plotALoops(mat, fout, ss=None, bwSigs=None, bins=100, norm=False):
     if norm == False:
         cmap = sns.cubehelix_palette(light=1, as_cmap=True)
         center = None
-        vmin = 0
+        if vmin is None:
+            vmin = 0
     else:
         cmap = sns.color_palette("RdBu_r", 11).as_hex()
         cmap[int(len(cmap) / 2)] = "#FFFFFF"
         cmap = ListedColormap(cmap)
         center = 0
-        vmin = None
     sns.heatmap(mat,
                 xticklabels=False,
                 yticklabels=False,
@@ -428,6 +437,7 @@ def plotALoops(mat, fout, ss=None, bwSigs=None, bins=100, norm=False):
                 linecolor="gray",
                 linestyle="--",
                 vmin=vmin,
+                vmax=vmax,
                 center=center,
                 cbar_kws={
                     'orientation': 'horizontal',
@@ -456,7 +466,10 @@ def aggLoops(predir,
              cpu=1,
              skipZeros=False,
              norm=False,
-             oneD=False):
+             oneD=False,
+             vmax=None,
+             vmin=None,
+             ):
     """
     Aggregated loops analysis. 
     """
@@ -526,7 +539,7 @@ def aggLoops(predir,
             bwSigs[bwName] = bwSig
     else:
         bwSigs = None
-    plotALoops(mat, output, ss, bwSigs, norm=norm)
+    plotALoops(mat, output, ss, bwSigs, norm=norm,vmin=vmin,vmax=vmax)
 
 
 ### aggregated viewpoints releated functions
