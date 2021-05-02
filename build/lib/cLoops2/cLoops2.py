@@ -3900,7 +3900,7 @@ def main():
     if cmd == "agg":
         start = datetime.now()
 
-        report = "Command cLoops2 {cmd} -d {predir} -o {output} -cut {cut} -mcut {mcut} -p {cpu} -skipZeros {skipZeros} -peaks {peakf} -peak_ext {peak_ext} -peak_bins {peak_bins} -peak_norm {peak_norm} -loops {loopf} -loop_ext {loop_ext} -loop_cut {loop_cut} -loop_norm {loop_norm} -loop_vmin {loop_vim} -loop_vmax {loop_vmax} -viewPoints {viewPointF} -viewPointUp {viewPointUp} -viewPointDown {viewPointDown} -viewPointBs {viewPointBs} -viewPoint_norm {viewPoint_norm} -twoAnchors {twoAnchorF} -twoAnchor_ext {twoAnchor_ext} -twoAnchor_vmin {twoAnchor_vmin} -twoAnchor_vmax {twoAnchor_vmax} -domains {domainf} -domain_ext {domain_ext} -domain_vmin {dvmin} -domain_vmax {dvmax} -bws {bws} -1D {oneD}".format(
+        report = "Command cLoops2 {cmd} -d {predir} -o {output} -cut {cut} -mcut {mcut} -p {cpu} -skipZeros {skipZeros} -peaks {peakf} -peak_ext {peak_ext} -peak_bins {peak_bins} -peak_norm {peak_norm} -loops {loopf} -loop_ext {loop_ext} -loop_cut {loop_cut} -loop_norm {loop_norm} -loop_vmin {loop_vmin} -loop_vmax {loop_vmax} -viewPoints {viewPointF} -viewPointUp {viewPointUp} -viewPointDown {viewPointDown} -viewPointBs {viewPointBs} -viewPoint_norm {viewPoint_norm} -twoAnchors {twoAnchorF} -twoAnchor_ext {twoAnchor_ext} -twoAnchor_vmin {twoAnchor_vmin} -twoAnchor_vmax {twoAnchor_vmax} -domains {domainf} -domain_ext {domain_ext} -domain_vmin {dvmin} -domain_vmax {dvmax} -bws {bws} -1D {oneD}".format(
             cmd=cmd,
             predir=cliParser.predir,
             output=cliParser.fnOut,
