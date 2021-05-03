@@ -102,4 +102,4 @@ if __name__ == '__main__':
     start_time = datetime.now()
     main()
     usedtime = datetime.now() - start_time
-    sys.stderr.write("Prcess finished. Used CPU time: %s Bye!\n" % usedtime)
+    sys.stderr.write("Process finished. Used CPU time: %s Bye!\n" % usedtime)
