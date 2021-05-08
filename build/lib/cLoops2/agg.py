@@ -349,6 +349,7 @@ def plotALoops(
             nmat = deepcopy(mat[i])
             nmat[p, p] = 0
             if nmat.mean() == 0.0:
+                #es.append(0.0)
                 continue
             else:
                 es.append(mat[i, p, p] / nmat.mean())
