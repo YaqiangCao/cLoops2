@@ -1606,6 +1606,24 @@ Example:
         "Fold change cutoff for MA plot of normalized PETs of loops. Assign when\n"\
         "-customize option used."
     )
+    callDiffLoops.add_argument(
+        "-vmin",
+        dest="vmin",
+        default=None,
+        required=False,
+        type=float,
+        help=
+        "The minimum value shown in the heatmap and colorbar."
+    )
+    callDiffLoops.add_argument(
+        "-vmax",
+        dest="vmax",
+        default=None,
+        required=False,
+        type=float,
+        help=
+        "The maxmum value shown in the heatmap and colorbar."
+    )
  
     #call domain function
     callDomainsDes = """
@@ -3528,7 +3546,7 @@ def main():
     if cmd == "callDiffLoops":
         start = datetime.now()
 
-        report = "Command: cLoops2 {} -tloop {} -cloop {} -td {} -cd {} -pcut {} -fdr {} -o {} -p {} -j {} -w {} -customize {} -cacut {} -cmcut {}".format(
+        report = "Command: cLoops2 {} -tloop {} -cloop {} -td {} -cd {} -pcut {} -fdr {} -o {} -p {} -j {} -w {} -customize {} -cacut {} -cmcut {} -vmin {} -vmax {}".format(
                cmd, 
                cliParser.tloop, 
                cliParser.cloop, 
@@ -3543,6 +3561,8 @@ def main():
                cliParser.customize,
                cliParser.cacut,
                cliParser.cmcut,
+               cliParser.vmin,
+               cliParser.vmax,
         )   
         logger.info(report)
 
@@ -3601,6 +3621,8 @@ def main():
             customize=cliParser.customize,
             cacut=cliParser.cacut,
             cmcut=cliParser.cmcut,
+            vmin=cliParser.vmin,
+            vmax=cliParser.vmax,
         )
 
         end = datetime.now()

@@ -474,7 +474,7 @@ def getDiffAggLoops(predir, loops, cpu=1, norm=True):
     return mat, es
 
 
-def plotDiffAggLoops(dloops, output, tl, cl, td, cd, cpu=1, norm=True):
+def plotDiffAggLoops(dloops, output, tl, cl, td, cd, cpu=1, norm=True,vmin=None,vmax=None):
     """
     Plot the aggregated unqiue and overlapped loops.
     """
@@ -521,6 +521,8 @@ def plotDiffAggLoops(dloops, output, tl, cl, td, cd, cpu=1, norm=True):
                     linewidths=0.05,
                     linecolor="gray",
                     linestyle="--",
+                    vmin=vmin,
+                    vmax=vmax,
                     cbar_kws={"shrink": 0.5})
         ax.set_ylabel(na, fontsize=10)
         ax.set_title("Common loops\n%s loops; ES:%.3f" %
@@ -541,6 +543,8 @@ def plotDiffAggLoops(dloops, output, tl, cl, td, cd, cpu=1, norm=True):
                     linewidths=0.05,
                     linecolor="gray",
                     linestyle="--",
+                    vmin=vmin,
+                    vmax=vmax,
                     cbar_kws={"shrink": 0.5})
         ax.set_title("%s unique loops\n%s loops; ES:%.3f" %
                      (na, len(trtTrtES), np.mean(trtTrtES)),
@@ -560,6 +564,8 @@ def plotDiffAggLoops(dloops, output, tl, cl, td, cd, cpu=1, norm=True):
                     linewidths=0.05,
                     linecolor="gray",
                     linestyle="--",
+                    vmin=vmin,
+                    vmax=vmax,
                     cbar_kws={"shrink": 0.5})
         ax.set_title("%s unique loops\n%s loops; ES:%.3f" %
                      (nb, len(trtConES), np.mean(trtConES)),
@@ -579,6 +585,8 @@ def plotDiffAggLoops(dloops, output, tl, cl, td, cd, cpu=1, norm=True):
                     linewidths=0.05,
                     linecolor="gray",
                     linestyle="--",
+                    vmin=vmin,
+                    vmax=vmax,
                     cbar_kws={"shrink": 0.5})
         ax.set_ylabel(nb, fontsize=10)
         ax.set_title("%s loops; ES:%.3f" %
@@ -597,6 +605,8 @@ def plotDiffAggLoops(dloops, output, tl, cl, td, cd, cpu=1, norm=True):
                     linewidths=0.05,
                     linecolor="gray",
                     linestyle="--",
+                    vmin=vmin,
+                    vmax=vmax,
                     cbar_kws={"shrink": 0.5})
         ax.set_title("%s loops; ES:%.3f" % (len(conTrtES), np.mean(conTrtES)),
                      fontsize=8)
@@ -613,6 +623,8 @@ def plotDiffAggLoops(dloops, output, tl, cl, td, cd, cpu=1, norm=True):
                     linewidths=0.05,
                     linecolor="gray",
                     linestyle="--",
+                    vmin=vmin,
+                    vmax=vmax,
                     cbar_kws={"shrink": 0.5})
         ax.set_title("%s loops; ES:%.3f" % (len(conConES), np.mean(conConES)),
                      fontsize=8)
@@ -637,6 +649,8 @@ def callDiffLoops(
         customize=False,
         cacut=0.0,
         cmcut=0.0,
+        vmin=None,
+        vmax=None,
 ):
     """
     Call differentially enriched loops 
@@ -774,4 +788,4 @@ def callDiffLoops(
                          fccut=mcut,
                          pcut=pcut)
     #plot aggregated differential loops
-    plotDiffAggLoops(dloops, output, tl, cl, td, cd, cpu=cpu, norm=True)
+    plotDiffAggLoops(dloops, output, tl, cl, td, cd, cpu=cpu, norm=True,vmin=vmin,vmax=vmax)
