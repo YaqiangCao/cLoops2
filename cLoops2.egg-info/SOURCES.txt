@@ -4,7 +4,6 @@ cLoops2.log
 cLoops2_env.yaml
 cLoops2_pip_readme.md
 setup.py
-cLoops2/.callPeaks.py.swp
 cLoops2/__init__.py
 cLoops2/agg.py
 cLoops2/ano.py

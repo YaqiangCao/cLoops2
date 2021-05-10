@@ -486,6 +486,7 @@ def plotDiffAggLoops(dloops, output, tl, cl, td, cd, cpu=1, norm=True,vmin=None,
     overlappedLoops = {}
     trtLoops = {}
     conLoops = {}
+    #counts of called un-specific and specific loops
     cover, ctrt, ccon = 0, 0, 0
     for loop in dloops:
         key = loop.chromX + "-" + loop.chromY
@@ -525,8 +526,8 @@ def plotDiffAggLoops(dloops, output, tl, cl, td, cd, cpu=1, norm=True,vmin=None,
                     vmax=vmax,
                     cbar_kws={"shrink": 0.5})
         ax.set_ylabel(na, fontsize=10)
-        ax.set_title("Common loops\n%s loops; ES:%.3f" %
-                     (len(trtOverES), np.mean(trtOverES)),
+        ax.set_title("%s un-specific loops\nES:%.3f" %
+                     (len(cover), np.mean(trtOverES)),
                      fontsize=8)
     else:
         ax.set_title("No common loops")
@@ -546,8 +547,8 @@ def plotDiffAggLoops(dloops, output, tl, cl, td, cd, cpu=1, norm=True,vmin=None,
                     vmin=vmin,
                     vmax=vmax,
                     cbar_kws={"shrink": 0.5})
-        ax.set_title("%s unique loops\n%s loops; ES:%.3f" %
-                     (na, len(trtTrtES), np.mean(trtTrtES)),
+        ax.set_title("%s specific loops\nES:%.3f" %
+                     (na, ctrt, np.mean(trtTrtES)),
                      fontsize=8)
     else:
         ax.set_title("No %s unique loops" % na)
@@ -567,8 +568,8 @@ def plotDiffAggLoops(dloops, output, tl, cl, td, cd, cpu=1, norm=True,vmin=None,
                     vmin=vmin,
                     vmax=vmax,
                     cbar_kws={"shrink": 0.5})
-        ax.set_title("%s unique loops\n%s loops; ES:%.3f" %
-                     (nb, len(trtConES), np.mean(trtConES)),
+        ax.set_title("%s specific loops\nES:%.3f" %
+                     (nb, ccon, np.mean(trtConES)),
                      fontsize=8)
     else:
         ax.set_title("No %s unique loops" % nb)
@@ -589,9 +590,7 @@ def plotDiffAggLoops(dloops, output, tl, cl, td, cd, cpu=1, norm=True,vmin=None,
                     vmax=vmax,
                     cbar_kws={"shrink": 0.5})
         ax.set_ylabel(nb, fontsize=10)
-        ax.set_title("%s loops; ES:%.3f" %
-                     (len(conOverES), np.mean(conOverES)),
-                     fontsize=8)
+        ax.set_title("ES:%.3f" %np.mean(conOverES), fontsize=8)
 
     ax = axs[1][1]
     if ctrt > 0:
@@ -608,8 +607,7 @@ def plotDiffAggLoops(dloops, output, tl, cl, td, cd, cpu=1, norm=True,vmin=None,
                     vmin=vmin,
                     vmax=vmax,
                     cbar_kws={"shrink": 0.5})
-        ax.set_title("%s loops; ES:%.3f" % (len(conTrtES), np.mean(conTrtES)),
-                     fontsize=8)
+        ax.set_title("ES:%.3f" %np.mean(conTrtES),fontsize=8)
 
     ax = axs[1][2]
     if ccon > 0:
@@ -626,8 +624,7 @@ def plotDiffAggLoops(dloops, output, tl, cl, td, cd, cpu=1, norm=True,vmin=None,
                     vmin=vmin,
                     vmax=vmax,
                     cbar_kws={"shrink": 0.5})
-        ax.set_title("%s loops; ES:%.3f" % (len(conConES), np.mean(conConES)),
-                     fontsize=8)
+        ax.set_title("ES:%.3f" % np.mean(conConES), fontsize=8)
 
     pylab.tight_layout()
     pylab.savefig(output + "_diffAggLoops.pdf")
