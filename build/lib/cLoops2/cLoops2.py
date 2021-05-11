@@ -1551,6 +1551,15 @@ Example:
         "enriched loops after Bonferroni correction , default is 1e-2."
     )
     callDiffLoops.add_argument(
+        "-igp",
+        dest="igp",
+        default=False,
+        action="store_true",
+        help=
+        "Ignore Poisson p-value cutoff and only using FDR to control MA plot\n"\
+        "cutoffs."
+    )
+    callDiffLoops.add_argument(
         "-fdr",
         dest="fdr",
         default=0.1,
@@ -1623,6 +1632,15 @@ Example:
         type=float,
         help=
         "The maxmum value shown in the heatmap and colorbar."
+    )
+    callDiffLoops.add_argument(
+        "-cmap",
+        dest="cmap",
+        default="summer",
+        required=False,
+        choices=["summer","red","div","cool"],
+        help=
+        "The heatmap style. Default is summer."
     )
  
     #call domain function
@@ -3546,13 +3564,14 @@ def main():
     if cmd == "callDiffLoops":
         start = datetime.now()
 
-        report = "Command: cLoops2 {} -tloop {} -cloop {} -td {} -cd {} -pcut {} -fdr {} -o {} -p {} -j {} -w {} -customize {} -cacut {} -cmcut {} -vmin {} -vmax {}".format(
+        report = "Command: cLoops2 {} -tloop {} -cloop {} -td {} -cd {} -pcut {} -igp {} -fdr {} -o {} -p {} -j {} -w {} -customize {} -cacut {} -cmcut {} -vmin {} -vmax {} -cmap {}".format(
                cmd, 
                cliParser.tloop, 
                cliParser.cloop, 
                cliParser.tpred,
                cliParser.cpred, 
                cliParser.pcut, 
+               cliParser.igp,
                cliParser.fdr, 
                cliParser.fnOut,
                cliParser.cpu,
@@ -3563,6 +3582,7 @@ def main():
                cliParser.cmcut,
                cliParser.vmin,
                cliParser.vmax,
+               cliParser.cmap,
         )   
         logger.info(report)
 

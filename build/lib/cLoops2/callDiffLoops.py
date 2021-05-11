@@ -13,6 +13,7 @@ Well tested for Trac-looping data.
 2020-06-24: try to add the estimation of anchors
 2020-07-30: try to add the estimation of anchors, and seperated loops. acut and mcut estimated from background already very strong. win size may not affect, so for efficient consideration set to 1. Alsoadd p-values to bg estimation.
 2021-04-12: cutomize parameters for acut and mcut for MA plot added
+2021-05-10: add heatmap vmin/vmax, cmap; not p-value cutoff added to include more loops.
 """
 
 __date__ = ""
@@ -329,23 +330,36 @@ def estLoopDiffSig(key, sf, ta, tb, dloops, pseudo=1.0):
     return dloops, cs, ts, ts2
 
 
-def markDiffSig(loops, acut, mcut, pcut=1e-2, pseudo=1):
+def markDiffSig(loops, acut, mcut, pcut=1e-2, pseudo=1,igp=False):
     """
     Carry out Bonferroni correction for p-values first then mark the significance of loops
     """
     for loop in loops:
         loop.poisson_p_value = min(1, loop.poisson_p_value * len(loops))
-        if loop.poisson_p_value <= pcut and abs(loop.scaled_fc) >= mcut:
-            c = np.log2(max(loop.raw_con_rab, pseudo))
-            t = np.log2(max(loop.scaled_trt_rab, pseudo))
-            #loop.significant = 1
-            a = (c + t) / 2
-            if a >= acut:
-                loop.significant = 1
+        if igp == False:
+            if loop.poisson_p_value <= pcut and abs(loop.scaled_fc) >= mcut:
+                c = np.log2(max(loop.raw_con_rab, pseudo))
+                t = np.log2(max(loop.scaled_trt_rab, pseudo))
+                #loop.significant = 1
+                a = (c + t) / 2
+                if a >= acut:
+                    loop.significant = 1
+                else:
+                    loop.significant = 0
             else:
                 loop.significant = 0
         else:
-            loop.significant = 0
+            if abs(loop.scaled_fc) >= mcut:
+                c = np.log2(max(loop.raw_con_rab, pseudo))
+                t = np.log2(max(loop.scaled_trt_rab, pseudo))
+                #loop.significant = 1
+                a = (c + t) / 2
+                if a >= acut:
+                    loop.significant = 1
+                else:
+                    loop.significant = 0
+            else:
+                loop.significant = 0
     return loops
 
 
@@ -474,7 +488,7 @@ def getDiffAggLoops(predir, loops, cpu=1, norm=True):
     return mat, es
 
 
-def plotDiffAggLoops(dloops, output, tl, cl, td, cd, cpu=1, norm=True,vmin=None,vmax=None):
+def plotDiffAggLoops(dloops, output, tl, cl, td, cd, cpu=1, norm=True,vmin=None,vmax=None,cmap=None):
     """
     Plot the aggregated unqiue and overlapped loops.
     """
@@ -506,10 +520,16 @@ def plotDiffAggLoops(dloops, output, tl, cl, td, cd, cpu=1, norm=True,vmin=None,
                     conLoops[key] = []
                 ccon += 1
                 conLoops[key].append(loop)
+    
+    #cmap for heatmaps
+    if cmap is None:
+        cmap = cmaps["summer"]
+    else:
+        cmap = cmaps[cmap]
 
     #show enrichment score and aggregation plot
     fig, axs = pylab.subplots(2, 3, figsize=(10, 6))
-
+    
     ax = axs[0][0]
     if cover > 0:
         trtOverMat, trtOverES = getDiffAggLoops(td, overlappedLoops, cpu)
@@ -518,7 +538,7 @@ def plotDiffAggLoops(dloops, output, tl, cl, td, cd, cpu=1, norm=True,vmin=None,
                     yticklabels=False,
                     square=True,
                     ax=ax,
-                    cmap=cmaps["summer"],
+                    cmap=cmap,
                     linewidths=0.05,
                     linecolor="gray",
                     linestyle="--",
@@ -527,7 +547,7 @@ def plotDiffAggLoops(dloops, output, tl, cl, td, cd, cpu=1, norm=True,vmin=None,
                     cbar_kws={"shrink": 0.5})
         ax.set_ylabel(na, fontsize=10)
         ax.set_title("%s un-specific loops\nES:%.3f" %
-                     (len(cover), np.mean(trtOverES)),
+                     (cover, np.mean(trtOverES)),
                      fontsize=8)
     else:
         ax.set_title("No common loops")
@@ -540,7 +560,7 @@ def plotDiffAggLoops(dloops, output, tl, cl, td, cd, cpu=1, norm=True,vmin=None,
                     yticklabels=False,
                     square=True,
                     ax=ax,
-                    cmap=cmaps["summer"],
+                    cmap=cmap,
                     linewidths=0.05,
                     linecolor="gray",
                     linestyle="--",
@@ -548,7 +568,7 @@ def plotDiffAggLoops(dloops, output, tl, cl, td, cd, cpu=1, norm=True,vmin=None,
                     vmax=vmax,
                     cbar_kws={"shrink": 0.5})
         ax.set_title("%s specific loops\nES:%.3f" %
-                     (na, ctrt, np.mean(trtTrtES)),
+                     (ctrt, np.mean(trtTrtES)),
                      fontsize=8)
     else:
         ax.set_title("No %s unique loops" % na)
@@ -561,7 +581,7 @@ def plotDiffAggLoops(dloops, output, tl, cl, td, cd, cpu=1, norm=True,vmin=None,
                     yticklabels=False,
                     square=True,
                     ax=ax,
-                    cmap=cmaps["summer"],
+                    cmap=cmap,
                     linewidths=0.05,
                     linecolor="gray",
                     linestyle="--",
@@ -569,7 +589,7 @@ def plotDiffAggLoops(dloops, output, tl, cl, td, cd, cpu=1, norm=True,vmin=None,
                     vmax=vmax,
                     cbar_kws={"shrink": 0.5})
         ax.set_title("%s specific loops\nES:%.3f" %
-                     (nb, ccon, np.mean(trtConES)),
+                     (ccon, np.mean(trtConES)),
                      fontsize=8)
     else:
         ax.set_title("No %s unique loops" % nb)
@@ -582,7 +602,7 @@ def plotDiffAggLoops(dloops, output, tl, cl, td, cd, cpu=1, norm=True,vmin=None,
                     yticklabels=False,
                     square=True,
                     ax=ax,
-                    cmap=cmaps["summer"],
+                    cmap=cmap,
                     linewidths=0.05,
                     linecolor="gray",
                     linestyle="--",
@@ -600,7 +620,7 @@ def plotDiffAggLoops(dloops, output, tl, cl, td, cd, cpu=1, norm=True,vmin=None,
                     yticklabels=False,
                     square=True,
                     ax=ax,
-                    cmap=cmaps["summer"],
+                    cmap=cmap,
                     linewidths=0.05,
                     linecolor="gray",
                     linestyle="--",
@@ -617,7 +637,7 @@ def plotDiffAggLoops(dloops, output, tl, cl, td, cd, cpu=1, norm=True,vmin=None,
                     yticklabels=False,
                     square=True,
                     ax=ax,
-                    cmap=cmaps["summer"],
+                    cmap=cmap,
                     linewidths=0.05,
                     linecolor="gray",
                     linestyle="--",
@@ -640,6 +660,7 @@ def callDiffLoops(
         mcut=-1,
         cpu=1,
         pcut=1e-2,
+        igp=False,
         fdrcut=0.05,
         juicebox=False,
         washU=False,
@@ -648,6 +669,7 @@ def callDiffLoops(
         cmcut=0.0,
         vmin=None,
         vmax=None,
+        cmap=None,
 ):
     """
     Call differentially enriched loops 
@@ -660,10 +682,12 @@ def callDiffLoops(
     @param mcut: int, distance cutoff for estimation of difference significance, <=mcut
     @param cpu: int, number of cpus used 
     @param pcut: float, p-value cutoffs after Bon correction
+    @param igp: bool, whether to ignore p-value cutoff
     @param fdrcut: float, fdrcut for background to estimate Mcut and Acut
     @param customize: binary, if true, use user provided MA M cut and A cut
     @param cacut: float, if customize, used, A for MA plot
     @param cmcut: float, if customize, used, M for MA plot
+    @param cmap: str, color map string option
     """
     #data name
     if td.endswith("/"):
@@ -742,7 +766,7 @@ def callDiffLoops(
         ts2.extend(d[3])
 
     #step 5, p-values Bonferroni correction and determine whether significant
-    dloops = markDiffSig(dloops, acut, mcut, pcut)
+    dloops = markDiffSig(dloops, acut, mcut, pcut=pcut,igp=igp)
     sigIndex = [i for i, loop in enumerate(dloops) if loop.significant > 0]
 
     # step 6, write the result
@@ -785,4 +809,5 @@ def callDiffLoops(
                          fccut=mcut,
                          pcut=pcut)
     #plot aggregated differential loops
-    plotDiffAggLoops(dloops, output, tl, cl, td, cd, cpu=cpu, norm=True,vmin=vmin,vmax=vmax)
+    plotDiffAggLoops(dloops, output, tl, cl, td, cd, cpu=cpu, norm=True,vmin=vmin,vmax=vmax,cmap=cmap)
+
