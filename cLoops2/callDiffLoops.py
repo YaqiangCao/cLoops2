@@ -488,7 +488,7 @@ def getDiffAggLoops(predir, loops, cpu=1, norm=True):
     return mat, es
 
 
-def plotDiffAggLoops(dloops, output, tl, cl, td, cd, cpu=1, norm=True,vmin=None,vmax=None,cmap=None):
+def plotDiffAggLoops(dloops, output, tl, cl, td, cd, cpu=1, norm=True,vmin=None,vmax=None,cmap="summer"):
     """
     Plot the aggregated unqiue and overlapped loops.
     """

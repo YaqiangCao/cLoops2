@@ -3635,6 +3635,7 @@ def main():
             mcut=cliParser.mcut,
             cpu=cliParser.cpu,
             pcut=cliParser.pcut,
+            igp=cliParser.igp,
             fdrcut=cliParser.fdr,
             juicebox=cliParser.juicebox,
             washU=cliParser.washU,
@@ -3643,6 +3644,7 @@ def main():
             cmcut=cliParser.cmcut,
             vmin=cliParser.vmin,
             vmax=cliParser.vmax,
+            cmap=cliParser.cmap,
         )
 
         end = datetime.now()
