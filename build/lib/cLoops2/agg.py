@@ -643,17 +643,17 @@ def plotAViewPoints(
         bwSigs=None,
         bins=200,
         norm=False,
+        vmin=None, 
+        vmax=None,
 ):
     """
     bwSigs: {name:signal array}
     """
     n = mat.shape[0]
     #take care of colormap
-    vmin = None
-    vmax = None
     center = None
 
-    #get the enrichment score
+    #get the enrichment score, defined as viewpoint all interactions / mean( upstream&downstream)
     p = int(upExt / bs)
     es = []
     for i in range(mat.shape[0]):
@@ -676,7 +676,9 @@ def plotAViewPoints(
     else:
         mat = np.log2(mat + 1)
         cmap = cmaps["red"]
-        vmin = 0
+        if vmin is None:
+            vmin = 0
+        center=None
         label = "log2(PETs+1)"
 
     #1D signal
@@ -746,6 +748,7 @@ def plotAViewPoints(
                 cbar_ax=cax,
                 linewidths=0,
                 vmin=vmin,
+                vmax=vmax,
                 center=center,
                 cbar_kws={
                     'orientation': 'horizontal',
@@ -784,6 +787,8 @@ def aggViewPoints(
         oneD=False,
         oneBins=500,
         norm=False,
+        vmin=None,
+        vmax=None,
 ):
     """
     Aggregated view points analysis. 
@@ -874,7 +879,10 @@ def aggViewPoints(
                     ss,
                     bwSigs,
                     bins=oneBins,
-                    norm=norm)
+                    norm=norm,
+                    vmin=vmin,
+                    vmax=vmax,
+                    )
 
 
 ### aggregated two anchors releated functions

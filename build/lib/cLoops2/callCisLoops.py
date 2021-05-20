@@ -19,6 +19,7 @@ callCisLoops.py
 2020-11-22: using cDBSCAN2 for Hi-C data
 2020-11-25: observed from Hi-C data, for overlapped loops, higher enrichment score,better
 2021-03-23: change HIC P2LLcut to 1 and binomial p-value cut to 1e-3 as using cDBSCAN2; previouse cutoffs for HIC P2LLcut >=2 binomial p<=1e-5
+2021-05-20: try to speed up permutation background query speed; tested with K562 Hi-TrAC chr21, 5 fold speed up.
 """
 
 #sys
@@ -163,20 +164,26 @@ def getPerRegions(loop, xy, win=5):
     @param loop: cLoops2:ds:Loop 
     @param xy: cLoops2:ds:XY
     """
-    # the PET id in the permutated regions
     ca = loop.x_center
     cb = loop.y_center
     sa = (loop.x_end - loop.x_start) / 2
     sb = (loop.y_end - loop.y_start) / 2
     nas, nbs = [], []
     step = (sa + sb) / 2
+    #the permutated region all PET ids
+    start = min([ ca-win*step-sa, cb-win*step-sb ])
+    end = max([ca+win*step+sa,cb+win*step+sb])
+    ps = list(xy.queryPeak( start, end))
+    nmat = xy.mat[ps,]
+    nxy = XY(nmat[:,0],nmat[:,1])
+    # the PET id in the permutated regions
     for i in range(0 - win, win + 1):
         if i == 0:
             continue
         niva = [max([0, ca + i * step - sa]), max([0, ca + i * step + sa])]
         nivb = [max([0, cb + i * step - sb]), max([0, cb + i * step + sb])]
-        nas.append(xy.queryPeak(niva[0], niva[1]))
-        nbs.append(xy.queryPeak(nivb[0], nivb[1]))
+        nas.append(nxy.queryPeak(niva[0], niva[1]))
+        nbs.append(nxy.queryPeak(nivb[0], nivb[1]))
     return nas, nbs
 
 
@@ -254,7 +261,7 @@ def estLoopSig(
         p2llcut = 1 
     xy = ixy2pet(fixy, cut=cut,mcut=mcut)
     N = xy.number
-    logger.info( "Estimate significance for %s candidate interactions in %s with %s PETs distance > =%s and <=%s,requring minPts >=%s." % (len(loops), key, N, cut, mcut,minPts))
+    logger.info( "Estimate significance for %s candidate interactions in %s with %s PETs distance > =%s and <=%s,requiring minPts >=%s." % (len(loops), key, N, cut, mcut,minPts))
     nloops = []
     for loop in tqdm(loops):
         #filtering unbalanced anchor size

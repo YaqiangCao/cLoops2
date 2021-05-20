@@ -1560,6 +1560,15 @@ Example:
         "cutoffs."
     )
     callDiffLoops.add_argument(
+        "-noPCorr",
+        dest="noPCorr",
+        default=False,
+        action="store_true",
+        help=
+        "Do not performe Bonferroni correction of Poisson p-values. Will get\n"\
+        "more loops. Default is always performing."
+    )
+    callDiffLoops.add_argument(
         "-fdr",
         dest="fdr",
         default=0.1,
@@ -2354,6 +2363,24 @@ Examples:
         help=
         "Whether to normalize the sub-matrix for each loop as divide the mean\n"\
         "PETs for the matrix. Default is not."
+    )
+    agg.add_argument(
+        "-viewPoint_vmin",
+        dest="viewPoint_vmin",
+        required=False,
+        default=None,
+        type=float,
+        help=
+        "The minimum value shown in the aggregated view points heatmap and colorbar."
+    )
+    agg.add_argument(
+        "-viewPoint_vmax",
+        dest="viewPoint_vmax",
+        required=False,
+        default=None,
+        type=float,
+        help=
+        "The maxmum value shown in the aggregated view points heatmap and colorbar."
     )
     agg.add_argument(
         "-loops",
@@ -3564,7 +3591,7 @@ def main():
     if cmd == "callDiffLoops":
         start = datetime.now()
 
-        report = "Command: cLoops2 {} -tloop {} -cloop {} -td {} -cd {} -pcut {} -igp {} -fdr {} -o {} -p {} -j {} -w {} -customize {} -cacut {} -cmcut {} -vmin {} -vmax {} -cmap {}".format(
+        report = "Command: cLoops2 {} -tloop {} -cloop {} -td {} -cd {} -pcut {} -igp {} -noPCorr {} -fdr {} -o {} -p {} -j {} -w {} -customize {} -cacut {} -cmcut {} -vmin {} -vmax {} -cmap {}".format(
                cmd, 
                cliParser.tloop, 
                cliParser.cloop, 
@@ -3572,6 +3599,7 @@ def main():
                cliParser.cpred, 
                cliParser.pcut, 
                cliParser.igp,
+               cliParser.noPCorr,
                cliParser.fdr, 
                cliParser.fnOut,
                cliParser.cpu,
@@ -3636,6 +3664,7 @@ def main():
             cpu=cliParser.cpu,
             pcut=cliParser.pcut,
             igp=cliParser.igp,
+            noPCorr=cliParser.noPCorr,
             fdrcut=cliParser.fdr,
             juicebox=cliParser.juicebox,
             washU=cliParser.washU,
@@ -3944,7 +3973,7 @@ def main():
     if cmd == "agg":
         start = datetime.now()
 
-        report = "Command cLoops2 {cmd} -d {predir} -o {output} -cut {cut} -mcut {mcut} -p {cpu} -skipZeros {skipZeros} -peaks {peakf} -peak_ext {peak_ext} -peak_bins {peak_bins} -peak_norm {peak_norm} -loops {loopf} -loop_ext {loop_ext} -loop_cut {loop_cut} -loop_norm {loop_norm} -loop_vmin {loop_vmin} -loop_vmax {loop_vmax} -viewPoints {viewPointF} -viewPointUp {viewPointUp} -viewPointDown {viewPointDown} -viewPointBs {viewPointBs} -viewPoint_norm {viewPoint_norm} -twoAnchors {twoAnchorF} -twoAnchor_ext {twoAnchor_ext} -twoAnchor_vmin {twoAnchor_vmin} -twoAnchor_vmax {twoAnchor_vmax} -domains {domainf} -domain_ext {domain_ext} -domain_vmin {dvmin} -domain_vmax {dvmax} -bws {bws} -1D {oneD}".format(
+        report = "Command cLoops2 {cmd} -d {predir} -o {output} -cut {cut} -mcut {mcut} -p {cpu} -skipZeros {skipZeros} -peaks {peakf} -peak_ext {peak_ext} -peak_bins {peak_bins} -peak_norm {peak_norm} -loops {loopf} -loop_ext {loop_ext} -loop_cut {loop_cut} -loop_norm {loop_norm} -loop_vmin {loop_vmin} -loop_vmax {loop_vmax} -viewPoints {viewPointF} -viewPointUp {viewPointUp} -viewPointDown {viewPointDown} -viewPointBs {viewPointBs} -viewPoint_norm {viewPoint_norm} -viewPoint_vmin {viewPoint_vmin} -viewPoint_vmax {viewPoint_vmax} -twoAnchors {twoAnchorF} -twoAnchor_ext {twoAnchor_ext} -twoAnchor_vmin {twoAnchor_vmin} -twoAnchor_vmax {twoAnchor_vmax} -domains {domainf} -domain_ext {domain_ext} -domain_vmin {dvmin} -domain_vmax {dvmax} -bws {bws} -1D {oneD}".format(
             cmd=cmd,
             predir=cliParser.predir,
             output=cliParser.fnOut,
@@ -3966,6 +3995,8 @@ def main():
             viewPointDown=cliParser.viewPointDown,
             viewPointBs=cliParser.viewPointBs,
             viewPoint_norm=cliParser.viewPoint_norm,
+            viewPoint_vmin=cliParser.viewPoint_vmin,
+            viewPoint_vmax=cliParser.viewPoint_vmax,
             twoAnchorF=cliParser.twoAnchorsF,
             twoAnchor_ext=cliParser.twoAnchor_ext,
             twoAnchor_vmin=cliParser.twoAnchor_vmin,
@@ -4053,6 +4084,8 @@ def main():
                     skipZeros=cliParser.skipZeros,
                     oneD=cliParser.oneD,
                     norm=cliParser.viewPoint_norm,
+                    vmin=cliParser.viewPoint_vmin,
+                    vmax=cliParser.viewPoint_vmax,
                 )
             else:
                 logger.error("%s not exists! Return."%cliParser.viewPointF)

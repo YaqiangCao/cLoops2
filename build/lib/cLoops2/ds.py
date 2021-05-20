@@ -6,6 +6,7 @@ Defined data structure used in cLoops2.
 
 2020-04-20: update the xy.queryLoop, changed to old way, preiviouse one (lefta,leftb, righta,righb), if rightb < lefta, will call 0
 2021-04-01: add summit for peak
+2021-05-20: add mat attribute to XY object for raw data access
 """
 
 __author__ = "CAO Yaqiang"
@@ -106,6 +107,7 @@ class XY(object):
             x2i.setdefault(x, []).append(i)
         for i, y in enumerate(ys):
             y2i.setdefault(y, []).append(i)
+        self.mat = np.array( [[xs[i],ys[i]] for i in range(len(xs)) ] )
         self.xs = np.sort(np.array(xs))
         self.ys = np.sort(np.array(ys))
         self.x2i = x2i

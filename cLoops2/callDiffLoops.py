@@ -330,12 +330,13 @@ def estLoopDiffSig(key, sf, ta, tb, dloops, pseudo=1.0):
     return dloops, cs, ts, ts2
 
 
-def markDiffSig(loops, acut, mcut, pcut=1e-2, pseudo=1,igp=False):
+def markDiffSig(loops, acut, mcut, pcut=1e-2, pseudo=1,igp=False,noPCorr=False):
     """
     Carry out Bonferroni correction for p-values first then mark the significance of loops
     """
     for loop in loops:
-        loop.poisson_p_value = min(1, loop.poisson_p_value * len(loops))
+        if noPCorr == False:
+            loop.poisson_p_value = min(1, loop.poisson_p_value * len(loops))
         if igp == False:
             if loop.poisson_p_value <= pcut and abs(loop.scaled_fc) >= mcut:
                 c = np.log2(max(loop.raw_con_rab, pseudo))
@@ -661,6 +662,7 @@ def callDiffLoops(
         cpu=1,
         pcut=1e-2,
         igp=False,
+        noPCorr=False,
         fdrcut=0.05,
         juicebox=False,
         washU=False,
@@ -683,6 +685,7 @@ def callDiffLoops(
     @param cpu: int, number of cpus used 
     @param pcut: float, p-value cutoffs after Bon correction
     @param igp: bool, whether to ignore p-value cutoff
+    @param noPCorr: bool, whehter to perform Bon correction of p-values, default yes
     @param fdrcut: float, fdrcut for background to estimate Mcut and Acut
     @param customize: binary, if true, use user provided MA M cut and A cut
     @param cacut: float, if customize, used, A for MA plot
@@ -766,7 +769,7 @@ def callDiffLoops(
         ts2.extend(d[3])
 
     #step 5, p-values Bonferroni correction and determine whether significant
-    dloops = markDiffSig(dloops, acut, mcut, pcut=pcut,igp=igp)
+    dloops = markDiffSig(dloops, acut, mcut, pcut=pcut,igp=igp,noPCorr=noPCorr)
     sigIndex = [i for i, loop in enumerate(dloops) if loop.significant > 0]
 
     # step 6, write the result
