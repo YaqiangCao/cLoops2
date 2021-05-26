@@ -15,7 +15,7 @@ callCisLoops.py
 2020-02-15: P2LL quite useless in cLoops2, no more trying. Finally binomial p value can control how many significant loops for HiC
 2020-03-04: replace print to logger
 2020-03-09: update density with library size, not the PETs number in that chromosome, more stable, not affect by estimated cutoffs
-2020-03-11: remove the pseudo for estimate p-values of loops, for Trac-looping, it could at least >= 6 is pseudo =1 for poisson p < 1e-6, make the setting of minPts meanless
+2020-03-11: remove the pseudo for estimate p-values of loops, for Trac-looping, it could at least >= 6 if pseudo =1 for poisson p < 1e-6, make the setting of minPts meanless
 2020-11-22: using cDBSCAN2 for Hi-C data
 2020-11-25: observed from Hi-C data, for overlapped loops, higher enrichment score,better
 2021-03-23: change HIC P2LLcut to 1 and binomial p-value cut to 1e-3 as using cDBSCAN2; previouse cutoffs for HIC P2LLcut >=2 binomial p<=1e-5

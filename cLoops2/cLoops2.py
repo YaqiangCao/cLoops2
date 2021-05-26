@@ -2613,7 +2613,7 @@ Examples:
         default=False,
         required=False,
         action="store_true",
-        help="Whether to save the segregation score ad bedGraph file, default\n"\
+        help="Whether to save the segregation score as bedGraph file, default\n"\
         "is not."
     )
 

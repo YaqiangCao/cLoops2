@@ -327,10 +327,21 @@ def peaks2txt(peaks, fout):
         ]
         fo.write("\t".join(header) + "\n")
         for i, peak in enumerate(peaks):
+            if hasattr(peak, "id"):
+                pid = peak.id
+            else:
+                pid = "peak_%s"%i
             line = [
-                "peak_%s" % i, peak.chrom, peak.start, peak.end, peak.summit, 
-                peak.length, peak.counts, peak.density, peak.enrichment_score,
-                peak.poisson_p_value
+                pid,
+                peak.chrom, 
+                peak.start, 
+                peak.end, 
+                peak.summit, 
+                peak.length, 
+                peak.counts, 
+                peak.density, 
+                peak.enrichment_score,
+                peak.poisson_p_value,
             ]
             if hasattr(peak, "control_counts"):
                 line.extend([
@@ -410,8 +421,12 @@ def loops2txt(loops, fout):
         ]
         fo.write("\t".join(header) + "\n")
         for i, loop in enumerate(loops):
+            if hasattr(loop, "id"):
+                lid = loop.id
+            else:
+                lid = "loop_%s-%s-%s" % (loop.chromX, loop.chromY, i),
             line = [
-                "loop_%s-%s-%s" % (loop.chromX, loop.chromY, i),
+                lid,
                 loop.chromX,
                 loop.x_start,
                 loop.x_end,
@@ -807,8 +822,12 @@ def doms2txt(doms, fout):
         ]
         fo.write("\t".join(header) + "\n")
         for i, dom in enumerate(doms):
+            if hasattr(dom, "id"):
+                did = dom.id
+            else:
+                did = "domain_%s" % i,
             line = [
-                "domain_%s" % i,
+                did,
                 dom.chrom,
                 dom.start,
                 dom.end,
