@@ -194,7 +194,7 @@ def findTargets(
     @param tgf: str, output of cLoops2 anaLoops, _targets.txt file
     @param bed: str, input querying bed file.
     """
-    print("reading networks and acnhors")
+    print("reading networks and anchors")
     G, cov = readNet(netf)
     tgs = readTargets(tgf)
     if fbed != "":
