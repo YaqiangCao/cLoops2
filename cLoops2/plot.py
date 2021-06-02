@@ -1403,6 +1403,7 @@ def plotProfiles(
         beds=[],
         loops=None,
         gtf="",
+        width=4,
 ):
     """
     Plot profiles. 
@@ -1434,7 +1435,7 @@ def plotProfiles(
         hr.extend([0.2] * len(beds))
 
     #prepare figure
-    fig = pylab.figure(figsize=(4, hights))
+    fig = pylab.figure(figsize=(width, hights))
     gs = mpl.gridspec.GridSpec(
         len(hr),
         1,
