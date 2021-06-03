@@ -664,6 +664,7 @@ def plotMatHeatmap(
         viewEnd=-1,
         vmin=None,
         vmax=None,
+        width=4,
 ):
     """
     Plot the contact matrix heatmap with 1D tracks or 2D annotations
@@ -764,6 +765,7 @@ def plotMatHeatmap(
     hr = []
     if gtf != "":
         genes = getGenes(gtf, chrom[0], start, end)
+        """
         if len(genes) > 20:
             print(
                 "More than 20 genes in the target region, only plot random 20."
@@ -773,6 +775,7 @@ def plotMatHeatmap(
             for n in ns:
                 ng[n] = genes[n]
             genes = ng
+        """
         hights += len(genes) * 0.1
         hr.extend([0.1] * len(genes))
     if len(bws) > 0:
@@ -800,7 +803,7 @@ def plotMatHeatmap(
         hr.extend([6, 0.1])
 
     #prepare figure
-    fig = pylab.figure(figsize=(4, hights))
+    fig = pylab.figure(figsize=(width, hights))
     gs = mpl.gridspec.GridSpec(len(hr),
                                1,
                                height_ratios=hr,
@@ -1053,6 +1056,7 @@ def plotPETsArches(
         gtf="",
         aw=1,
         ac=1,
+        width=4,
 ):
     """
     Plot the interacting PETs as arches, showing the raw data. 
@@ -1104,7 +1108,7 @@ def plotPETsArches(
     hr.append(2.5)
 
     #prepare figure
-    fig = pylab.figure(figsize=(4, hights))
+    fig = pylab.figure(figsize=(width, hights))
     gs = mpl.gridspec.GridSpec(len(hr),
                                1,
                                height_ratios=hr,
@@ -1236,6 +1240,7 @@ def plotPETsScatter(
         sc = 0,
         sa = 0.5,
         triu=False,
+        width=8,
 ):
     """
     Plot the interacting PETs as scatter, showing the raw data. 
@@ -1293,7 +1298,7 @@ def plotPETsScatter(
         square = False
   
     #prepare figure
-    fig = pylab.figure(figsize=(4, hights))
+    fig = pylab.figure(figsize=(width, hights))
     gs = mpl.gridspec.GridSpec(len(hr),
                                1,
                                height_ratios=hr,
@@ -1403,6 +1408,7 @@ def plotProfiles(
         beds=[],
         loops=None,
         gtf="",
+        width=8,
 ):
     """
     Plot profiles. 
@@ -1412,6 +1418,7 @@ def plotProfiles(
     hr = []
     if gtf != "":
         genes = getGenes(gtf, chrom, start, end)
+        """
         if len(genes) > 20:
             print(
                 "More than 20 genes in the target region, only plot random 20."
@@ -1421,6 +1428,7 @@ def plotProfiles(
             for n in ns:
                 ng[n] = genes[n]
             genes = ng
+        """
         hights += len(genes) * 0.12
         hr.extend([0.12] * len(genes))
     if len(bws) > 0:
@@ -1434,7 +1442,7 @@ def plotProfiles(
         hr.extend([0.2] * len(beds))
 
     #prepare figure
-    fig = pylab.figure(figsize=(4, hights))
+    fig = pylab.figure(figsize=(width, hights))
     gs = mpl.gridspec.GridSpec(
         len(hr),
         1,

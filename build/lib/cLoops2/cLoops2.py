@@ -2082,7 +2082,16 @@ Examples:
         "inactivate or activate histone markers, as actually the PCA values do\n"\
         "not have directions, especially comparing different samples."
     )
- 
+    plot.add_argument(
+        "-figWidth",
+        dest="fidWidth",
+        required=False,
+        default=4,
+        choices=[4, 8],
+        help="Figure width. 4 is good to show the plot as half of a A4 figure\n"\
+        "width and 8 is good to show more wider. Default is 4."
+    )
+
     #montage analysis
     montageDes = """
 Montage analysis of specific regions, producing Westworld Season 3 -like 
@@ -3728,7 +3737,7 @@ def main():
     if cmd == "plot":
         start = datetime.now()
 
-        report = "Command cLoops2 {cmd} -f {f} -o {output} -chrom {chrom} -start {start} -end {end} -bs {r} -cut {cut} -mcut {mcut} -log {log} -m {method} -corr {corr} -triu {triu} -norm {norm} -bws {bws} -bwvs {bwvs} -bwcs {bwcs} -beds {beds} -gtf {gtf} -1D {oneD} -1Dv {oneDv} -loops {floop} -domains {fdomain} -vmin {vmin} -vmax {vmax} -virtual4C {virtual4C} -view_start {viewStart} -view_end {viewEnd} -arch {arch} -aw {aw} -ac {ac} -scatter {scatter} -ss {ss} -sa {sa} -sc {sc} -eig {eig} -eig_r {eig_r}".format(
+        report = "Command cLoops2 {cmd} -f {f} -o {output} -chrom {chrom} -start {start} -end {end} -bs {r} -cut {cut} -mcut {mcut} -log {log} -m {method} -corr {corr} -triu {triu} -norm {norm} -bws {bws} -bwvs {bwvs} -bwcs {bwcs} -beds {beds} -gtf {gtf} -1D {oneD} -1Dv {oneDv} -loops {floop} -domains {fdomain} -vmin {vmin} -vmax {vmax} -virtual4C {virtual4C} -view_start {viewStart} -view_end {viewEnd} -arch {arch} -aw {aw} -ac {ac} -scatter {scatter} -ss {ss} -sa {sa} -sc {sc} -eig {eig} -eig_r {eig_r} -figWidth {figWidth}".format(
             cmd=cmd,
             f=cliParser.fixy,
             output=cliParser.fnOut,
@@ -3766,6 +3775,7 @@ def main():
             sc=cliParser.sc,
             eig=cliParser.eig,
             eig_r=cliParser.eig_r,
+            figWidth=cliParser.figWidth,
         )
         logger.info(report)
 
@@ -3856,7 +3866,8 @@ def main():
                     vmin=cliParser.vmin,
                     vmax=cliParser.vmax,
                     eig=cliParser.eig,
-                    eig_r=cliParser.eig_r
+                    eig_r=cliParser.eig_r,
+                    width=cliParser.figWidth,
                 )
             else:
                 if cliParser.arch:
@@ -3877,6 +3888,7 @@ def main():
                         gtf=cliParser.gtf, 
                         aw=cliParser.aw,
                         ac=cliParser.ac,
+                        width=cliParser.figWidth,
                     )
                 if cliParser.scatter:
                     plotPETsScatter( 
@@ -3898,6 +3910,7 @@ def main():
                         sc=cliParser.sc,
                         sa=cliParser.sa,
                         triu=cliParser.triu,
+                        width=cliParser.figWidth,
                     )
         else:
             if cliParser.chrom !="":
@@ -3912,6 +3925,7 @@ def main():
                     beds=beds, 
                     loops=loops, 
                     gtf=cliParser.gtf, 
+                    width=cliParser.figWidth,
                 )
             else:
                 logger.error("ERROR! -f %s not exists and -chrom %s not assigned"%(cliParser.fixy,cliParser.chrom))
