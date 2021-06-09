@@ -2027,6 +2027,14 @@ Examples:
         "change it see how many colors are supported by cLoops2."
     )
     plot.add_argument(
+        "-aa",
+        dest="aa",
+        required=False,
+        default=1,
+        type=float,
+        help="Alpha to control arch color saturation. Default is 1."
+    )
+    plot.add_argument(
         "-scatter",
         dest="scatter",
         required=False,
@@ -2084,10 +2092,11 @@ Examples:
     )
     plot.add_argument(
         "-figWidth",
-        dest="fidWidth",
+        dest="figWidth",
         required=False,
         default=4,
         choices=[4, 8],
+        type=int,
         help="Figure width. 4 is good to show the plot as half of a A4 figure\n"\
         "width and 8 is good to show more wider. Default is 4."
     )
@@ -3737,7 +3746,7 @@ def main():
     if cmd == "plot":
         start = datetime.now()
 
-        report = "Command cLoops2 {cmd} -f {f} -o {output} -chrom {chrom} -start {start} -end {end} -bs {r} -cut {cut} -mcut {mcut} -log {log} -m {method} -corr {corr} -triu {triu} -norm {norm} -bws {bws} -bwvs {bwvs} -bwcs {bwcs} -beds {beds} -gtf {gtf} -1D {oneD} -1Dv {oneDv} -loops {floop} -domains {fdomain} -vmin {vmin} -vmax {vmax} -virtual4C {virtual4C} -view_start {viewStart} -view_end {viewEnd} -arch {arch} -aw {aw} -ac {ac} -scatter {scatter} -ss {ss} -sa {sa} -sc {sc} -eig {eig} -eig_r {eig_r} -figWidth {figWidth}".format(
+        report = "Command cLoops2 {cmd} -f {f} -o {output} -chrom {chrom} -start {start} -end {end} -bs {r} -cut {cut} -mcut {mcut} -log {log} -m {method} -corr {corr} -triu {triu} -norm {norm} -bws {bws} -bwvs {bwvs} -bwcs {bwcs} -beds {beds} -gtf {gtf} -1D {oneD} -1Dv {oneDv} -loops {floop} -domains {fdomain} -vmin {vmin} -vmax {vmax} -virtual4C {virtual4C} -view_start {viewStart} -view_end {viewEnd} -arch {arch} -aw {aw} -ac {ac} -aa {aa} -scatter {scatter} -ss {ss} -sa {sa} -sc {sc} -eig {eig} -eig_r {eig_r} -figWidth {figWidth}".format(
             cmd=cmd,
             f=cliParser.fixy,
             output=cliParser.fnOut,
@@ -3769,6 +3778,7 @@ def main():
             arch=cliParser.arch,
             aw=cliParser.aw,
             ac=cliParser.ac,
+            aa=cliParser.aa,
             scatter=cliParser.scatter,
             ss=cliParser.ss,
             sa=cliParser.sa,
@@ -3888,6 +3898,7 @@ def main():
                         gtf=cliParser.gtf, 
                         aw=cliParser.aw,
                         ac=cliParser.ac,
+                        aa=cliParser.aa,
                         width=cliParser.figWidth,
                     )
                 if cliParser.scatter:

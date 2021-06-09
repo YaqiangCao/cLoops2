@@ -1056,6 +1056,7 @@ def plotPETsArches(
         gtf="",
         aw=1,
         ac=1,
+        aa=1,
         width=4,
 ):
     """
@@ -1080,6 +1081,7 @@ def plotPETsArches(
     hr = []
     if gtf != "":
         genes = getGenes(gtf, chrom[0], start, end)
+        """
         if len(genes) > 20:
             print(
                 "More than 20 genes in the target region, only plot random 20."
@@ -1089,6 +1091,7 @@ def plotPETsArches(
             for n in ns:
                 ng[n] = genes[n]
             genes = ng
+        """
         hights += len(genes) * 0.1
         hr.extend([0.1] * len(genes))
     if len(bws) > 0:
@@ -1211,7 +1214,7 @@ def plotPETsArches(
                     theta2=360,
                     edgecolor=colors[ac],
                     lw=aw,
-                    alpha=0.8,
+                    alpha=aa,
                 ))
         ax.set_xticks([])
         ax.set_yticks([])
@@ -1264,6 +1267,7 @@ def plotPETsScatter(
     hr = []
     if gtf != "":
         genes = getGenes(gtf, chrom[0], start, end)
+        """
         if len(genes) > 20:
             print(
                 "More than 20 genes in the target region, only plot random 20."
@@ -1273,6 +1277,7 @@ def plotPETsScatter(
             for n in ns:
                 ng[n] = genes[n]
             genes = ng
+        """
         hights += len(genes) * 0.1
         hr.extend([0.1] * len(genes))
     if len(bws) > 0:
