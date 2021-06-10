@@ -1424,6 +1424,9 @@ optional arguments:
   -ppmw PPMW     Link line width indicator, short for 1 PETs per Million PETs line
                  width, default is 10. Adjust this value when -simple is used. Decrease
                  it if links are too bold and increase it when links are too thin.
+  -aw AW         Line width for each PET if -simple is not selected. Default is 1.
+  -no1D          Whether to not plot 1D profiles. Default is plot. Set this for Hi-C
+                 like data.
 ```
 
 ------
