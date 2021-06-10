@@ -17,11 +17,11 @@
 -------
 -------
 ## Introduction
-cLoops2 is an extension of our previous work, [cLoops](https://github.com/YaqiangCao/cLoops). From loop-calling based on assumption-free clustering to a full suite of analysis tools for 3D genomic interaction data, cLoops2 has been adapted specifically for data such as Hi-Trac/Trac-looping, for which interactions are enriched over the genome through experimental steps. cLoops2 still supports Hi-C -like data, of which the interaction signals are evenly distributed at enzyme cutting sites.  The changes from cLoops to cLoops2 are designed to address challenges around aiming for higher resolutions with the next-generation of genome architecture mapping technologies. 
+cLoops2 is an extension of our previous work, [cLoops](https://github.com/YaqiangCao/cLoops). From loop-calling based on assumption-free clustering to a full suite of analysis tools for 3D genomic interaction data, cLoops2 has been adapted specifically for data such as Hi-TrAC/Trac-looping, for which interactions are enriched over the genome through experimental steps. cLoops2 still supports Hi-C -like data, of which the interaction signals are evenly distributed at enzyme cutting sites.  The changes from cLoops to cLoops2 are designed to address challenges around aiming for higher resolutions with the next-generation of genome architecture mapping technologies. 
 
 cLoops2 is designed with respect reference to [bedtools](https://bedtools.readthedocs.io/en/latest/) and [Samtools](http://www.htslib.org/) for command-line style programming. If you have experience with them, you will find cLoops2 easy and efficient to use and combine commands, integrate as steps in your processing pipeline. 
 
-Please refer to our [Hi-Trac method manuscript]() or [cLoops2 manuscript]() for what cLoops2 can do and show. 
+Please refer to our [Hi-TrAC method manuscript]() or [cLoops2 manuscript]() for what cLoops2 can do and show. 
 
 If you use cLoops2 in your research (the idea, the algorithm, the analysis scripts or the supplemental data), please give us a star on the GitHub repo page and cite our paper as follows:    
 
@@ -71,7 +71,7 @@ Happy peak/loop-calling and have fun exploring all the other kinds of analyses.
 ------
 ## Basic Usage and Quick Guide
 ### Example data background introduction 
-Example data for testing is available at [cLoops2/example/data](https://github.com/YaqiangCao/cLoops2/blob/master/example/data). The BEDPE files were from Hi-Trac experiments mapped to hg38 for chromosome 21 in GM12878 and K562 cell lines, two biological replicates for each cell line. Only intra-chromosomal PETs were kept. Raw FASTQ reads were processed by [tracPre2.py](https://github.com/YaqiangCao/cLoops2/blob/master/scripts/tracPre2.py).       
+Example data for testing is available at [cLoops2/example/data](https://github.com/YaqiangCao/cLoops2/blob/master/example/data). The BEDPE files were from Hi-TrAC experiments mapped to hg38 for chromosome 21 in GM12878 and K562 cell lines, two biological replicates for each cell line. Only intra-chromosomal PETs were kept. Raw FASTQ reads were processed by [tracPre2.py](https://github.com/YaqiangCao/cLoops2/blob/master/scripts/tracPre2.py).       
 
 For other kinds of 3D genomic interaction data such as ChIA-PET, Hi-C, and HiChIP, cLoops2 can also start with provided BEDPE files.     
 
@@ -133,7 +133,7 @@ The main output is a figure as follows.
 cLoops2 estDis -d gm -o gm -bs 1000 -p 10 -plot
 ```
 
-The main output is a figure as follows. The plot indicates Hi-Trac data may detect significant interactions within 1MB. 
+The main output is a figure as follows. The plot indicates Hi-TrAC data may detect significant interactions within 1MB. 
 
 <p align="center">
 <img align="center" width="400" height="275" src="https://github.com/YaqiangCao/cLoops2/blob/master/pngs/gm_obsExpDisFreq_obsExp.png">
@@ -159,7 +159,7 @@ cLoops2 callPeaks -d gm -o gm -eps 50,100 -minPts 10 -mcut 1000 -split
 The main output is a [\_peaks.txt](#_peaks.txt) file, from which contains all important informations for peaks.   
 
 ### Rountine analysis step 7: show aggregated peaks 
-Check global peaks width and enrichment through aggregation plot. For Hi-Trac data, we expect high enrichment of signals at peaks.
+Check global peaks width and enrichment through aggregation plot. For Hi-TrAC data, we expect high enrichment of signals at peaks.
 ```
 cLoops2 agg -d gm -peaks gm_peaks.bed -o gm -peak_ext 2500 -peak_bins 200 -peak_norm -skipZeros
 ```
@@ -177,7 +177,7 @@ cLoops2 callLoops -d gm -o gm -eps 200,500,1000 -minPts 10 -w -j
 
 The main output is a [\_loops.txt](#_loops.txt) file, which contains all important information for loops.   
 
-We implemented a trans-chromosomal-loops-caller in ***cLoops callLoops*** with a parameter of ***-trans***. However, we do not recommend running with this option for Hi-Trac data. 
+We implemented a trans-chromosomal-loops-caller in ***cLoops callLoops*** with a parameter of ***-trans***. However, we do not recommend running with this option for Hi-TrAC data. 
 
 With the options of ***-w -j***, loops can be output as the input of the washU genome browser and juicebox. 
 
@@ -196,9 +196,9 @@ cLoops2 agg -d gm -o gm -loops gm_loops.txt -bws ../data/GM12878_ATAC_chr21.bw,.
 <img align="center" width="300" height="500" src="https://github.com/YaqiangCao/cLoops2/blob/master/pngs/gm_aggLoops.png">
 </p>
 
-For Hi-Trac, we expect the aggregated loops pattern as above: 
+For Hi-TrAC, we expect the aggregated loops pattern as above: 
 - highly enriched signal at the center for loop regions; 
-- relative higher signal from the two anchors, as for Hi-Trac, anchors are expected to be peaks in the 1D.
+- relative higher signal from the two anchors, as for Hi-TrAC, anchors are expected to be peaks in the 1D.
 
 ### Rountine analysis step 10: call domains 
 ```
@@ -207,7 +207,7 @@ cLoops2 callDomains -d gm -o gm -bs 5000 -ws 100000,250000
 
 The main output is a [\_domains.txt](#_domains.txt) file. 
 
-For Hi-Trac, called domains are all activate domains. There is a ***-hic*** option for Hi-C like data.
+For Hi-TrAC, called domains are all activate domains. There is a ***-hic*** option for Hi-C like data.
 
 ### Rountine analysis step 11: show aggregated domains
 ```
@@ -220,7 +220,7 @@ cLoops2 agg -d gm -o gm -domains gm_domains.bed -bws ../data/GM12878_CTCF_chr21.
 <p align="center">
 <img align="center" width="500" height="600" src="https://github.com/YaqiangCao/cLoops2/blob/master/pngs/gm_aggDomains.png">
 
-For Hi-Trac, we expect the aggregated domains pattern as above (maybe better clear if there are more domains):
+For Hi-TrAC, we expect the aggregated domains pattern as above (maybe better clear if there are more domains):
 - clear segregation from up-and down-stream;   
 - enriched CTCF/Cohesin bindings at boundaries;   
 - higher 1D signal than nearby regions;   
@@ -393,7 +393,7 @@ Available sub-commands are:
     filterPETs: filter PETs based on peaks, loops, singleton mode or knn mode. 
     samplePETs: sample PETs according to specific target size.
     callPeaks: call peaks for ChIP-seq, ATAC-seq, ChIC-seq and CUT&Tag or the 
-               3D genomic data such as Trac-looping, Hi-Trac, HiChIP and more.
+               3D genomic data such as Trac-looping, Hi-TrAC, HiChIP and more.
     callLoops: call loops for 3D genomic data.
     callDiffLoops: call differentially enriched loops for two datasets. 
     callDomains: call domains for 3D genomic data. 
@@ -911,7 +911,7 @@ Run **cLoops2 callPeaks -h** to see details.
 Call peaks based on clustering. 
 
 Well tested work for ChIP-seq, ChIC-seq, ATAC-seq, CUT&RUN -like or the 3D
-genomic data such as Hi-Trac/Trac-looping, ChIA-PET and HiChIP.
+genomic data such as Hi-TrAC/Trac-looping, ChIA-PET and HiChIP.
 
 There are three steps in the algorithm: 1) cluster the PETs to find 
 self-ligation clusters, which are candidate peaks; 2) estimate the significance
@@ -1019,7 +1019,7 @@ Run **cLoops2 callLoops -h** to see details.
 ```
 Call loops based on clustering. 
 
-Well tested work for Hi-Trac/TrAC-looping, HiCHiP, ChIA-PET and Hi-C.
+Well tested work for Hi-TrAC/TrAC-looping, HiCHiP, ChIA-PET and Hi-C.
 
 Similar to call peaks, there are three main steps in the algorithm: 1) cluster 
 the PETs to find inter-ligation clusters, which are candidate loops; 2) 
@@ -1039,15 +1039,15 @@ sensitive than cDBSCAN in cLoops, so the same parameters can generate quite
 different results. With -hic option, cDBSCAN will be used. 
 
 Examples:
-    1. call loops for Hi-Trac/Trac-looping
+    1. call loops for Hi-TrAC/Trac-looping
         cLoops2 callLoops -d trac -o trac -eps 200,500,1000,2000 -minPts 5 -w -j
 
-    2. call loops for Hi-Trac/Trac-looping with filtering short distance PETs 
+    2. call loops for Hi-TrAC/Trac-looping with filtering short distance PETs 
        and using maximal estimated distance cutoff
         cLoops2 callLoops -d trac -o trac -eps 200,500,1000,2000 -minPts 5 \
                           -cut 1000 -max_cut -w -j
 
-    3. call loops for Hi-Trac/Trac-looping and get the PETs with any end 
+    3. call loops for Hi-TrAC/Trac-looping and get the PETs with any end 
        overlapping loop anchors
         cLoops2 callLoops -d trac -o trac -eps 200,500,1000,2000 -minPts 5 -w \
                           -j -filterPETs
@@ -1194,13 +1194,13 @@ Run **cLoops2 callDomains -h** to see details.
 Call domains for the 3D genomic data based on correlation matrix and local 
 segregation score.
 
-Well tested work for Hi-Trac/Trac-looping data.
+Well tested work for Hi-TrAC/Trac-looping data.
 
 Examples:
     1. call Hi-C like TADs
         cLoops2 callDomains -d trac -o trac -bs 5000,10000 -ws 500000 -p 20
 
-    2. call Hi-Trac/Trac-looping specific small domains
+    2. call Hi-TrAC/Trac-looping specific small domains
         cLoops2 callDomains -d trac -o trac -bs 1000 -ws 100000 -p 20 
 
     3. call domains for Hi-C
@@ -1723,7 +1723,7 @@ The following analysis application scripts are available when cLoops2 is install
 
 - [tracPre.py](https://github.com/YaqiangCao/cLoops2/blob/master/scripts/tracPre.py): pre-process the raw reads of FASTQ files of Trac-looping data to the reference genome and obtain the unique PETs with quality control results.
 
-- [tracPre2.py](https://github.com/YaqiangCao/cLoops2/blob/master/scripts/tracPre2.py): pre-process the raw reads of FASTQ files of Hi-Trac data to the reference genome and obtain the unique PETs with quality control results.
+- [tracPre2.py](https://github.com/YaqiangCao/cLoops2/blob/master/scripts/tracPre2.py): pre-process the raw reads of FASTQ files of Hi-TrAC data to the reference genome and obtain the unique PETs with quality control results.
 
 -----
 ------
