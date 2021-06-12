@@ -728,9 +728,9 @@ def plotMatHeatmap(
         metaf = predir + "/petMeta.json"
         meta = json.loads(open(metaf).read())
         total = meta["Unique PETs"]
-        virtual4Csig = getVirtual4CSig(xy2, start, end, viewStart, viewEnd,
-                                       res)
-        virtual4Csig = virtual4Csig / total * 10**6
+        #virtual4Csig = getVirtual4CSig(xy2, start, end, viewStart, viewEnd, res)
+        virtual4Csig = getVirtual4CSig(xy2, start, end, viewStart, viewEnd)
+        #virtual4Csig = virtual4Csig / total * 10**6
     if triu:
         mat = rotate(mat, angle=45, reshape=True)
         #take the uppper matrix and remove padding zeros
@@ -895,12 +895,12 @@ def plotMatHeatmap(
         #log2 is nesscessary
         virtual4Csig = np.log2(virtual4Csig + 1)
         xs = np.arange(len(virtual4Csig))
-        ax.plot(xs, virtual4Csig, color=colors[axi], label="virtual 4C signal")
-        ax.fill_between(xs, 0, virtual4Csig, color=colors[axi], alpha=0.8)
+        ax.plot(xs, virtual4Csig, color=colors[0], label="virtual 4C signal")
+        ax.fill_between(xs, 0, virtual4Csig, color=colors[0], alpha=0.8)
         ax.tick_params(axis='both', which='major', labelsize=4)
         ax.set_xticklabels([])
         ax.set_xlim([np.min(xs), np.max(xs)])
-        ax.set_ylabel("log2(RPM+1)", fontsize=6)
+        ax.set_ylabel("log2(counts)", fontsize=6)
         ax.legend(fontsize=6, fancybox=False, frameon=False)
 
     #plot loops as arches

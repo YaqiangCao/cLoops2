@@ -161,7 +161,7 @@ def getBinMean(s, bins=100):
     return ns
 
 
-def get1DSigMat(xy, rs, ext=50, bins=100, skipZeros=False):
+def get1DSigMat(xy, rs, ext=20, bins=100, skipZeros=False):
     """
     Get the 1D signal matrix for a set of regions.
     @param xy is XY object
@@ -192,7 +192,7 @@ def get1DSigMat(xy, rs, ext=50, bins=100, skipZeros=False):
 
 
 
-def getVirtual4CSig(xy,start,end,viewStart,viewEnd,bs):
+def getVirtual4CSig(xy,start,end,viewStart,viewEnd,ext=20):
     """
     Get the virtual 4C signal for a region and a view point.
     @param xy, cLoops2.ds.XY object
@@ -201,42 +201,21 @@ def getVirtual4CSig(xy,start,end,viewStart,viewEnd,bs):
     @param viewStart: int, start coordinate for view point
     @param viewEnd: int, end coordinate for view point
     """
-    #size = viewEnd - viewStart
-    size = bs
-    upBins = int( (viewStart - start) / size ) + 1
-    downBins =  int( (end- viewEnd) / size ) + 1
-    upS,downS = [],[]
-    sig = len(xy.queryPeakBoth(viewStart, viewEnd))
-    #upstream signals
-    for i in range(1,upBins):
-        s = viewStart - size*i
-        #e = viewEnd - size*i  
-        e = s + size
-        if e < start:
-            break
-        if s < start:
-            s = start
-        ra, rb, rab = xy.queryLoop(s, e, viewStart, viewEnd)
-        upS.extend( [len(rab)] * (e-s) )
-    upS.reverse()
-    #downstream signals
-    for i in range(1,downBins+1):
-        s = viewStart + size*i
-        #e = viewEnd + size*i  
-        e = s + size
-        if s > end:
-            break
-        if e > end :
-            e = end
-        ra, rb, rab = xy.queryLoop(s, e, viewStart, viewEnd)
-        downS.extend( [len(rab)] * (e-s) )
-    ss = []
-    ss.extend( upS )
-    ss.append( sig*(viewEnd-viewStart) )
-    ss.extend( downS )
-    ss = np.array( ss )
+    aps = xy.queryPeak(start,end)
+    bps = xy.queryPeak(viewStart,viewEnd)
+    cps = xy.queryPeakBoth(viewStart,viewEnd)
+    ps = aps.intersection( bps ).difference( cps )
+    ss = np.zeros(end - start)
+    for i in ps:
+        x = xy.mat[i,0]
+        y = xy.mat[i,1]
+        pa = max(0, x - start - ext)
+        pb = min(max(0, x - start + ext), end-start) #fix max
+        ss[pa:pb] += 1
+        pa = max(0, y - start - ext)
+        pb = min(max(0, y - start + ext), end)
+        ss[pa:pb] += 1
     return ss
-        
- 
+
 
 

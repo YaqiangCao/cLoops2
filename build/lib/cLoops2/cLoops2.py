@@ -123,7 +123,7 @@ Available sub-commands are:
     filterPETs: filter PETs based on peaks, loops, singleton mode or knn mode. 
     samplePETs: sample PETs according to specific target size.
     callPeaks: call peaks for ChIP-seq, ATAC-seq, ChIC-seq and CUT&Tag or the 
-               3D genomic data such as Trac-looping, Hi-Trac, HiChIP and more.
+               3D genomic data such as Trac-looping, Hi-TrAC, HiChIP and more.
     callLoops: call loops for 3D genomic data.
     callDiffLoops: call differentially enriched loops for two datasets. 
     callDomains: call domains for 3D genomic data. 
@@ -1156,7 +1156,7 @@ Example:
 Call peaks based on clustering. 
 
 Well tested work for ChIP-seq, ChIC-seq, ATAC-seq, CUT&RUN -like or the 3D
-genomic data such as Hi-Trac/Trac-looping, ChIA-PET and HiChIP.
+genomic data such as Hi-TrAC/Trac-looping, ChIA-PET and HiChIP.
 
 There are three steps in the algorithm: 1) cluster the PETs to find 
 self-ligation clusters, which are candidate peaks; 2) estimate the significance
@@ -1303,7 +1303,7 @@ Examples:
         action="store_true",
         help=
         "Whether to split paired-end as single end data to call peaks. Sometimes\n"\
-        "works well for Hi-Trac/Trac-looping and HiChIP. Can get more peaks."
+        "works well for Hi-TrAC/Trac-looping and HiChIP. Can get more peaks."
     )
     callPeaks.add_argument(
         "-splitExt",
@@ -1320,7 +1320,7 @@ Examples:
     callLoopsDes = """
 Call loops based on clustering. 
 
-Well tested work for Hi-Trac/TrAC-looping, HiCHiP, ChIA-PET and Hi-C.
+Well tested work for Hi-TrAC/TrAC-looping, HiCHiP, ChIA-PET and Hi-C.
 
 Similar to call peaks, there are three main steps in the algorithm: 1) cluster 
 the PETs to find inter-ligation clusters, which are candidate loops; 2) 
@@ -1340,15 +1340,15 @@ sensitive than cDBSCAN in cLoops, so the same parameters can generate quite
 different results. With -hic option, cDBSCAN will be used. 
 
 Examples:
-    1. call loops for Hi-Trac/Trac-looping
+    1. call loops for Hi-TrAC/Trac-looping
         cLoops2 callLoops -d trac -o trac -eps 200,500,1000,2000 -minPts 5 -w -j
 
-    2. call loops for Hi-Trac/Trac-looping with filtering short distance PETs 
+    2. call loops for Hi-TrAC/Trac-looping with filtering short distance PETs 
        and using maximal estimated distance cutoff
         cLoops2 callLoops -d trac -o trac -eps 200,500,1000,2000 -minPts 5 \\
                           -cut 1000 -max_cut -w -j
 
-    3. call loops for Hi-Trac/Trac-looping and get the PETs with any end 
+    3. call loops for Hi-TrAC/Trac-looping and get the PETs with any end 
        overlapping loop anchors
         cLoops2 callLoops -d trac -o trac -eps 200,500,1000,2000 -minPts 5 -w \\
                           -j -filterPETs
@@ -1657,13 +1657,13 @@ Example:
 Call domains for the 3D genomic data based on correlation matrix and local 
 segregation score.
 
-Well tested work for Hi-Trac/Trac-looping data.
+Well tested work for Hi-TrAC/Trac-looping data.
 
 Examples:
     1. call Hi-C like TADs
         cLoops2 callDomains -d trac -o trac -bs 5000,10000 -ws 500000 -p 20
 
-    2. call Hi-Trac/Trac-looping specific small domains
+    2. call Hi-TrAC/Trac-looping specific small domains
         cLoops2 callDomains -d trac -o trac -bs 1000 -ws 100000 -p 20 
 
     3. call domains for Hi-C
