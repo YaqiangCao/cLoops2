@@ -1,4 +1,4 @@
-#!/home/caoy7/anaconda2/envs/pipi/bin/python3
+#!/home/caoy7/anaconda2/envs/py37/bin/python3
 #--coding:utf-8--
 """
 tow.py 
@@ -642,4 +642,4 @@ if __name__ == "__main__":
     start_time = datetime.now()
     main()
     usedtime = datetime.now() - start_time
-    sys.stderr.write("Prcess finished. Used CPU time: %s Bye!\n" % usedtime)
+    sys.stderr.write("Process finished. Used CPU time: %s Bye!\n" % usedtime)

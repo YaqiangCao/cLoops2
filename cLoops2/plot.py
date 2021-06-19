@@ -1267,17 +1267,6 @@ def plotPETsScatter(
     hr = []
     if gtf != "":
         genes = getGenes(gtf, chrom[0], start, end)
-        """
-        if len(genes) > 20:
-            print(
-                "More than 20 genes in the target region, only plot random 20."
-            )
-            ns = list(genes.keys())[:20]
-            ng = {}
-            for n in ns:
-                ng[n] = genes[n]
-            genes = ng
-        """
         hights += len(genes) * 0.1
         hr.extend([0.1] * len(genes))
     if len(bws) > 0:

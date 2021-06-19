@@ -1,4 +1,4 @@
-#!/home/caoy7/anaconda2/envs/pipi/bin/python3
+#!/home/caoy7/anaconda2/envs/py37/bin/python3
 #--coding:utf-8 --
 """
 getSigEnrich.py
