@@ -507,11 +507,11 @@ def plotGene(ax, n, g, start, end, space=0.02):
         if g.strand == "+":
             c = colors[1]
             p = g.exons[0].start - (end - start) * (space * 2)
-            ax.text(p, 0.15, n, color=c, fontsize=5)
+            ax.text(p, 0.15, n, color=c, fontsize=5,style="italic")
         else:
             c = colors[3]
             p = g.exons[-1].end + (end - start) * space
-            ax.text(p, 0.15, n, color=c, fontsize=5)
+            ax.text(p, 0.15, n, color=c, fontsize=5,style="italic")
     return ax
 
 

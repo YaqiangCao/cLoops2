@@ -1,5 +1,6 @@
 MANIFEST.in
 README.md
+cLoops2.log
 cLoops2_env.yaml
 cLoops2_pip_readme.md
 setup.py
@@ -43,6 +44,7 @@ cLoops2/__pycache__/__init__.cpython-35.pyc
 cLoops2/__pycache__/__init__.cpython-36.pyc
 cLoops2/__pycache__/__init__.cpython-37.pyc
 cLoops2/__pycache__/__init__.cpython-38.pyc
+cLoops2/__pycache__/__init__.cpython-39.pyc
 cLoops2/__pycache__/agg.cpython-36.pyc
 cLoops2/__pycache__/agg.cpython-37.pyc
 cLoops2/__pycache__/agg.cpython-38.pyc
@@ -59,6 +61,7 @@ cLoops2/__pycache__/cLoops2.cpython-35.pyc
 cLoops2/__pycache__/cLoops2.cpython-36.pyc
 cLoops2/__pycache__/cLoops2.cpython-37.pyc
 cLoops2/__pycache__/cLoops2.cpython-38.pyc
+cLoops2/__pycache__/cLoops2.cpython-39.pyc
 cLoops2/__pycache__/callCisLoops.cpython-36.pyc
 cLoops2/__pycache__/callCisLoops.cpython-37.pyc
 cLoops2/__pycache__/callCisLoops.cpython-38.pyc
@@ -80,12 +83,14 @@ cLoops2/__pycache__/cmat.cpython-38.pyc
 cLoops2/__pycache__/ds.cpython-36.pyc
 cLoops2/__pycache__/ds.cpython-37.pyc
 cLoops2/__pycache__/ds.cpython-38.pyc
+cLoops2/__pycache__/ds.cpython-39.pyc
 cLoops2/__pycache__/dump.cpython-36.pyc
 cLoops2/__pycache__/dump.cpython-37.pyc
 cLoops2/__pycache__/dump.cpython-38.pyc
 cLoops2/__pycache__/est.cpython-36.pyc
 cLoops2/__pycache__/est.cpython-37.pyc
 cLoops2/__pycache__/est.cpython-38.pyc
+cLoops2/__pycache__/est.cpython-39.pyc
 cLoops2/__pycache__/estDis.cpython-36.pyc
 cLoops2/__pycache__/estDis.cpython-37.pyc
 cLoops2/__pycache__/estDis.cpython-38.pyc
@@ -104,15 +109,18 @@ cLoops2/__pycache__/geo.cpython-38.pyc
 cLoops2/__pycache__/io.cpython-36.pyc
 cLoops2/__pycache__/io.cpython-37.pyc
 cLoops2/__pycache__/io.cpython-38.pyc
+cLoops2/__pycache__/io.cpython-39.pyc
 cLoops2/__pycache__/montage.cpython-36.pyc
 cLoops2/__pycache__/montage.cpython-37.pyc
 cLoops2/__pycache__/montage.cpython-38.pyc
 cLoops2/__pycache__/plot.cpython-36.pyc
 cLoops2/__pycache__/plot.cpython-37.pyc
 cLoops2/__pycache__/plot.cpython-38.pyc
+cLoops2/__pycache__/plot.cpython-39.pyc
 cLoops2/__pycache__/qc.cpython-36.pyc
 cLoops2/__pycache__/qc.cpython-37.pyc
 cLoops2/__pycache__/qc.cpython-38.pyc
+cLoops2/__pycache__/qc.cpython-39.pyc
 cLoops2/__pycache__/quant.cpython-36.pyc
 cLoops2/__pycache__/quant.cpython-37.pyc
 cLoops2/__pycache__/quant.cpython-38.pyc
@@ -122,6 +130,7 @@ cLoops2/__pycache__/settings.cpython-38.pyc
 cLoops2/__pycache__/utils.cpython-36.pyc
 cLoops2/__pycache__/utils.cpython-37.pyc
 cLoops2/__pycache__/utils.cpython-38.pyc
+cLoops2/__pycache__/utils.cpython-39.pyc
 data/hg19.chrom.sizes
 data/hg38.chrom.sizes
 scripts/getBedpeFBed.py

@@ -507,11 +507,11 @@ def plotGene(ax, n, g, start, end, space=0.02):
         if g.strand == "+":
             c = colors[1]
             p = g.exons[0].start - (end - start) * (space * 2)
-            ax.text(p, 0.15, n, color=c, fontsize=5)
+            ax.text(p, 0.15, n, color=c, fontsize=5,style="italic")
         else:
             c = colors[3]
             p = g.exons[-1].end + (end - start) * space
-            ax.text(p, 0.15, n, color=c, fontsize=5)
+            ax.text(p, 0.15, n, color=c, fontsize=5,style="italic")
     return ax
 
 
@@ -1267,17 +1267,6 @@ def plotPETsScatter(
     hr = []
     if gtf != "":
         genes = getGenes(gtf, chrom[0], start, end)
-        """
-        if len(genes) > 20:
-            print(
-                "More than 20 genes in the target region, only plot random 20."
-            )
-            ns = list(genes.keys())[:20]
-            ng = {}
-            for n in ns:
-                ng[n] = genes[n]
-            genes = ng
-        """
         hights += len(genes) * 0.1
         hr.extend([0.1] * len(genes))
     if len(bws) > 0:
