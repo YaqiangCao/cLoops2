@@ -8,7 +8,7 @@
 
 </div>
 
-## cLoops2: full stack analysis tool for enriched chromatin interaction data 
+## cLoops2: full stack analysis tool for chromatin interactions
 <p align="center">
 <img align="center" src="https://github.com/YaqiangCao/cLoops2/blob/master/pngs/FlowChart.png">
 </p>   
