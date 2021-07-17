@@ -15,13 +15,14 @@ cLoops2 main interface to kinds of calling and analysis programme.
 2020-08-10: going to add circos plot as Montage module
 2020-10-27: integrated interaction density and distance estimation
 2020-12-08: integrated find target genes for a set regions/loops through the enhancer promoter network.  
+2021-07-16: initial public available for GitHub and PyPI.
 """
 
 __author__ = "CAO Yaqiang"
 __date__ = ""
 __modified__ = ""
 __email__ = "caoyaqiang0410@gmail.com"
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 
 #sys library
 import warnings
