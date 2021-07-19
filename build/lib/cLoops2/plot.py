@@ -247,8 +247,10 @@ def plotCorrScatterPCC(mat, fout):
     cb = fig.colorbar(hb, ax=ax)
     cb.set_label('log10(N), number of points')
     ax.set_title("vector size:%s\nPCC:%.3f" % (len(sa), corr))
-    ax.set_xlabel(da + ",log10(PET+1)")
-    ax.set_ylabel(db + ",log10(PET+1)")
+    #ax.set_xlabel(da + ",log10(PET+1)")
+    #ax.set_ylabel(db + ",log10(PET+1)")
+    ax.set_xlabel(da)
+    ax.set_ylabel(db)
     pylab.savefig("%s" % fout)
 
 
