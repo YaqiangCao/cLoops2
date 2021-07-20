@@ -1379,9 +1379,11 @@ def plotPETsScatter(
         #caculating the rotate coordinates
         x = mat[:,0]*np.cos( -np.pi/4 ) - mat[:,1]*np.sin( -np.pi/4 )
         y = mat[:,1]*np.cos( -np.pi/4 ) + mat[:,0]*np.sin( -np.pi/4 )
-        ax.set_xlim([0, np.max(x)])
-        ax.set_ylim([np.min(y),np.max(y)])
+        xlim = (end - start) * ( np.cos(-np.pi/4) - np.sin(-np.pi/4) )
         ax.scatter( x,y, s =ss, color=colors[sc], alpha=sa)
+        ax.set_ylim([np.min(y),np.max(y)])
+        #ax.set_xlim([0,np.max(x)])
+        ax.set_xlim([0,xlim])
     else:
         ax.scatter( mat[:,0], mat[:,1], s =ss, color=colors[sc], alpha=sa)
         ax.scatter( mat[:,1], mat[:,0], s =ss, color=colors[sc], alpha=sa)
@@ -1389,7 +1391,7 @@ def plotPETsScatter(
         ax.set_ylim([0, end-start])
     ax.set_xticks([])
     ax.set_yticks([])
-    ax.invert_yaxis()
+    #ax.invert_yaxis()
     pylab.savefig(fo + "_scatter.pdf")
 
 
