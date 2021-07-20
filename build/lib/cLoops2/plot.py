@@ -1382,7 +1382,6 @@ def plotPETsScatter(
         xlim = (end - start) * ( np.cos(-np.pi/4) - np.sin(-np.pi/4) )
         ax.scatter( x,y, s =ss, color=colors[sc], alpha=sa)
         ax.set_ylim([np.min(y),np.max(y)])
-        #ax.set_xlim([0,np.max(x)])
         ax.set_xlim([0,xlim])
     else:
         ax.scatter( mat[:,0], mat[:,1], s =ss, color=colors[sc], alpha=sa)
