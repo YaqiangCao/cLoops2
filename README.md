@@ -21,11 +21,11 @@ cLoops2 is an extension of our previous work, [cLoops](https://github.com/Yaqian
 
 cLoops2 is designed with respect reference to [bedtools](https://bedtools.readthedocs.io/en/latest/) and [Samtools](http://www.htslib.org/) for command-line style programming. If you have experience with them, you will find cLoops2 easy and efficient to use and combine commands, integrate as steps in your processing pipeline. 
 
-Please refer to our [Hi-TrAC method manuscript]() or [cLoops2 manuscript]() for what cLoops2 can do and show. 
+Please refer to our [Hi-TrAC method manuscript]() or [cLoops2 manuscript](https://www.biorxiv.org/content/10.1101/2021.07.20.453068v1) for what cLoops2 can do and show. 
 
 If you use cLoops2 in your research (the idea, the algorithm, the analysis scripts or the supplemental data), please give us a star on the GitHub repo page and cite our paper as follows:    
 
-Preprint bioRxiv: Yaqiang Cao et al. "Full-stack analysis for enriched 3D genomic interaction data with cLoops2"   
+Preprint bioRxiv: [Yaqiang Cao et al. "cLoops2: a full-stack comprehensive analytical tool for chromatin interactions"](https://www.biorxiv.org/content/10.1101/2021.07.20.453068v1)
 
 
 -------

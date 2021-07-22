@@ -1390,7 +1390,7 @@ def plotPETsScatter(
         ax.set_ylim([0, end-start])
     ax.set_xticks([])
     ax.set_yticks([])
-    #ax.invert_yaxis()
+    ax.invert_yaxis()
     pylab.savefig(fo + "_scatter.pdf")
 
 
