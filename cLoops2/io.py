@@ -825,7 +825,7 @@ def doms2txt(doms, fout):
             if hasattr(dom, "id"):
                 did = dom.id
             else:
-                did = "domain_%s" % i,
+                did = "domain_%s" % i
             line = [
                 did,
                 dom.chrom,
