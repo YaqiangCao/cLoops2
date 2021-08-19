@@ -1369,7 +1369,7 @@ def plotPETsScatter(
         rs = getBedRegion(bed, chrom[0], start, end)
         plotRegion(ax, rs, start, end, i, label=name)
 
-    #plot PETs as dos
+    #plot PETs as dots
     axi += 1
     ax = fig.add_subplot(gs[axi])
     ps = xy2.queryPeakBoth(start, end)

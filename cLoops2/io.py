@@ -424,7 +424,7 @@ def loops2txt(loops, fout):
             if hasattr(loop, "id"):
                 lid = loop.id
             else:
-                lid = "loop_%s-%s-%s" % (loop.chromX, loop.chromY, i),
+                lid = "loop_%s-%s-%s" % (loop.chromX, loop.chromY, i)
             line = [
                 lid,
                 loop.chromX,
