@@ -9,6 +9,7 @@ cLoops IO module.
 2020-04-09: updated parseIxy to add <=dist cutoff.
 2020-07-30: DiffLoop object to washU, UCSC, Juicebox added.
 2020-11-08: improving parseBedpe, to get the unique PETs from each txt file by parallel.
+2021-08-20: adding parsePairs, pairs defined as https://pairtools.readthedocs.io/en/latest/formats.html#pairs
 """
 
 __author__ = "CAO Yaqiang"
@@ -30,7 +31,7 @@ from tqdm import tqdm
 from joblib import Parallel, delayed
 
 #cLoops2
-from cLoops2.ds import PET, XY, Loop, Peak, Domain
+from cLoops2.ds import PET, Pair, XY, Loop, Peak, Domain
 from cLoops2.utils import callSys, cFlush, getLogger
 
 
@@ -144,6 +145,102 @@ def parseBedpe(fs, fout, logger, mapq=1, cs=[], cut=0,mcut=-1, cis=False,cpu=1):
     ds = {
         "Total PETs": total,
         "High Mapq(>=%s) PETs" % mapq: hiq,
+        "Total Trans PETs": t,
+        "Total Cis PETs": c,
+        "Filtered too close (<%s) PETs" % cut: closeCis,
+        "Filtered too distant (>%s) PETs" % mcut: farCis,
+        "Unique PETs": uniques,
+        "Cis PETs Redundancy": nr
+    }
+    with open(fout + "/petMeta.json", "w") as fo:
+        json.dump(ds, fo)
+    #convert to .ixy files
+    logger.info("writing .ixy files")
+    Parallel(n_jobs=cpu,backend="multiprocessing")(delayed(txt2ixy)(f) for f in nfs)
+    nfs = glob(fout + "/*.ixy")
+    #collect files and update meta information
+    ixyfs = glob(fout + "/*.ixy")
+    metaf = fout + "/petMeta.json"
+    updateJson(ixyfs, metaf)
+
+
+def parsePairs(fs, fout, logger, cs=[], cut=0,mcut=-1, cis=False,cpu=1):
+    """
+    Pre-processing PETs, organized by chromosomes. Input could be mixed PETs in pairs.gz or pairs. 
+    Also change read id to numbers to minize memory usage.
+    @param fs: pairs files of replicates, could be .pairs or .pairs.gz
+    @param fout: output prefix, the name for directory
+    @param logger: logger object
+    @param cs: chroms that wanted, list like ["chr1","chr2"]
+    """
+    #chroms data, used to keep
+    chroms = {}
+    total, t, c, closeCis,farCis = 0, 0, 0, 0, 0
+    for f in fs:
+        r = "Parsing PETs from %s, requiring initial distance cutoff >%s and <%s" % (
+            f, cut,mcut)
+        logger.info(r)
+        if f.endswith(".gz"):
+            #of = gzip.open(f, "rb") #python2
+            of = gzip.open(f, "rt")  #python3
+        else:
+            of = open(f)
+        for i, line in enumerate(of):
+            if i % 100000 == 0:
+                cFlush("%s PETs processed from %s" % (i, f))
+            if line.startswith("#"):
+                continue
+            line = line.split("\n")[0].split("\t")
+            if line[7] not in [ "UU", "MR","MU","RU","UR" ]:
+                continue
+            try:
+                pet = Pair(line)
+            except:
+                continue
+            #filtering unwanted PETs in chroms
+            if len(cs) > 0 and (not (pet.chromA in cs and pet.chromB in cs)):
+                continue
+            total += 1  #total read in PETs
+            if pet.cis == True:
+                c += 1
+            else:
+                t += 1
+            #skip trans PETs for furthur processing
+            if cis and pet.cis == False:
+                continue
+            #filtering too close cis PETs
+            if cut > 0 and pet.cis and pet.distance < cut:
+                closeCis += 1
+                continue
+            if mcut > 0 and pet.cis and pet.distance > mcut:
+                farCis += 1
+                continue
+            #pet.chromA and pet.chromB is sorted in PET object
+            key = (pet.chromA, pet.chromB)
+            if key not in chroms:
+                cf = os.path.join(fout,
+                                  "%s-%s" % (pet.chromA, pet.chromB) + ".txt")
+                chroms[key] = {
+                    "f": cf,
+                    "of": open(cf, "w"),
+                }
+            nline = [pet.cA, pet.cB]
+            chroms[key]["of"].write("\t".join(list(map(str, nline))) + "\n")
+    print("\n" * 2)
+    #get unique PETs
+    nfs = [v["f"] for v in chroms.values()]
+    del (chroms)
+    uniques = Parallel(n_jobs=cpu,backend="multiprocessing")(delayed(getUniqueTxt)(f) for f in nfs)
+    uniques = int(np.sum( uniques ))
+    r = "Totaly %s PETs in target chromosomes from %s, in which %s high quality unqiue PETs" % (
+        total, ",".join(fs), uniques)
+    logger.info(r)
+    if c > 0:
+        nr = 1-uniques / 1.0 / (c - closeCis)
+    else:
+        nr = 0
+    ds = {
+        "Total PETs": total,
         "Total Trans PETs": t,
         "Total Cis PETs": c,
         "Filtered too close (<%s) PETs" % cut: closeCis,

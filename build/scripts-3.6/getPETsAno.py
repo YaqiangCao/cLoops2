@@ -1,4 +1,4 @@
-#!python
+#!/home/caoy7/anaconda2/envs/cLoops2/bin/python
 #--coding:utf-8 --
 """
 getPETsAno.py
@@ -35,7 +35,6 @@ def help():
     Create the command line interface for the script.
     """
     description = """
-        Quantify the loop density.
         Get the annotations of PETs located for enhancer-promoter, enhancer-enhancer,
         promoter-promoter inteaction ratios.
         Example:

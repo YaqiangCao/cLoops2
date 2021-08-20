@@ -41,7 +41,7 @@ from joblib import Parallel, delayed
 
 #cLoops2, import sorted by module name length
 from cLoops2.qc import qcBedpes
-from cLoops2.io import parseBedpe, txt2ixy, updateJson, writeNewJson, parseTxt2Loops, combineDirs  #pre-process input BEDPE
+from cLoops2.io import parseBedpe, parsePairs, txt2ixy, updateJson, writeNewJson, parseTxt2Loops, combineDirs  #pre-process input BEDPE
 from cLoops2.est import estRes, estSat  #estimate reasonable resolution, sequencing depth
 from cLoops2.agg import aggPeaks, aggLoops, aggViewPoints, aggDomains, aggTwoAnchors  #aggreate analysis of peaks,loops, viewPoints, domains
 from cLoops2.est import getXyDis, getGmmLabelsEps, getKDis, getKDisKneeEps  #estimate eps
@@ -282,7 +282,11 @@ Example:
     #pre
     #pre-processing of BEDPE files into easy accessed data.
     preDes = """
-Preprocess BEDPE PETs into cLoops2 data files.
+Preprocess mapped PETs into cLoops2 data files.
+
+Support input file formats:
+BEDPE: https://bedtools.readthedocs.io/en/latest/content/general-usage.html 
+PAIRS: https://pairtools.readthedocs.io/en/latest/formats.html#pairs
 
 The output directory contains one .json file for the basic statistics of PETs 
 information and .ixy files which are coordinates for every PET. The coordinate
@@ -297,6 +301,7 @@ Examples:
 
     2. keep all cis PETs that have distance > 1kb
         cLoops2 pre -f trac_rep1.bedpe.gz,trac_rep2.bedpe.gz -o trac -mapq 0
+
     """
     pre = subparsers.add_parser(
         'pre',
@@ -312,7 +317,7 @@ Examples:
         required=True,
         type=str,
         help=
-        "Input BEDPE file(s), .bedpe and .bedpe.gz are both suitable.\n"\
+        "Input BEDPE or PAIR file(s), .bedpe and .bedpe.gz are both suitable.\n"\
         "Replicates or multiple samples can be assigned as -f A.bedpe.gz,\n"\
         "B.bedpe.gz,C.bedpe.gz to get merged PETs."
     )
@@ -344,7 +349,18 @@ Examples:
         required=False,
         type=int,
         default=10,
-        help="MAPQ cutoff to filter raw PETs, default is >=10."
+        help=
+        "MAPQ cutoff to filter raw PETs, default is >=10. This option is not\n"\
+        "valid when input is .pairs file."
+    )
+    pre.add_argument(
+        "-format",
+        dest="format",
+        required=False,
+        choices=["bedpe", "pairs"],
+        default="bedpe",
+        help=
+        "cLoops2 currently supports BEDPE and PAIRs file format. Default is bedpe."
     )
 
     #update
@@ -2819,7 +2835,7 @@ def main():
     if cmd == "pre":
         start = datetime.now()
 
-        report = "Command: cLoops2 {} -f {} -o {} -p {} -c {} -cut {} -mcut {} -mapq {} -trans {}".format(
+        report = "Command: cLoops2 {} -f {} -o {} -p {} -c {} -cut {} -mcut {} -mapq {} -trans {} -format {}".format(
                 cmd, 
                 cliParser.fnIn, 
                 cliParser.fnOut, 
@@ -2828,7 +2844,8 @@ def main():
                 cliParser.cut, 
                 cliParser.mcut,
                 cliParser.mapq, 
-                cliParser.trans
+                cliParser.trans,
+                cliParser.format,
             )
         logger.info(report)
 
@@ -2851,15 +2868,26 @@ def main():
                 report = "Input file %s not exitst!" % f
                 logger.error(report)
                 return
-        #parse BEDPE files into xy coordinates
         if cliParser.trans:
             cis = False
         else:
             cis = True
-        parseBedpe(fs,
+        #parse BEDPE files into xy coordinates
+        if cliParser.format == "bedpe":
+            parseBedpe(fs,
                    fout,
                    logger,
                    mapq=cliParser.mapq,
+                   cs=chroms,
+                   cut=cliParser.cut,
+                   mcut=cliParser.mcut,
+                   cis=cis,
+                   cpu=cliParser.cpu,
+                   )
+        if cliParser.format == "pairs":
+            parsePairs(fs,
+                   fout,
+                   logger,
                    cs=chroms,
                    cut=cliParser.cut,
                    mcut=cliParser.mcut,

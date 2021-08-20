@@ -89,6 +89,55 @@ class PET(object):
 
 
 
+class Pair(object):
+    """
+    Pair object.
+    Data format according to:https://pairtools.readthedocs.io/en/latest/formats.html#pairs
+    """
+    __slots__ = [
+        "chromA",
+        "chromB",
+        "cA",
+        "cB",
+        "strandA",
+        "strandB",
+        "distance",
+        "cis",
+        "mid",
+        "start",
+        "end",
+    ]
+
+    def __init__(self, d):
+        """
+        d is line = line.split( "\n" )[ 0 ].split( "\t" ) from BEDPE file 
+        """
+        self.chromA = d[1]
+        self.cA = int( d[2] )
+        self.chromB = d[3]
+        self.cB = int( d[4] )
+        self.strandA = d[5]
+        self.strandB = d[6]
+        if self.chromA == self.chromB:
+            self.cis = True
+            #adjust the left end and right end to make sure left is alwasy small than right
+            if self.cA > self.cB:
+                self.cA, self.cB = self.cB, self.cA
+                self.strandA, self.strandB = self.strandB, self.strandA
+            self.distance = int(abs(self.cB - self.cA)) 
+            self.mid = int( (self.cA + self.cB) / 2)  #middle of the fragment
+        else:
+            self.cis = False
+            self.distance = None
+            self.mid = None
+            #adjust the left end and right end to make sure left is alwasy small than right, (chr1,chr2)
+            if self.chromA > self.chromB:
+                self.chromA, self.chromB = self.chromB, self.chromA
+                self.cA, self.cB = self.cB, self.cA
+                self.strandA, self.strandB = self.strandB, self.strandA
+
+
+
 class XY(object):
     """
     x,y coordinates for fast access, query point numbers and ids.

@@ -522,3 +522,6 @@ def ixy2mat(
     mat.to_csv(fout + "_cmat.txt", sep="\t", index_label="pos")
     logger.info("Converting to contact matrix txt %s_cmat.txt finished." % fout)
 
+
+def ixy2pairs():
+    pass

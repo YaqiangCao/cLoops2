@@ -7,7 +7,6 @@ cLoops2 major file conversion functions
 2020-06-25: to add dump to BEDPE
 2020-07-01: refine ixy2bdg
 2020-07-28: ixy2bed added
-2021-08-16: ixy2pairs added, pairs refferred to https://pairtools.readthedocs.io/en/latest/formats.html#pairs
 """
 
 __author__ = "CAO Yaqiang"
