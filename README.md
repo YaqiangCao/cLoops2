@@ -1852,8 +1852,8 @@ column | name | explanation
 23th | rawControlES | control sample rawControlCounts/rawControlNearbyMedianCounts 
 24th | targetDensity | raw interaction density in target sample, RPKM
 25th | controlDensity | raw interaction density in control sample, RPKM
-26th | rawFc | raw fold change of the interaction density, log2(target/control), pseudo=1 is used to avoid /0
-27th | scaledFc | scaled fold change of PETs, log2( scaledTargetCounts/rawControlCounts ), pseudo=1 is used to avoid /0
+26th | rawFc | raw fold change of the interaction density, log2(target/control)
+27th | scaledFc | scaled fold change of PETs, log2( scaledTargetCounts/rawControlCounts )
 28th | poissonPvalue | possion p-value for the significance test after Bonferroni correction
 29th | significant | 1 or 0, 1 means we think the loop is significant differentlly enriched
 
