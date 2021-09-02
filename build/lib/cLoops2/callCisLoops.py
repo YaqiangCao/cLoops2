@@ -20,6 +20,7 @@ callCisLoops.py
 2020-11-25: observed from Hi-C data, for overlapped loops, higher enrichment score,better
 2021-03-23: change HIC P2LLcut to 1 and binomial p-value cut to 1e-3 as using cDBSCAN2; previouse cutoffs for HIC P2LLcut >=2 binomial p<=1e-5
 2021-05-20: try to speed up permutation background query speed; tested with K562 Hi-TrAC chr21, 5 fold speed up.
+2021-08-24: for some very small anchors (<100bp), a lot of problem , for Hi-TrAC and Trac-looping data
 """
 
 #sys
@@ -109,6 +110,9 @@ def runCisDBSCANLoops(fixy, eps, minPts, cut=0,mcut=-1):
         loop.y_center = (loop.y_start + loop.y_end) / 2
         loop.cis = True
         loop.distance = abs(loop.y_center - loop.x_center)
+        #very small anchor 
+        if loop.x_end - loop.x_start + loop.y_end - loop.y_start < 200:
+            continue
         if loop.x_end < loop.y_start:  #true candidate loops
             loops.append(loop)
             loopReads.extend(los)
@@ -274,6 +278,9 @@ def estLoopSig(
                                    loop.y_end)
         ra, rb, rab = len(ra), len(rb), len(rab)
         if rab < minPts:
+            continue
+        #very small anchors may have the problem
+        if ra == rab or rb == rab:
             continue
         #unbalanced anchor density, to avoid lines, unknow reason for lines, maybe stripes
         if ra / float(rb) > countDiffCut or rb / float(ra) > countDiffCut:

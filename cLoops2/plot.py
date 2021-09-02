@@ -602,6 +602,7 @@ def plotLoops(ax, loops, nchrom, start, end,xy2=None):
         lws = [c / minCab for c in cabs]
         if max(lws) > 10:
             lws = [1] * len(lws)
+        #lws = [1] * len(lws)
         pa = 0
         pb = 1.0
         ymax = 0

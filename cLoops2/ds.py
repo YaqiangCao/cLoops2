@@ -310,16 +310,13 @@ class DiffLoop(object):
         "raw_con_mrab",
         "scaled_trt_rab",
         "scaled_trt_mrab",
-        "expected_trt_rab", #expected counts in loop by normalizing two anchor depth
         "trt_density",  #interaction density
         "con_density",
         "trt_es", #enrichment score compared to nearby region
         "con_es",
         "raw_fc",  #log2 transformed fold change
         "scaled_fc",  #log2 transformed fold change
-        "expected_fc",
         "poisson_p_value",
-        "expected_poisson_p_value",
         "significant",
     ]
 

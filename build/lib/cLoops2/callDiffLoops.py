@@ -14,6 +14,7 @@ Well tested for Trac-looping data.
 2020-07-30: try to add the estimation of anchors, and seperated loops. acut and mcut estimated from background already very strong. win size may not affect, so for efficient consideration set to 1. Alsoadd p-values to bg estimation.
 2021-04-12: cutomize parameters for acut and mcut for MA plot added
 2021-05-10: add heatmap vmin/vmax, cmap; not p-value cutoff added to include more loops.
+2021-08-20: add 1D peak normalization option.
 """
 
 __date__ = ""
