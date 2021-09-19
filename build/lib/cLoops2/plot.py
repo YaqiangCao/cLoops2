@@ -12,6 +12,7 @@ Plotting related functions for cLoops2.
 2020-10-30: adding plotting PETs as arches
 2021-02-04: adding option for not requring heatmps/arches
 2021-02-09: refine some details of code
+2021-09-18: improved parsing speed for plots
 """
 
 __author__ = "CAO Yaqiang"
@@ -672,14 +673,17 @@ def plotMatHeatmap(
     """
     Plot the contact matrix heatmap with 1D tracks or 2D annotations
     """
-
+    
+    #prepare data
     chrom, xy = parseIxy(f, cut=cut, mcut=mcut)
-    xy2 = XY(xy[:, 0], xy[:, 1])  #XY object
-
     if start == 0:
         start = np.min(xy)
     if end == -1:
         end = np.max(xy)
+    ps = np.where((xy[:, 0] >= start) & (xy[:, 1] <= end))[0]
+    xy = xy[ps, ]
+    xy2 = XY(xy[:, 0], xy[:, 1])  #XY object
+
     mat = getObsMat(xy, start, end, res)
     bgmat = None
     if method == "obs/exp":
@@ -1065,13 +1069,16 @@ def plotPETsArches(
     """
     Plot the interacting PETs as arches, showing the raw data. 
     """
+    #prepare data
     chrom, xy = parseIxy(f, cut=cut, mcut=mcut)
-    xy2 = XY(xy[:, 0], xy[:, 1])  #XY object
-
     if start == 0:
         start = np.min(xy)
     if end == -1:
         end = np.max(xy)
+    ps = np.where((xy[:, 0] >= start) & (xy[:, 1] <= end))[0]
+    xy = xy[ps, ]
+    xy2 = XY(xy[:, 0], xy[:, 1])  #XY object
+
     if oneD:
         predir = os.path.dirname(os.path.realpath(f))
         metaf = predir + "/petMeta.json"
@@ -1251,13 +1258,16 @@ def plotPETsScatter(
     """
     Plot the interacting PETs as scatter, showing the raw data. 
     """
+    #prepare data
     chrom, xy = parseIxy(f, cut=cut, mcut=mcut)
-    xy2 = XY(xy[:, 0], xy[:, 1])  #XY object
-
     if start == 0:
         start = np.min(xy)
     if end == -1:
         end = np.max(xy)
+    ps = np.where((xy[:, 0] >= start) & (xy[:, 1] <= end))[0]
+    xy = xy[ps, ]
+    xy2 = XY(xy[:, 0], xy[:, 1])  #XY object
+
     if oneD:
         predir = os.path.dirname(os.path.realpath(f))
         metaf = predir + "/petMeta.json"
