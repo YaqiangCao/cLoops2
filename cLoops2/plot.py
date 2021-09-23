@@ -325,7 +325,7 @@ def getBedRegion(f, chrom, start, end):
             s = int(line[1])
             e = int(line[2])
         except:
-            cotninue
+            continue
         if c != chrom:
             continue
         if s >= start and e <= end:
@@ -424,10 +424,23 @@ def getGenes(f, chrom, start, end):
     #select genes in the target region
     ngs = {}
     for n, g in gs.items():
-        if g.start < start or g.end > end:
+        if g.end < start or g.start > end:
             continue
-        g.exons = stichExons(list(g.exons.values()))
-        ngs[n] = g
+        #whole gene in the target region
+        if start <= g.start and g.end <= end:
+            g.exons = stichExons(list(g.exons.values()))
+            ngs[n] = g
+        else:
+            #partial exon in the target region
+            if (g.start <= start and start <= g.end) or \
+               (g.start <= end and end <= g.end):
+                nes = []
+                for k,v in g.exons.items():
+                    if start <= k[0] and k[1] <= end:
+                        nes.append(v)
+                if len(nes) > 0:
+                    g.exons = stichExons(nes)
+                    ngs[n] = g
     return ngs
 
 
@@ -666,6 +679,7 @@ def plotMatHeatmap(
         virtual4C=False,
         viewStart=-1,
         viewEnd=-1,
+        viewV="",
         vmin=None,
         vmax=None,
         width=4,
@@ -734,10 +748,7 @@ def plotMatHeatmap(
         predir = os.path.dirname(os.path.realpath(f))
         metaf = predir + "/petMeta.json"
         meta = json.loads(open(metaf).read())
-        total = meta["Unique PETs"]
-        #virtual4Csig = getVirtual4CSig(xy2, start, end, viewStart, viewEnd, res)
         virtual4Csig = getVirtual4CSig(xy2, start, end, viewStart, viewEnd)
-        #virtual4Csig = virtual4Csig / total * 10**6
     if triu:
         mat = rotate(mat, angle=45, reshape=True)
         #take the uppper matrix and remove padding zeros
@@ -897,18 +908,33 @@ def plotMatHeatmap(
     if virtual4C:
         axi += 1
         ax = fig.add_subplot(gs[axi])
+        if viewV != "":
+            viewV = list(map(float, viewV.split(",")))
+        else:
+            viewV = [None, None]
         if len(virtual4Csig) > 1000:
             virtual4Csig = getBinMean(virtual4Csig, 1000)
         #log2 is nesscessary
         virtual4Csig = np.log2(virtual4Csig + 1)
+        ax = plotCoverage(ax,
+                     virtual4Csig,
+                     colori=0,
+                     label="virtual 4C signal",
+                     vmin=viewV[0],
+                     vmax=viewV[1],
+        )
+        ax.set_ylabel("log2(counts)", fontsize=6)
+        """
         xs = np.arange(len(virtual4Csig))
         ax.plot(xs, virtual4Csig, color=colors[0], label="virtual 4C signal")
         ax.fill_between(xs, 0, virtual4Csig, color=colors[0], alpha=0.8)
         ax.tick_params(axis='both', which='major', labelsize=4)
         ax.set_xticklabels([])
         ax.set_xlim([np.min(xs), np.max(xs)])
+        ax.set_ylim([viewV[0],viewV[1]])
         ax.set_ylabel("log2(counts)", fontsize=6)
         ax.legend(fontsize=6, fancybox=False, frameon=False)
+        """
 
     #plot loops as arches
     nchrom = "-".join(chrom)
@@ -1253,6 +1279,10 @@ def plotPETsScatter(
         sc = 0,
         sa = 0.5,
         triu=False,
+        virtual4C=False,
+        viewStart=-1,
+        viewEnd=-1,
+        viewV="",
         width=8,
 ):
     """
@@ -1275,6 +1305,12 @@ def plotPETsScatter(
         total = meta["Unique PETs"] * 2
         sig = get1DSig(xy2, start, end)
         sig = sig / total * 10**6
+    if virtual4C:
+        predir = os.path.dirname(os.path.realpath(f))
+        metaf = predir + "/petMeta.json"
+        meta = json.loads(open(metaf).read())
+        virtual4Csig = getVirtual4CSig(xy2, start, end, viewStart, viewEnd)
+
     hights = 0
     #heights ratio
     hr = []
@@ -1286,6 +1322,9 @@ def plotPETsScatter(
         hights += len(bws) * 0.5
         hr.extend([1] * len(bws))
     if oneD:
+        hights += 0.5
+        hr.append(1)
+    if virtual4C:
         hights += 0.5
         hr.append(1)
     if loops is not None:
@@ -1362,7 +1401,27 @@ def plotPETsScatter(
                      label="1D signal",
                      vmin=oneDv[0],
                      vmax=oneDv[1])
-
+    #plot view point, virtual 4C plot
+    if virtual4C:
+        axi += 1
+        ax = fig.add_subplot(gs[axi])
+        if viewV != "":
+            viewV = list(map(float, viewV.split(",")))
+        else:
+            viewV = [None, None]
+        if len(virtual4Csig) > 1000:
+            virtual4Csig = getBinMean(virtual4Csig, 1000)
+        #log2 is nesscessary
+        virtual4Csig = np.log2(virtual4Csig + 1)
+        ax = plotCoverage(ax,
+                     virtual4Csig,
+                     colori=0,
+                     label="virtual 4C signal",
+                     vmin=viewV[0],
+                     vmax=viewV[1],
+        )
+        ax.set_ylabel("log2(counts)", fontsize=6)
+ 
     #plot loops as arches
     nchrom = "-".join(chrom)
     if loops is not None and nchrom in loops and len(loops[nchrom]) > 0:

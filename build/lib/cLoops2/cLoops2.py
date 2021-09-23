@@ -1947,6 +1947,24 @@ Examples:
         "False."
     )
     plot.add_argument(
+        "-vmin",
+        dest="vmin",
+        default=None,
+        required=False,
+        type=float,
+        help=
+        "The minimum value shown in the heatmap and colorbar."
+    )
+    plot.add_argument(
+        "-vmax",
+        dest="vmax",
+        default=None,
+        required=False,
+        type=float,
+        help=
+        "The maxmum value shown in the heatmap and colorbar."
+    )
+    plot.add_argument(
         "-1D",
         dest="oneD",
         default=False,
@@ -1966,24 +1984,6 @@ Examples:
         help=
         "1D profile y-axis limitations. Default is auto-determined. Assign as\n"\
         "vmin,vmax, for example 0,1."
-    )
-    plot.add_argument(
-        "-vmin",
-        dest="vmin",
-        default=None,
-        required=False,
-        type=float,
-        help=
-        "The minimum value shown in the heatmap and colorbar."
-    )
-    plot.add_argument(
-        "-vmax",
-        dest="vmax",
-        default=None,
-        required=False,
-        type=float,
-        help=
-        "The maxmum value shown in the heatmap and colorbar."
     )
     plot.add_argument(
         "-virtual4C",
@@ -2014,6 +2014,15 @@ Examples:
         help=
         "End genomic coordinate for the view point end region, only valid\n"\
         "when -vitrutal4C is set, should >=start and <=end."
+    )
+    plot.add_argument(
+        "-4Cv",
+        dest="viewV",
+        default="",
+        required=False,
+        help=
+        "Virtual 4C profile y-axis limitations. Default is auto-determined.\n"\
+        "Assign as vmin,vmax, for example 0,1."
     )
     plot.add_argument(
         "-arch",
@@ -3775,7 +3784,7 @@ def main():
     if cmd == "plot":
         start = datetime.now()
 
-        report = "Command cLoops2 {cmd} -f {f} -o {output} -chrom {chrom} -start {start} -end {end} -bs {r} -cut {cut} -mcut {mcut} -log {log} -m {method} -corr {corr} -triu {triu} -norm {norm} -bws {bws} -bwvs {bwvs} -bwcs {bwcs} -beds {beds} -gtf {gtf} -1D {oneD} -1Dv {oneDv} -loops {floop} -domains {fdomain} -vmin {vmin} -vmax {vmax} -virtual4C {virtual4C} -view_start {viewStart} -view_end {viewEnd} -arch {arch} -aw {aw} -ac {ac} -aa {aa} -scatter {scatter} -ss {ss} -sa {sa} -sc {sc} -eig {eig} -eig_r {eig_r} -figWidth {figWidth}".format(
+        report = "Command cLoops2 {cmd} -f {f} -o {output} -chrom {chrom} -start {start} -end {end} -bs {r} -cut {cut} -mcut {mcut} -log {log} -m {method} -corr {corr} -triu {triu} -norm {norm} -bws {bws} -bwvs {bwvs} -bwcs {bwcs} -beds {beds} -gtf {gtf} -1D {oneD} -1Dv {oneDv} -loops {floop} -domains {fdomain} -vmin {vmin} -vmax {vmax} -virtual4C {virtual4C} -view_start {viewStart} -view_end {viewEnd} -4Cv {viewV} -arch {arch} -aw {aw} -ac {ac} -aa {aa} -scatter {scatter} -ss {ss} -sa {sa} -sc {sc} -eig {eig} -eig_r {eig_r} -figWidth {figWidth}".format(
             cmd=cmd,
             f=cliParser.fixy,
             output=cliParser.fnOut,
@@ -3804,6 +3813,7 @@ def main():
             virtual4C=cliParser.virtual4C,
             viewStart=cliParser.viewStart,
             viewEnd=cliParser.viewEnd,
+            viewV=cliParser.viewV,
             arch=cliParser.arch,
             aw=cliParser.aw,
             ac=cliParser.ac,
@@ -3902,6 +3912,7 @@ def main():
                     virtual4C=cliParser.virtual4C,
                     viewStart=cliParser.viewStart,
                     viewEnd=cliParser.viewEnd,
+                    viewV=cliParser.viewV,
                     vmin=cliParser.vmin,
                     vmax=cliParser.vmax,
                     eig=cliParser.eig,
@@ -3950,6 +3961,10 @@ def main():
                         sc=cliParser.sc,
                         sa=cliParser.sa,
                         triu=cliParser.triu,
+                        virtual4C=cliParser.virtual4C,
+                        viewStart=cliParser.viewStart,
+                        viewEnd=cliParser.viewEnd,
+                        viewV=cliParser.viewV,
                         width=cliParser.figWidth,
                     )
         else:

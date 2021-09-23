@@ -73,7 +73,7 @@ def filterPETs(rs, key, predir, fixy, iv=False):
         return
     if iv:
         aids = set(np.arange(mat.shape[0]))
-        rids = aids.difference(rids)
+        rids = list(aids.difference(rids))
     mat = mat[rids, ]
     foixy = predir + "/" + "-".join(key2) + ".ixy"
     joblib.dump(mat, foixy)
