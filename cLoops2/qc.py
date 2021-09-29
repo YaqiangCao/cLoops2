@@ -102,6 +102,8 @@ def evaBedpe(f):
         stat.redudancy = 1 - stat.uniques / 1.0 / stat.total
     else:
         stat.redundancy = 0
+    if stat.cis == 0:
+        stat.cis = 1
     stat.meandis = stat.meandis / 1.0 / stat.cis
     print("Analysis of %s finished." % f)
     del reds
@@ -136,6 +138,10 @@ def qcBedpes(fs, fout, cpu=1):
         ]
         fo.write("\t".join(header) + "\n")
         for bs in data:
+            if bs.uniques == 0:
+                bs.uniques = 1
+            if bs.cis == 0:
+                bs.cis = 1 
             line = [
                 bs.sample, bs.total, bs.uniques, bs.redudancy, bs.cis,
                 bs.cis / 1.0 / bs.uniques, bs.trans,

@@ -7,6 +7,7 @@ cLoops2 major file conversion functions
 2020-06-25: to add dump to BEDPE
 2020-07-01: refine ixy2bdg
 2020-07-28: ixy2bed added
+2021-09-28: ixy2virtual4C added
 """
 
 __author__ = "CAO Yaqiang"
@@ -29,8 +30,9 @@ import pandas as pd
 from tqdm import tqdm
 
 #cLoops2
+from cLoops2.ds import XY
 from cLoops2.io import parseIxy
-from cLoops2.cmat import getObsMat, getExpMat
+from cLoops2.cmat import getObsMat, getExpMat, getVirtual4CSig
 from cLoops2.utils import isTool, callSys
 from cLoops2.settings import *
 
@@ -523,5 +525,68 @@ def ixy2mat(
     logger.info("Converting to contact matrix txt %s_cmat.txt finished." % fout)
 
 
-def ixy2pairs():
-    pass
+def ixy2virtual4C(
+        d,
+        fout,
+        logger,
+        chrom="",
+        start=-1,
+        end=-1,
+        viewStart=-1,
+        viewEnd=-1,
+        cut=0,
+        mcut=-1,
+    ):
+    """
+    Get the virtual 4C signal for a specific view point.
+    @param d: str,cLoops2 pre data directory
+    @param fout: str,prefix of output files
+    @param logger: logger
+    @param chrom: str, such as "chr1-chr1"
+    @param start: int, start location
+    @param end: int, end location
+    @param cut: int, > cut PETs kept
+    @param mcut: int, <mcut PETs kept
+    """
+    if start != -1 and end != -1 and end < start:
+        logger.error("End %s is smaller than %s start." % (end, start))
+        return
+    if viewStart == -1 or viewEnd == -1:
+        logger.error("viewStart or viewEnd not assigned.")
+        return
+    if viewStart != -1 and viewEnd != -1 and viewEnd < viewStart:
+        logger.error("viewEnd %s is smaller than %s viewStart." % (viewEnd, viewStart))
+        return
+    f = os.path.join(d,chrom+".ixy")
+    if not os.path.isfile(f):
+        logger.error("%s not exists, please check the input -virtual4C_chrom"%f)
+        return
+    metaf = d + "/petMeta.json"
+    meta = json.loads(open(metaf).read())
+    tot = meta["Unique PETs"] 
+    chrom, xy = parseIxy(f, cut=cut, mcut=mcut)
+    if start == -1:
+        start = np.min(xy)
+    if end == -1:
+        end = np.max(xy)
+    ps = np.where((xy[:, 0] >= start) & (xy[:, 1] <= end))[0]
+    xy = xy[ps, ]
+    xy2 = XY(xy[:, 0], xy[:, 1])  #XY object
+    virtual4Csig = getVirtual4CSig(xy2, start, end, viewStart, viewEnd)
+    with open( fout + "_4C.bdg","w") as fo:
+        i = 0
+        while i < len(virtual4Csig) -1 :
+            if virtual4Csig[i] == 0 :
+                i += 1
+                continue
+            for j in range(i+1, len(virtual4Csig)):
+                if virtual4Csig[j] != virtual4Csig[i]:
+                    break
+            #v = np.log2(virtual4Csig[i] / 1.0 / tot * 10**6)
+            v = np.log2(virtual4Csig[i])
+            line = [chrom[0],start+i, start+j-1,v]
+            fo.write("\t".join(list(map(str, line))) + "\n")
+            if j == len(virtual4Csig) - 1:
+                break
+            i = j
+

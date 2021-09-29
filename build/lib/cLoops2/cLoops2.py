@@ -45,7 +45,7 @@ from cLoops2.io import parseBedpe, parsePairs, txt2ixy, updateJson, writeNewJson
 from cLoops2.est import estRes, estSat  #estimate reasonable resolution, sequencing depth
 from cLoops2.agg import aggPeaks, aggLoops, aggViewPoints, aggDomains, aggTwoAnchors  #aggreate analysis of peaks,loops, viewPoints, domains
 from cLoops2.est import getXyDis, getGmmLabelsEps, getKDis, getKDisKneeEps  #estimate eps
-from cLoops2.dump import ixy2bed,ixy2bedpe,ixy2hic,ixy2washU,ixy2ucsc,ixy2bdg,ixy2mat #dump files to others
+from cLoops2.dump import ixy2bed,ixy2bedpe,ixy2hic,ixy2washU,ixy2ucsc,ixy2bdg,ixy2mat,ixy2virtual4C #dump files to others
 from cLoops2.plot import plotGmmEst, plotKDis, plotKDisE, plotMatHeatmap,plotPETsScatter,plotPETsArches,plotProfiles  #plot
 from cLoops2.utils import getLogger  #logger and other utilities
 from cLoops2.quant import quantPeaks, quantLoops, quantDomains #quantification of features
@@ -113,8 +113,8 @@ Available sub-commands are:
     pre: preprocess input BEDPE files into cLoops2 data.
     update: update cLoops2 data files locations.
     combine: combine multiple cLooops2 data directories.
-    dump: convert cLoops2 data files to others (BEDPE, HIC, washU, bedGraph and
-          contact matrix)
+    dump: convert cLoops2 data files to others (BEDPE, HIC, washU, bedGraph,
+          contact matrix or virtual 4C signal)
     estEps: estimate eps using Gaussian mixture models or k-distance plot.
     estRes: estimate reasonable contact matrix resolution based on signal 
             enrichment.
@@ -424,7 +424,8 @@ Example:
     #dump
     dumpDes = """
 Convert cLoops2 data files to other types. Currently supports BED file,BEDPE 
-file, HIC file, washU long-range track, bedGraph file and matrix txt file. 
+file, HIC file, washU long-range track, 1D signal bedGraph file, matrix txt 
+file and virtual 4C signal bedGraph file. 
 
 Converting cLoops2 data to .hic file needs "juicer_tools pre" in the command
 line enviroment. 
@@ -438,6 +439,9 @@ ChIP-seq and ATAC-seq.
 Converting cLoops2 data to matrix txt file will need specific resolution. 
 The output txt file can be loaded in TreeView for visualization or further
 analysis. 
+Converting cLoops2 data to virtual 4C signal will need the region of view point
+such as a specific promoter or enhancer. The output .bdg file can be loaded in 
+IGV or other genome browser for visualization.
 
 Examples:
     1. convert cLoops2 data to single-end .bed file fo usage of BEDtools or 
@@ -473,6 +477,7 @@ Examples:
         cLoops2 dump -d test -mat -o test -mat_res 10000 \\
                     -mat_chrom chr21-chr21 -mat_start 36000000 \\
                     -mat_end 40000000 -log -corr
+
     """
     dump = subparsers.add_parser(
         'dump',
@@ -704,6 +709,65 @@ Examples:
         help=
         "Whether to normalize the matrix with z-score. Default is not."
     )
+    dump.add_argument(
+        "-virtual4C",
+        dest="virtual4C",
+        required=False,
+        action="store_true",
+        default=False,
+        help= 
+        "Convert data to virtual 4C signal for a specific view point."
+    )
+    dump.add_argument(
+        "-virtual4C_chrom",
+        dest="virtual4C_chrom",
+        required=False,
+        default="",
+        type=str,
+        help=
+        "The chrom-chrom set for -virtual4C. Specify it as chr1-chr1.\n"\
+    )
+    dump.add_argument(
+        "-virtual4C_start",
+        dest="virtual4C_start",
+        required=False,
+        type=int,
+        default=-1,
+        help=
+        "Start genomic coordinate for the target region for -virtual4C. Default\n"\
+        "will be the smallest coordinate from specified chrom-chrom set."
+    )
+    dump.add_argument(
+        "-virtual4C_end",
+        dest="virtual4C_end",
+        required=False,
+        type=int,
+        default=-1,
+        help=
+        "End genomic coordinate for the target region for -virtual4C. Default\n"\
+        "will be the biggest coordinate from specified chrom-chrom set."
+    )
+    dump.add_argument(
+        "-virtual4C_viewStart",
+        dest="virtual4C_viewStart",
+        required=False,
+        type=int,
+        default=0,
+        help=
+        "Start genomic coordinate for the view point start region, only valid\n"\
+        "when -vitrutal4C is set, should >=start and <=end."
+    )
+    dump.add_argument(
+        "-virtual4C_viewEnd",
+        dest="virtual4C_viewEnd",
+        required=False,
+        type=int,
+        default=-1,
+        help=
+        "End genomic coordinate for the view point end region, only valid\n"\
+        "when -vitrutal4C is set, should >=start and <=end."
+    )
+ 
 
     #estEps
     #estimation eps using estimated peak size GMM or k-distance plot
@@ -2973,7 +3037,7 @@ def main():
     if cmd == "dump":
         start = datetime.now()
 
-        report = "Command: cLoops2 {cmd} -d {predir} -o {output} -cut {cut} -mcut {mcut} -bed {bed} -bed_ext {bed_ext} -bedpe {bedpe} -bedpe_ext {bedpe_ext} -hic {hic} -hic_org {hic_org} -hic_res {hic_res} -washU {washu} -washU_ext {washu_ext} -ucsc {ucsc} -ucsc_ext {ucsc_ext} -ucsc_cs {ucsc_cs} -bdg {bdg} -bdg_ext {bdg_ext} -bdg_pe {bdg_pe} -mat {mat} -mat_res {mat_res} -mat_chrom {chrom} -mat_start {start} -mat_end {end} -log {log} -m {method} -corr {corr} -norm {norm}".format(
+        report = "Command: cLoops2 {cmd} -d {predir} -o {output} -cut {cut} -mcut {mcut} -bed {bed} -bed_ext {bed_ext} -bedpe {bedpe} -bedpe_ext {bedpe_ext} -hic {hic} -hic_org {hic_org} -hic_res {hic_res} -washU {washu} -washU_ext {washu_ext} -ucsc {ucsc} -ucsc_ext {ucsc_ext} -ucsc_cs {ucsc_cs} -bdg {bdg} -bdg_ext {bdg_ext} -bdg_pe {bdg_pe} -mat {mat} -mat_res {mat_res} -mat_chrom {chrom} -mat_start {start} -mat_end {end} -log {log} -m {method} -corr {corr} -norm {norm} -virtual4C {virtual4C} -virtual4C_chrom {virtual4C_chrom} -virtual4C_start {virtual4C_start} -virtual4C_end {virtual4C_end} -virtual4C_viewStart {virtual4C_viewStart} -virtual4C_viewEnd {virtual4C_viewEnd}".format(
             cmd = cmd, 
             predir = cliParser.predir,
             output = cliParser.fnOut,
@@ -3003,6 +3067,12 @@ def main():
             method = cliParser.method,
             corr = cliParser.corr,
             norm = cliParser.norm,
+            virtual4C = cliParser.virtual4C,
+            virtual4C_chrom = cliParser.virtual4C_chrom,
+            virtual4C_start = cliParser.virtual4C_start,
+            virtual4C_end = cliParser.virtual4C_end,
+            virtual4C_viewStart = cliParser.virtual4C_viewStart,
+            virtual4C_viewEnd = cliParser.virtual4C_viewEnd,
         )
         logger.info(report)
 
@@ -3097,6 +3167,20 @@ def main():
                 corr=cliParser.corr,
                 norm=cliParser.norm,
             )
+        if cliParser.virtual4C:
+            ixy2virtual4C(
+                cliParser.predir,
+                cliParser.fnOut,
+                logger,
+                chrom=cliParser.virtual4C_chrom,
+                start=cliParser.virtual4C_start,
+                end=cliParser.virtual4C_end,
+                viewStart=cliParser.virtual4C_viewStart,
+                viewEnd=cliParser.virtual4C_viewEnd,
+                cut=cliParser.cut,
+                mcut=cliParser.mcut,
+            )
+
 
         end = datetime.now()
         logger.info("cLoops2 %s finished. Used time: %s." %

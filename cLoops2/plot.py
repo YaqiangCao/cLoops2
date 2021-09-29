@@ -467,7 +467,7 @@ def parseBwvs(bws, bwvs=""):
     return bwvs
 
 
-def plotGene(ax, n, g, start, end, space=0.02):
+def plotGene(ax, n, g, start, end, space=0.02,lencut=1000):
     """
     Plot one genes.
     @param ax: maplotlib ax
@@ -528,6 +528,11 @@ def plotGene(ax, n, g, start, end, space=0.02):
             c = colors[3]
             p = g.exons[-1].end + (end - start) * space
             ax.text(p, 0.15, n, color=c, fontsize=5,style="italic")
+    if end - start > lencut:
+        nend = start + int( (end-start)/lencut ) * lencut
+        ax.set_xlim([start,nend])
+    else: 
+        ax.set_xlim([start, end])
     return ax
 
 
@@ -567,7 +572,7 @@ def plotCoverage(ax, ys, colori=1, label="", vmin=None, vmax=None,
     return ax
 
 
-def plotRegion(ax, rs, start, end, colori=1, label=""):
+def plotRegion(ax, rs, start, end, colori=1, lencut=1000, label=""):
     """
     Plot genomic region.
     @param ax: matplotlib ax
@@ -580,13 +585,17 @@ def plotRegion(ax, rs, start, end, colori=1, label=""):
                               r[1] - r[0],
                               0.6,
                               fill=True,
-                              color=colors[colori],
+                             color=colors[colori],
                               alpha=0.8)
         ax.add_patch(p)
     ax.set_ylim([0, 1])
     ax.text((start + end) / 2, 0.2, label, fontsize=6)
     ax.axis("off")
-    ax.set_xlim([start, end])
+    if end - start > lencut:
+        nend = start + int( (end-start)/lencut ) * lencut
+        ax.set_xlim([start,nend])
+    else: 
+        ax.set_xlim([start, end])
     return ax
 
 
@@ -924,18 +933,7 @@ def plotMatHeatmap(
                      vmax=viewV[1],
         )
         ax.set_ylabel("log2(counts)", fontsize=6)
-        """
-        xs = np.arange(len(virtual4Csig))
-        ax.plot(xs, virtual4Csig, color=colors[0], label="virtual 4C signal")
-        ax.fill_between(xs, 0, virtual4Csig, color=colors[0], alpha=0.8)
-        ax.tick_params(axis='both', which='major', labelsize=4)
-        ax.set_xticklabels([])
-        ax.set_xlim([np.min(xs), np.max(xs)])
-        ax.set_ylim([viewV[0],viewV[1]])
-        ax.set_ylabel("log2(counts)", fontsize=6)
-        ax.legend(fontsize=6, fancybox=False, frameon=False)
-        """
-
+        
     #plot loops as arches
     nchrom = "-".join(chrom)
     if loops is not None and nchrom in loops and len(loops[nchrom]) > 0:
