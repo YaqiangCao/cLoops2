@@ -117,6 +117,7 @@ def quantPeaks(
         cut=cut,
         mcut=mcut,
     ) for key in keys)
+
     peaks = []
     for d in ds:
         peaks.extend(d[1])

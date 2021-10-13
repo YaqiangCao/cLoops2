@@ -110,7 +110,7 @@ def runCisDBSCANLoops(fixy, eps, minPts, cut=0,mcut=-1):
         loop.y_center = (loop.y_start + loop.y_end) / 2
         loop.cis = True
         loop.distance = abs(loop.y_center - loop.x_center)
-        #very small anchor 
+        #very small anchor , added in Aug,2021
         if loop.x_end - loop.x_start + loop.y_end - loop.y_start < 200:
             continue
         if loop.x_end < loop.y_start:  #true candidate loops
