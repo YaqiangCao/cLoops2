@@ -537,7 +537,7 @@ def plotGene(ax, n, g, start, end, space=0.02,lencut=1000):
 
 
 def plotCoverage(ax, ys, colori=1, label="", vmin=None, vmax=None,
-                 lencut=1000):
+                 lencut=10000):
     """
     Plot 1D coverage data.
     @param ax: matplotlib ax
