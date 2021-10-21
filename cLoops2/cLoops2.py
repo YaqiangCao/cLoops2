@@ -1906,6 +1906,15 @@ Examples:
         "arches."
     )
     plot.add_argument(
+        "-loopCut",
+        dest="loopCut",
+        required=False,
+        default=0,
+        type=int,
+        help=
+        "Only show loops with more than loopCut PETs. Default is 0."
+    )
+    plot.add_argument(
         "-domains",
         dest="fdomain",
         required=False,
@@ -3868,7 +3877,7 @@ def main():
     if cmd == "plot":
         start = datetime.now()
 
-        report = "Command cLoops2 {cmd} -f {f} -o {output} -chrom {chrom} -start {start} -end {end} -bs {r} -cut {cut} -mcut {mcut} -log {log} -m {method} -corr {corr} -triu {triu} -norm {norm} -bws {bws} -bwvs {bwvs} -bwcs {bwcs} -beds {beds} -gtf {gtf} -1D {oneD} -1Dv {oneDv} -loops {floop} -domains {fdomain} -vmin {vmin} -vmax {vmax} -virtual4C {virtual4C} -view_start {viewStart} -view_end {viewEnd} -4Cv {viewV} -arch {arch} -aw {aw} -ac {ac} -aa {aa} -scatter {scatter} -ss {ss} -sa {sa} -sc {sc} -eig {eig} -eig_r {eig_r} -figWidth {figWidth}".format(
+        report = "Command cLoops2 {cmd} -f {f} -o {output} -chrom {chrom} -start {start} -end {end} -bs {r} -cut {cut} -mcut {mcut} -log {log} -m {method} -corr {corr} -triu {triu} -norm {norm} -bws {bws} -bwvs {bwvs} -bwcs {bwcs} -beds {beds} -gtf {gtf} -1D {oneD} -1Dv {oneDv} -loops {floop} -loopCut {loopCut} -domains {fdomain} -vmin {vmin} -vmax {vmax} -virtual4C {virtual4C} -view_start {viewStart} -view_end {viewEnd} -4Cv {viewV} -arch {arch} -aw {aw} -ac {ac} -aa {aa} -scatter {scatter} -ss {ss} -sa {sa} -sc {sc} -eig {eig} -eig_r {eig_r} -figWidth {figWidth}".format(
             cmd=cmd,
             f=cliParser.fixy,
             output=cliParser.fnOut,
@@ -3891,6 +3900,7 @@ def main():
             oneD=cliParser.oneD,
             oneDv=cliParser.oneDv,
             floop=cliParser.floop,
+            loopCut=cliParser.loopCut,
             fdomain=cliParser.fdomain,
             vmin=cliParser.vmin,
             vmax=cliParser.vmax,
@@ -3992,6 +4002,7 @@ def main():
                     beds=beds,
                     gtf=cliParser.gtf,
                     loops=loops,
+                    loopCut=cliParser.loopCut,
                     domains=cliParser.fdomain,
                     virtual4C=cliParser.virtual4C,
                     viewStart=cliParser.viewStart,
@@ -4019,6 +4030,7 @@ def main():
                         bwcs=cliParser.bwcs,
                         beds=beds, 
                         loops=loops, 
+                        loopCut=cliParser.loopCut,
                         gtf=cliParser.gtf, 
                         aw=cliParser.aw,
                         ac=cliParser.ac,
@@ -4040,6 +4052,7 @@ def main():
                         bwcs=cliParser.bwcs,
                         beds=beds, 
                         loops=loops, 
+                        loopCut=cliParser.loopCut,
                         gtf=cliParser.gtf, 
                         ss=cliParser.ss,
                         sc=cliParser.sc,

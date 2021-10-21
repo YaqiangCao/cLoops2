@@ -13,6 +13,7 @@ Plotting related functions for cLoops2.
 2021-02-04: adding option for not requring heatmps/arches
 2021-02-09: refine some details of code
 2021-09-18: improved parsing speed for plots
+2021-10-20: add a parameter to control PETs number for loops
 """
 
 __author__ = "CAO Yaqiang"
@@ -478,7 +479,7 @@ def plotGene(ax, n, g, start, end, space=0.02,lencut=1000):
     @param space: float, name and gene distance releative
     """
     ax.axis("off")
-    ax.set_xlim([start, end])
+    #ax.set_xlim([start, end])
     ax.set_ylim([0, 1])
     #plot intron as line, exon as block
     for i, exon in enumerate(g.exons):
@@ -537,7 +538,7 @@ def plotGene(ax, n, g, start, end, space=0.02,lencut=1000):
 
 
 def plotCoverage(ax, ys, colori=1, label="", vmin=None, vmax=None,
-                 lencut=10000):
+                 lencut=1000):
     """
     Plot 1D coverage data.
     @param ax: matplotlib ax
@@ -599,7 +600,7 @@ def plotRegion(ax, rs, start, end, colori=1, lencut=1000, label=""):
     return ax
 
 
-def plotLoops(ax, loops, nchrom, start, end,xy2=None):
+def plotLoops(ax, loops, nchrom, start, end,xy2=None,loopCut=0):
     """
     Plot loops as arches
     """
@@ -609,13 +610,15 @@ def plotLoops(ax, loops, nchrom, start, end,xy2=None):
         s = min(loop.x_start, loop.y_start)
         e = max(loop.x_end, loop.y_end)
         if start < s and e < end:
-            nloops.append(loop)
             #query from the data for number of PETs
             if xy2 is not None:
                 ca, cb, cab = xy2.queryLoop(loop.x_start, loop.x_end,
                                         loop.y_start, loop.y_end)
             else:
                 cab = [1]
+            if loopCut > 0 and len(cab) < loopCut:
+                continue
+            nloops.append(loop)
             cabs.append(len(cab))
     #start plot
     ncabs = [c for c in cabs if c > 0]
@@ -681,6 +684,7 @@ def plotMatHeatmap(
         bwcs="",
         beds=[],
         loops=None,
+        loopCut=0,
         domains="",
         eig=False,
         eig_r=False,
@@ -940,7 +944,7 @@ def plotMatHeatmap(
         axi += 1
         ax = fig.add_subplot(gs[axi])
         #plot the arch and annotate the PETs support the loop
-        plotLoops(ax, loops, nchrom,start,end,xy2=xy2)
+        plotLoops(ax, loops, nchrom,start,end,xy2=xy2,loopCut=loopCut)
         
     #plot genomic features
     for i, bed in enumerate(beds):
@@ -1084,6 +1088,7 @@ def plotPETsArches(
         bwcs="",
         beds=[],
         loops=None,
+        loopCut=0,
         gtf="",
         aw=1,
         ac=1,
@@ -1210,7 +1215,7 @@ def plotPETsArches(
         ax = fig.add_subplot(gs[axi])
         #plot the arch and annotate the PETs support the loop
         #get the minal PETs number as linewidth 1,others are fold
-        plotLoops(ax, loops, nchrom,start,end,xy2=xy2)
+        plotLoops(ax, loops, nchrom,start,end,xy2=xy2,loopCut=loopCut)
        
     #plot genomic features
     for i, bed in enumerate(beds):
@@ -1272,6 +1277,7 @@ def plotPETsScatter(
         bwcs="",
         beds=[],
         loops=None,
+        loopCut=0,
         gtf="",
         ss = 1,
         sc = 0,
@@ -1427,7 +1433,7 @@ def plotPETsScatter(
         ax = fig.add_subplot(gs[axi])
         #plot the arch and annotate the PETs support the loop
         #get the minal PETs number as linewidth 1,others are fold
-        plotLoops(ax, loops, nchrom,start,end,xy2=xy2)
+        plotLoops(ax, loops, nchrom,start,end,xy2=xy2,loopCut=loopCut)
        
     #plot genomic features
     for i, bed in enumerate(beds):
@@ -1472,6 +1478,7 @@ def plotProfiles(
         bwcs="",
         beds=[],
         loops=None,
+        loopCut=0,
         gtf="",
         width=8,
 ):
@@ -1565,7 +1572,7 @@ def plotProfiles(
         axi += 1
         ax = fig.add_subplot(gs[axi])
         #plot the arch for loops, all same width
-        plotLoops(ax, loops, nchrom,start,end)
+        plotLoops(ax, loops, nchrom,start,end,xy2=xy2,loopCut=loopCut)
 
     #plot genomic features
     for i, bed in enumerate(beds):

@@ -87,9 +87,11 @@ def getObsMat(xy, start, end, r):
     xy is [[x,y]]
     r is resolution
     """
-    ps = np.where(xy[:, 0] >= start)[0]
-    xy = xy[ps, ]
-    ps = np.where(xy[:, 1] <= end)[0]
+    #ps = np.where(xy[:, 0] >= start)[0]
+    #xy = xy[ps, ]
+    #ps = np.where(xy[:, 1] <= end)[0]
+    #xy = xy[ps, ]
+    ps = np.where((xy[:, 0] >= start) & (xy[:, 1] <= end))[0]
     xy = xy[ps, ]
     mat = xy2dict(xy, s=start, e=end, r=r)
     mat = dict2mat(mat)

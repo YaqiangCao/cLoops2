@@ -129,10 +129,16 @@ def help():
     return op
 
 
-def getData(f, cut=0, mcut=-1):
+def getData(f, cut=0, mcut=-1,start=0, end=-1):
     """
     """
     chrom, xy = parseIxy(f, cut=cut, mcut=mcut)
+    if start == 0:
+        start = np.min(xy)
+    if end == -1:
+        end = np.max(xy)
+    ps = np.where((xy[:, 0] >= start) & (xy[:, 1] <= end))[0]
+    xy = xy[ps, ]
     n = os.path.split(f)[-2]
     p = os.path.abspath(f)
     p = os.path.dirname(p)
@@ -160,8 +166,8 @@ def plotDiffMatHeatmap(
     """
     Plot the contact matrix heatmaps for compare.
     """
-    labela, chroma, xya, tota = getData(fa, cut, mcut)
-    labelb, chromb, xyb, totb = getData(fb, cut, mcut)
+    labela, chroma, xya, tota = getData(fa, cut, mcut,start,end)
+    labelb, chromb, xyb, totb = getData(fb, cut, mcut,start,end)
     if chroma != chromb:
         print("ERROR! %s and %s are not the same target chromosome, return." %
               (fa, fb))
