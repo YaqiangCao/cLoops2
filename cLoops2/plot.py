@@ -425,23 +425,9 @@ def getGenes(f, chrom, start, end):
     #select genes in the target region
     ngs = {}
     for n, g in gs.items():
-        if g.end < start or g.start > end:
-            continue
-        #whole gene in the target region
-        if start <= g.start and g.end <= end:
+        if (g.start >= start and g.start <= end ) or ( g.end >=start and g.end <=start ):
             g.exons = stichExons(list(g.exons.values()))
             ngs[n] = g
-        else:
-            #partial exon in the target region
-            if (g.start <= start and start <= g.end) or \
-               (g.start <= end and end <= g.end):
-                nes = []
-                for k,v in g.exons.items():
-                    if start <= k[0] and k[1] <= end:
-                        nes.append(v)
-                if len(nes) > 0:
-                    g.exons = stichExons(nes)
-                    ngs[n] = g
     return ngs
 
 
