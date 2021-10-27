@@ -425,7 +425,7 @@ def getGenes(f, chrom, start, end):
     #select genes in the target region
     ngs = {}
     for n, g in gs.items():
-        if (g.start >= start and g.start <= end ) or ( g.end >=start and g.end <=start ):
+        if (g.start >= start and g.start <= end ) or ( g.end >=start and g.end <=end ):
             g.exons = stichExons(list(g.exons.values()))
             ngs[n] = g
     return ngs
@@ -496,24 +496,39 @@ def plotGene(ax, n, g, start, end, space=0.02,lencut=1000):
                     linewidth=1,
                     linestyle="-")
             p = g.exons[0].start - (end - start) * (space * 2)
+            if p < start:
+                p = start
+            if p > end:
+                p = end
             ax.text(p, 0.15, n, color=c, fontsize=5)
         else:
-            #c = "red"
             c = colors[3]
             ax.plot([g.exons[-2].end, g.exons[-1].start], [0.5, 0.5],
                     color=c,
                     linewidth=1,
                     linestyle="-")
             p = g.exons[-1].end + (end - start) * space
+            if p < start:
+                p = start
+            if p > end:
+                p = end
             ax.text(p, 0.15, n, color=c, fontsize=5)
     else:
         if g.strand == "+":
             c = colors[1]
             p = g.exons[0].start - (end - start) * (space * 2)
+            if p < start:
+                p = start
+            if p > end:
+                p = end
             ax.text(p, 0.15, n, color=c, fontsize=5,style="italic")
         else:
             c = colors[3]
             p = g.exons[-1].end + (end - start) * space
+            if p < start:
+                p = start
+            if p > end:
+                p = end
             ax.text(p, 0.15, n, color=c, fontsize=5,style="italic")
     if end - start > lencut:
         nend = start + int( (end-start)/lencut ) * lencut
