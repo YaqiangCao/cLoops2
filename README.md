@@ -580,7 +580,8 @@ optional arguments:
 Run **cLoops2 dump -h** to see details.   
 ```
 Convert cLoops2 data files to other types. Currently supports BED file,BEDPE 
-file, HIC file, washU long-range track, bedGraph file and matrix txt file. 
+file, HIC file, washU long-range track, 1D signal bedGraph file, matrix txt 
+file and virtual 4C signal bedGraph file. 
 
 Converting cLoops2 data to .hic file needs "juicer_tools pre" in the command
 line enviroment. 
@@ -594,6 +595,9 @@ ChIP-seq and ATAC-seq.
 Converting cLoops2 data to matrix txt file will need specific resolution. 
 The output txt file can be loaded in TreeView for visualization or further
 analysis. 
+Converting cLoops2 data to virtual 4C signal will need the region of view point
+such as a specific promoter or enhancer. The output .bdg file can be loaded in 
+IGV or other genome browser for visualization.
 
 Examples:
     1. convert cLoops2 data to single-end .bed file fo usage of BEDtools or 
@@ -629,6 +633,7 @@ Examples:
         cLoops2 dump -d test -mat -o test -mat_res 10000 \
                     -mat_chrom chr21-chr21 -mat_start 36000000 \
                     -mat_end 40000000 -log -corr
+
     
 
 optional arguments:
@@ -683,7 +688,21 @@ optional arguments:
                         observed.
   -corr                 Whether to get the correlation matrix. Default is not. 
   -norm                 Whether to normalize the matrix with z-score. Default is not.
-
+  -virtual4C            Convert data to virtual 4C signal for a specific view point.
+  -virtual4C_chrom VIRTUAL4C_CHROM
+                        The chrom-chrom set for -virtual4C. Specify it as chr1-chr1.
+  -virtual4C_start VIRTUAL4C_START
+                        Start genomic coordinate for the target region for -virtual4C. Default
+                        will be the smallest coordinate from specified chrom-chrom set.
+  -virtual4C_end VIRTUAL4C_END
+                        End genomic coordinate for the target region for -virtual4C. Default
+                        will be the biggest coordinate from specified chrom-chrom set.
+  -virtual4C_viewStart VIRTUAL4C_VIEWSTART
+                        Start genomic coordinate for the view point start region, only valid
+                        when -vitrutal4C is set, should >=start and <=end.
+  -virtual4C_viewEnd VIRTUAL4C_VIEWEND
+                        End genomic coordinate for the view point end region, only valid
+                        when -vitrutal4C is set, should >=start and <=end.
 ```
 
 
