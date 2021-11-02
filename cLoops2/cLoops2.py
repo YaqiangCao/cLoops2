@@ -1,28 +1,14 @@
 #!/usr/bin/env python3
 #--coding:utf-8 --
 """
-cLoops2 main interface to kinds of calling and analysis programme. 
-2020-02-18: integrate statBedpe and plotMatrix functions to main part as qc and plot
-2020-02-21: integrate aggregrate analysis also in main functions
-2020-02-24: integrate loops quantifications in main functions. Change .ixy file to only contain (x,y) information.
-2020-02-25: call domains based on correlation matrix. integrate file conversion as dump funciton in main functiuon.
-2020-03-05: change call-cis-loops to callLoops, with -trans option for calling intra-chromosomal loops; also change the function name of call-diff-cis-loops to callDiffLoops
-2020-03-08: quantification module integrated.
-2020-04-06: going to integrate fraction of reads in features module.
-2020-05-04: dump to UCSC bigInteract added.
-2020-06-08: going to add comp and complot
-2020-06-24: going to integrate similarities , comb for combine multiple data sets
-2020-08-10: going to add circos plot as Montage module
-2020-10-27: integrated interaction density and distance estimation
-2020-12-08: integrated find target genes for a set regions/loops through the enhancer promoter network.  
-2021-07-16: initial public available for GitHub and PyPI.
+cLoops2 main interface. 
 """
 
 __author__ = "CAO Yaqiang"
 __date__ = ""
 __modified__ = ""
 __email__ = "caoyaqiang0410@gmail.com"
-__version__ = "0.0.2"
+__version__ = "0.0.3"
 
 #sys library
 import warnings
