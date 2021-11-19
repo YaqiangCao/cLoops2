@@ -21,6 +21,7 @@ callCisLoops.py
 2021-03-23: change HIC P2LLcut to 1 and binomial p-value cut to 1e-3 as using cDBSCAN2; previouse cutoffs for HIC P2LLcut >=2 binomial p<=1e-5
 2021-05-20: try to speed up permutation background query speed; tested with K562 Hi-TrAC chr21, 5 fold speed up.
 2021-08-24: for some very small anchors (<100bp), a lot of problem , for Hi-TrAC and Trac-looping data
+2021-11-18: remove estimated cutoffs
 """
 
 #sys
@@ -46,13 +47,14 @@ from cLoops2.est import estIntraCut
 from cLoops2.plot import plotIntraCut
 #from cLoops2.blockDBSCAN import blockDBSCAN as DBSCAN
 from cLoops2.geo import checkLoopOverlap, combineLoops
-from cLoops2.io import parseIxy, ixy2pet, loops2juiceTxt, loops2washuTxt, updateJson, loops2txt, loops2ucscTxt,loops2NewWashuTxt
+from cLoops2.io import parseIxy, ixy2pet, loops2juiceTxt, loops2washuTxt, updateJson, loops2txt, loops2ucscTxt, loops2NewWashuTxt
 
-#gloabl settings 
+#gloabl settings
 logger = None
 DBSCAN = None
 
-def runCisDBSCANLoops(fixy, eps, minPts, cut=0,mcut=-1):
+
+def runCisDBSCANLoops(fixy, eps, minPts, cut=0, mcut=-1):
     """
     Run DBSCAN to detect interactions for one .ixy file.
     @param fixy: str, .ixy file name 
@@ -60,11 +62,11 @@ def runCisDBSCANLoops(fixy, eps, minPts, cut=0,mcut=-1):
     @param minPts: int, minPts for DBSCAN
     """
     loops, loopReads, peakReads, distalDistance, closeDistance = [],[], [],[], []
-    key, mat = parseIxy(fixy, cut=cut,mcut=mcut)
-    mat2 = np.zeros((mat.shape[0],3))
-    mat2[:,0] = range(mat.shape[0])
-    mat2[:,1] = mat[:,0]
-    mat2[:,2] = mat[:,1]
+    key, mat = parseIxy(fixy, cut=cut, mcut=mcut)
+    mat2 = np.zeros((mat.shape[0], 3))
+    mat2[:, 0] = range(mat.shape[0])
+    mat2[:, 1] = mat[:, 0]
+    mat2[:, 2] = mat[:, 1]
     mat = mat2
     mat = mat.astype("int")
     if key[0] != key[1]:
@@ -76,13 +78,10 @@ def runCisDBSCANLoops(fixy, eps, minPts, cut=0,mcut=-1):
         closeDistance.extend(list(d[d < cut]))
     if len(mat) == 0:
         report = "No PETs found in %s, maybe due to cut > %" % (fixy, cut)
-        #print(report)
         logger.info(report)
         return None  #no data to call loops
-    #data for interaction records, read for readId
-    #report = "%s \t Clustering %s and %s using eps %s, minPts %s,pre-set distance cutoff > %s\n" % ( datetime.now(), key[0], key[1], eps, minPts, cut)
-    #sys.stderr.write(report)
-    report = "Clustering %s and %s using eps %s, minPts %s,pre-set distance cutoff > %s" % (key[0], key[1], eps, minPts, cut)
+    report = "Clustering %s and %s using eps %s, minPts %s,pre-set distance cutoff > %s" % (
+        key[0], key[1], eps, minPts, cut)
     logger.info(report)
     db = DBSCAN(mat, eps, minPts)
     labels = pd.Series(db.labels)
@@ -110,7 +109,7 @@ def runCisDBSCANLoops(fixy, eps, minPts, cut=0,mcut=-1):
         loop.y_center = (loop.y_start + loop.y_end) / 2
         loop.cis = True
         loop.distance = abs(loop.y_center - loop.x_center)
-        #very small anchor 
+        #very small anchor , added in Aug,2021
         if loop.x_end - loop.x_start + loop.y_end - loop.y_start < 200:
             continue
         if loop.x_end < loop.y_start:  #true candidate loops
@@ -118,35 +117,29 @@ def runCisDBSCANLoops(fixy, eps, minPts, cut=0,mcut=-1):
             loopReads.extend(los)
         else:  #maybe peaks
             peakReads.extend(los)
-    report = "Clustering %s and %s finished. Estimated %s self-ligation reads and %s inter-ligation reads, %s candidate loops." % (key[0], key[1], len(peakReads), len(loopReads), len(loops))
+    report = "Clustering %s and %s finished. Estimated %s candidate loops with %s PETs." % (
+        key[0], key[1], len(loops), len(loopReads))
     logger.info(report)
-    if len(loopReads) > 0:
-        distalDistance = list(mat.loc[loopReads, "Y"] -
-                              mat.loc[loopReads, "X"])
-    if len(peakReads) > 0:
-        closeDistance.extend(
-            list(mat.loc[peakReads, "Y"] - mat.loc[peakReads, "X"]))
-    return "-".join(key), loops, distalDistance, closeDistance
+    return "-".join(key), loops
 
 
-def parallelRunCisDBSCANLoops(meta, eps, minPts, cut=0,mcut=-1,cpu=1):
+def parallelRunCisDBSCANLoops(meta, eps, minPts, cut=0, mcut=-1, cpu=1):
     """
     Paralle version of runCisDBSCANLoops
     @param meta: meta information parsed form petMeta.json
     @param eps: int, eps for DBSCAN
     @param minPts: int, minPts for DBSCAN
     """
-    ds = Parallel(n_jobs=cpu,backend="multiprocessing")(delayed(runCisDBSCANLoops)(
-        meta["data"]["cis"][key]["ixy"], eps, minPts, cut=cut,mcut=mcut)
-                              for key in meta["data"]["cis"].keys())
-    loops, dis, dss = {}, [], []
+    ds = Parallel(n_jobs=cpu, backend="multiprocessing")(
+        delayed(runCisDBSCANLoops)(
+            meta["data"]["cis"][key]["ixy"], eps, minPts, cut=cut, mcut=mcut)
+        for key in meta["data"]["cis"].keys())
+    loops = {}
     for d in ds:
         if d is not None and len(d[1]) > 0:
-            key, di, ddis, ddss = d[0], d[1], d[2], d[3]
+            key, di = d[0], d[1]
             loops[key] = di
-            dis.extend(ddis)
-            dss.extend(ddss)
-    return loops, dis, dss
+    return loops
 
 
 def filterLoopsByDis(loops, cut):
@@ -175,11 +168,11 @@ def getPerRegions(loop, xy, win=5):
     nas, nbs = [], []
     step = (sa + sb) / 2
     #the permutated region all PET ids
-    start = min([ ca-win*step-sa, cb-win*step-sb ])
-    end = max([ca+win*step+sa,cb+win*step+sb])
-    ps = list(xy.queryPeak( start, end))
-    nmat = xy.mat[ps,]
-    nxy = XY(nmat[:,0],nmat[:,1])
+    start = min([ca - win * step - sa, cb - win * step - sb])
+    end = max([ca + win * step + sa, cb + win * step + sb])
+    ps = list(xy.queryPeak(start, end))
+    nmat = xy.mat[ps, ]
+    nxy = XY(nmat[:, 0], nmat[:, 1])
     # the PET id in the permutated regions
     for i in range(0 - win, win + 1):
         if i == 0:
@@ -262,10 +255,12 @@ def estLoopSig(
     if hic:
         p2llcut = 1
     else:
-        p2llcut = 1 
-    xy = ixy2pet(fixy, cut=cut,mcut=mcut)
+        p2llcut = 1
+    xy = ixy2pet(fixy, cut=cut, mcut=mcut)
     N = xy.number
-    logger.info( "Estimate significance for %s candidate interactions in %s with %s PETs distance > =%s and <=%s,requiring minPts >=%s." % (len(loops), key, N, cut, mcut,minPts))
+    logger.info(
+        "Estimate significance for %s candidate interactions in %s with %s PETs distance > =%s and <=%s,requiring minPts >=%s."
+        % (len(loops), key, N, cut, mcut, minPts))
     nloops = []
     for loop in tqdm(loops):
         #filtering unbalanced anchor size
@@ -290,7 +285,7 @@ def estLoopSig(
         loop.rab = rab
         #P2LL
         lowerra, lowerrb, lowerrab = xy.queryLoop(
-            loop.x_end,  (loop.x_end - loop.x_start) + loop.x_end,
+            loop.x_end, (loop.x_end - loop.x_start) + loop.x_end,
             loop.y_start - (loop.y_end - loop.y_start),
             loop.y_start)  #p2ll, seems useless
         loop.P2LL = float(rab) / max(len(lowerrab), pseudo)
@@ -312,8 +307,8 @@ def estLoopSig(
         if mrabs >= rab or fdr >= 0.1:  #hope to speed up
             continue
         #enrichment score
-        es = rab / max(mrabs,pseudo) #pseudo only used to avoid inf
-        if es < 1: #hope to speed up 
+        es = rab / max(mrabs, pseudo)  #pseudo only used to avoid inf
+        if es < 1:  #hope to speed up
             continue
         #simple possion test
         pop = max([1e-300, poisson.sf(rab - 1.0, mrabs)])
@@ -395,8 +390,9 @@ def selSigLoops(key, loops):
             for i in range(len(n) - 1):
                 for j in range(i + 1, len(n)):
                     #if n[i].binomial_p_value > n[j].binomial_p_value:
-                    if n[i].ES < n[j].ES: #these options actually does not matter a lot, observed from Hi-C
-                    #if n[i].density < n[j].density:
+                    if n[i].ES < n[
+                            j].ES:  #these options actually does not matter a lot, observed from Hi-C
+                        #if n[i].density < n[j].density:
                         n[i], n[j] = n[j], n[i]
             nnloops.append(n[0])
     #search again, in case of lost
@@ -444,7 +440,7 @@ def filterPETs(key, predir, fixy, loops, margin=1):
     logger.info("Filtering PETs of %s with %s loops." % (key, len(loops)))
     anchors = getAllAnchors(loops, margin=margin)
     key2, mat = parseIxy(fixy)
-    xy = XY(mat[:,0],mat[:,1]) 
+    xy = XY(mat[:, 0], mat[:, 1])
     rs = set()
     for iv in anchors:
         r = xy.queryPeak(iv[0], iv[1])
@@ -484,15 +480,18 @@ def callCisLoops(
     """
     global logger
     logger = log
-    global DBSCAN 
+    global DBSCAN
     if hic:
         from cLoops2.cDBSCAN2 import cDBSCAN as DBSCAN
-        logger.info("-hic option selected, cDBSCAN2 is used instead of blockDBSCAN.")
+        logger.info(
+            "-hic option selected, cDBSCAN2 is used instead of blockDBSCAN.")
     else:
         from cLoops2.blockDBSCAN import blockDBSCAN as DBSCAN
     if emPair and len(eps) != len(minPts):
-        logger.info("-emPair option selected, number of eps not equal to minPts, return.")
-        return 
+        logger.info(
+            "-emPair option selected, number of eps not equal to minPts, return."
+        )
+        return
     ##step 0 prepare data and check directories
     metaf = predir + "/petMeta.json"
     meta = json.loads(open(metaf).read())
@@ -512,49 +511,21 @@ def callCisLoops(
     ## step 1 find the candidate loops by running multiple times of clustering
     loops = {}  #candidate loops
     #distance of classified inter-ligation PETs, self-ligaiton PETs.
-    dis, dss = [], []
-    cuts = [
-        cut,
-    ]
     if emPair:
-        for ep,minPt in zip(eps,minPts):
-            loops_2, dis_2, dss_2 = parallelRunCisDBSCANLoops(
-                    meta,
-                    ep,
-                    minPt,
-                    cut=cut,
-                    mcut=mcut,
-                    cpu=cpu,
-                )
-            if len(dis_2) == 0:
-                logger.error(
-                    "ERROR: no inter-ligation PETs detected for eps %s minPts %s,can't model the distance cutoff,continue anyway"
-                    % (ep, minPt))
-                continue
-            if not (len(dis_2) == 0 or len(dss_2) == 0):
-                cut_2 = estIntraCut(np.array(dis_2), np.array(dss_2))
-                if plot:
-                    plotIntraCut(dis_2,
-                                 dss_2,
-                                 cut_2,
-                                 prefix=fout + "_eps%s_minPts%s_disCutoff" %
-                                 (ep, minPt))
-                logger.info(
-                    "Estimated inter-ligation and self-ligation distance cutoff > %s for eps=%s,minPts=%s"
-                    % (cut_2, ep, minPt))
-            if len(dss_2) == 0:
-                logger.info(
-                    "No self-ligation PETs found, using cutoff > %s for eps=%s,minPts=%s"
-                    % (cut, ep, minPt))
-                cut_2 = cut
-            loops_2 = filterLoopsByDis(loops_2, cut_2)
+        for ep, minPt in zip(eps, minPts):
+            loops_2 = parallelRunCisDBSCANLoops(
+                meta,
+                ep,
+                minPt,
+                cut=cut,
+                mcut=mcut,
+                cpu=cpu,
+            )
             loops = combineLoops(loops, loops_2)
-            cuts.append(cut)
-            cut = cut
     else:
         for ep in eps:
             for minPt in minPts:
-                loops_2, dis_2, dss_2 = parallelRunCisDBSCANLoops(
+                loops_2 = parallelRunCisDBSCANLoops(
                     meta,
                     ep,
                     minPt,
@@ -562,41 +533,8 @@ def callCisLoops(
                     mcut=mcut,
                     cpu=cpu,
                 )
-                if len(dis_2) == 0:
-                    logger.error(
-                        "ERROR: no inter-ligation PETs detected for eps %s minPts %s,can't model the distance cutoff,continue anyway"
-                        % (ep, minPt))
-                    continue
-                if not (len(dis_2) == 0 or len(dss_2) == 0):
-                    cut_2 = estIntraCut(np.array(dis_2), np.array(dss_2))
-                    if plot:
-                        plotIntraCut(dis_2,
-                                     dss_2,
-                                     cut_2,
-                                     prefix=fout + "_eps%s_minPts%s_disCutoff" %
-                                     (ep, minPt))
-                    logger.info(
-                        "Estimated inter-ligation and self-ligation distance cutoff > %s for eps=%s,minPts=%s"
-                        % (cut_2, ep, minPt))
-                if len(dss_2) == 0:
-                    logger.info(
-                        "No self-ligation PETs found, using cutoff > %s for eps=%s,minPts=%s"
-                        % (cut, ep, minPt))
-                    cut_2 = cut
-                loops_2 = filterLoopsByDis(loops_2, cut_2)
                 loops = combineLoops(loops, loops_2)
-                cuts.append(cut_2)
-                cut = cut_2
-
-        #distance cutoff for estimation of loop significance
-    #cuts = [c for c in cuts if c > 0]
-    ncuts = [c for c in cuts if c > cuts[0]]
-    ncuts.append( cuts[0] )
-    cuts = ncuts
-    if max_cut:
-        cut = np.max(cuts)
-    else:
-        cut = np.min(cuts)
+    loops = filterLoopsByDis(loops,cut)
 
     ## step 2 determine the statstical significance of candidate loops
     logger.info("Estimating loop statstical significance.")
@@ -604,7 +542,7 @@ def callCisLoops(
         mm = min(minPts)
     else:
         mm = max(minPts)
-    ds = Parallel(n_jobs=cpu,backend="multiprocessing")(
+    ds = Parallel(n_jobs=cpu, backend="multiprocessing")(
         delayed(estLoopSig)(
             key,
             loops[key],
@@ -621,21 +559,21 @@ def callCisLoops(
         nds[d[0]] = d[1]
 
     #mark the significant loops
-    ds = Parallel(n_jobs=cpu,backend="multiprocessing")(delayed(markSigLoops)(key, nds[key], hic=hic)
-                              for key in nds.keys())
+    ds = Parallel(n_jobs=cpu, backend="multiprocessing")(
+        delayed(markSigLoops)(key, nds[key], hic=hic) for key in nds.keys())
     nds = {}
     for d in ds:
         nds[d[0]] = d[1]
 
     ## step 3 for the overlapped loops, output the most significant one
     logger.info("Selecting the most significant loops of overlapped ones. ")
-    ds = Parallel(n_jobs=cpu,backend="multiprocessing")(delayed(selSigLoops)(key, nds[key])
-                              for key in nds.keys())
+    ds = Parallel(n_jobs=cpu, backend="multiprocessing")(
+        delayed(selSigLoops)(key, nds[key]) for key in nds.keys())
     nds = {}
     for d in ds:
         nds[d[0]] = d[1]
-    ds = Parallel(n_jobs=cpu,backend="multiprocessing")(delayed(selSigLoops)(key, nds[key])
-                              for key in nds.keys())
+    ds = Parallel(n_jobs=cpu, backend="multiprocessing")(
+        delayed(selSigLoops)(key, nds[key]) for key in nds.keys())
     nds = {}
     for d in ds:
         nds[d[0]] = d[1]
@@ -657,7 +595,7 @@ def callCisLoops(
 
     ## step 5 filtering PETs according to called loops
     if filter:
-        Parallel(n_jobs=cpu,backend="multiprocessing")(
+        Parallel(n_jobs=cpu, backend="multiprocessing")(
             delayed(filterPETs)(key,
                                 fdir,
                                 meta["data"]["cis"][key]["ixy"],
