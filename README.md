@@ -8,7 +8,7 @@
 
 </div>
 
-<h1 align="center"> cLoops2: full stack analysis tool for chromatin interactions </h1>
+<h2 align="center"> cLoops2: full stack analysis tool for chromatin interactions </h2>
 
 <p align="center">
 <img align="center" src="https://github.com/YaqiangCao/cLoops2/blob/master/pngs/FlowChart.png">
@@ -27,7 +27,6 @@ Please refer to our [Hi-TrAC method manuscript]() or [cLoops2 manuscript](https:
 If you use cLoops2 in your research (the idea, the algorithm, the analysis scripts or the supplemental data), please give us a star on the GitHub repo page and cite our paper as follows:    
 
 Official verision on NAR: [Yaqiang Cao et al. "cLoops2: a full-stack comprehensive analytical tool for chromatin interactions"](https://academic.oup.com/nar/advance-article/doi/10.1093/nar/gkab1233/6470683)   
-
 or     
 Preprint bioRxiv: [Yaqiang Cao et al. "cLoops2: a full-stack comprehensive analytical tool for chromatin interactions"](https://www.biorxiv.org/content/10.1101/2021.07.20.453068v1)   
 
