@@ -18,11 +18,11 @@
 -------
 -------
 ## Introduction
-cLoops2 is an extension of our previous work, [cLoops](https://github.com/YaqiangCao/cLoops). From loop-calling based on assumption-free clustering to a full suite of analysis tools for 3D genomic interaction data, cLoops2 has been adapted specifically for data such as Hi-TrAC/Trac-looping, for which interactions are enriched over the genome through experimental steps. cLoops2 still supports Hi-C -like data, of which the interaction signals are evenly distributed at enzyme cutting sites.  The changes from cLoops to cLoops2 are designed to address challenges around aiming for higher resolutions with the next-generation of genome architecture mapping technologies. 
+cLoops2 is an extension of our previous work, [cLoops](https://github.com/YaqiangCao/cLoops). From loop-calling based on assumption-free clustering to a full suite of analysis tools for 3D genomic interaction data, cLoops2 has been adapted specifically for data such as Hi-TrAC/Trac-looping/ChIA-PET/HiChIP, for which interactions are enriched over the genome through experimental steps. cLoops2 still supports Hi-C -like data. The changes from cLoops to cLoops2 are designed to address challenges around aiming for higher resolutions with the next-generation of genome architecture mapping technologies. 
 
 cLoops2 is designed with respect reference to [bedtools](https://bedtools.readthedocs.io/en/latest/) and [Samtools](http://www.htslib.org/) for command-line style programming. If you have experience with them, you will find cLoops2 easy and efficient to use and combine commands, integrate as steps in your processing pipeline. 
 
-Please refer to our [Hi-TrAC method manuscript]() or [cLoops2 manuscript](https://www.biorxiv.org/content/10.1101/2021.07.20.453068v1) for what cLoops2 can do and show. 
+Please refer to our [Hi-TrAC method manuscript(in prepration)]() or [cLoops2 manuscript](https://www.biorxiv.org/content/10.1101/2021.07.20.453068v1) for what cLoops2 can do and show. 
 
 If you use cLoops2 in your research (the idea, the algorithm, the analysis scripts or the supplemental data), please give us a star on the GitHub repo page and cite our paper as follows:    
 

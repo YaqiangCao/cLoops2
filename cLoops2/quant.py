@@ -126,12 +126,13 @@ def quantPeaks(
 
 
 ### loops quantification releated functions
-def _quantLoops(key, loops, fixy, tot, pcut=0, mcut=-1, pseudo=1):
+def _quantLoops(key, loops, fixy, tot, pcut=0, mcut=-1, pseudo=1,offp=False):
     """
     Estimate the loop density and statstical significance for one chromosomal.
     @param key: str, such as chr21-chr21
     @param loops: list of Loop object
     @param fixy: cLoops2 pre generated .ixy file
+    @param offp: bool, if True, do not call p-values 
     """
     tot = float(tot)
     xy = ixy2pet(fixy, cut=pcut,mcut=mcut)
@@ -143,13 +144,6 @@ def _quantLoops(key, loops, fixy, tot, pcut=0, mcut=-1, pseudo=1):
         ra, rb, rab = xy.queryLoop(loop.x_start, loop.x_end, loop.y_start,
                                    loop.y_end)
         ra, rb, rab = len(ra), len(rb), len(rab)
-        #make sure the anchor are significant
-        px, esx = estAnchorSig(xy, loop.x_start, loop.x_end)
-        py, esy = estAnchorSig(xy, loop.y_start, loop.y_end)
-        loop.x_peak_poisson_p_value = px
-        loop.x_peak_es = esx
-        loop.y_peak_poisson_p_value = py
-        loop.y_peak_es = esy
         lowerra, lowerrb, lowerrab = xy.queryLoop(
             loop.x_start - (loop.x_end - loop.x_start), loop.x_start,
             loop.y_start - (loop.y_end - loop.y_start), loop.y_start)  #p2ll
@@ -157,67 +151,86 @@ def _quantLoops(key, loops, fixy, tot, pcut=0, mcut=-1, pseudo=1):
         loop.ra = ra
         loop.rb = rb
         loop.rab = rab
-        if rab > 0:
-            #hypergeometric p-value
-            hyp = max([1e-300, hypergeom.sf(rab - 1.0, N, ra, rb)])
-            #print(ra,rb,rab, np.log10(loop.distance),N,n)
-            #start caculate the permutated background
-            nas, nbs = getPerRegions(loop, xy)
-            rabs, nbps = [], []
-            for na in nas:
-                nac = float(len(na))
-                for nb in nbs:
-                    nbc = float(len(nb))
-                    nrab = float(len(na.intersection(nb)))
-                    #collect the value for poisson test and binomial test
-                    if nrab > 0:
-                        rabs.append(nrab)
-                        den = nrab / (nac * nbc)
-                        nbps.append(den)
-                    else:
-                        rabs.append(0)
-                        nbps.append(0.0)
-            rabs, nbps = np.array(rabs), np.array(nbps)
-            if np.median(rabs) > 0:
-                mrabs = float(np.median(rabs))
-            else:
-                mrabs = pseudo
-            if np.median(nbps) > 0:
-                mbps = np.median(nbps)
-            else:
-                mbps = 1e-10
-            #print(mrabs,mbps,loop.rab,loop.x_end-loop.x_start, loop.y_end-loop.y_start, N)
-            #local fdr
-            if len(rabs) > 0:
-                fdr = len(rabs[rabs > rab]) / float(len(rabs))
-            else:
-                fdr = 0.0
-            #enrichment score
-            es = rab / mrabs
-            #simple possion test
-            pop = max([1e-300, poisson.sf(rab - 1.0, mrabs)])
-            #simple possion test
-            pop = max([1e-300, poisson.sf(rab - 1.0, mrabs)])
-            #simple binomial test
-            nbp = max([
-                1e-300, binom.sf(rab - 1.0, ra * rb - rab, mbps)
-            ])  #the p-value is quit similar to that of cLoops 1 binomial test
-            #nbp = max([1e-300, binom.sf(rab - 1.0, N - rab, mbps * ra * rb / N)])  #cLoops 1 binomial test
-            loop.FDR = fdr
-            loop.ES = es
-            loop.density = float(
-                loop.rab) / (loop.x_end - loop.x_start + loop.y_end -
-                             loop.y_start) / tot * 10.0**9
-            loop.hypergeometric_p_value = hyp
-            loop.poisson_p_value = pop
-            loop.binomial_p_value = nbp
-        else:
+        if offp:
             loop.FDR = 1
             loop.ES = 0
             loop.density = 0
             loop.hypergeometric_p_value = 1
             loop.poisson_p_value = 1
             loop.binomial_p_value = 1
+            loop.x_peak_poisson_p_value = 1
+            loop.x_peak_es = 0
+            loop.y_peak_poisson_p_value = 1
+            loop.y_peak_es = 0
+        else:
+            #make sure the anchor are significant
+            px, esx = estAnchorSig(xy, loop.x_start, loop.x_end)
+            py, esy = estAnchorSig(xy, loop.y_start, loop.y_end)
+            loop.x_peak_poisson_p_value = px
+            loop.x_peak_es = esx
+            loop.y_peak_poisson_p_value = py
+            loop.y_peak_es = esy
+            if rab > 0:
+                #hypergeometric p-value
+                hyp = max([1e-300, hypergeom.sf(rab - 1.0, N, ra, rb)])
+                #print(ra,rb,rab, np.log10(loop.distance),N,n)
+                #start caculate the permutated background
+                nas, nbs = getPerRegions(loop, xy)
+                rabs, nbps = [], []
+                for na in nas:
+                    nac = float(len(na))
+                    for nb in nbs:
+                        nbc = float(len(nb))
+                        nrab = float(len(na.intersection(nb)))
+                        #collect the value for poisson test and binomial test
+                        if nrab > 0:
+                            rabs.append(nrab)
+                            den = nrab / (nac * nbc)
+                            nbps.append(den)
+                        else:
+                            rabs.append(0)
+                            nbps.append(0.0)
+                rabs, nbps = np.array(rabs), np.array(nbps)
+                if np.median(rabs) > 0:
+                    mrabs = float(np.median(rabs))
+                else:
+                    mrabs = pseudo
+                if np.median(nbps) > 0:
+                    mbps = np.median(nbps)
+                else:
+                    mbps = 1e-10
+                #print(mrabs,mbps,loop.rab,loop.x_end-loop.x_start, loop.y_end-loop.y_start, N)
+                #local fdr
+                if len(rabs) > 0:
+                    fdr = len(rabs[rabs > rab]) / float(len(rabs))
+                else:
+                    fdr = 0.0
+                #enrichment score
+                es = rab / mrabs
+                #simple possion test
+                pop = max([1e-300, poisson.sf(rab - 1.0, mrabs)])
+                #simple possion test
+                pop = max([1e-300, poisson.sf(rab - 1.0, mrabs)])
+                #simple binomial test
+                nbp = max([
+                    1e-300, binom.sf(rab - 1.0, ra * rb - rab, mbps)
+                ])  #the p-value is quit similar to that of cLoops 1 binomial test
+                #nbp = max([1e-300, binom.sf(rab - 1.0, N - rab, mbps * ra * rb / N)])  #cLoops 1 binomial test
+                loop.FDR = fdr
+                loop.ES = es
+                loop.density = float(
+                    loop.rab) / (loop.x_end - loop.x_start + loop.y_end -
+                                 loop.y_start) / tot * 10.0**9
+                loop.hypergeometric_p_value = hyp
+                loop.poisson_p_value = pop
+                loop.binomial_p_value = nbp
+            else:
+                loop.FDR = 1
+                loop.ES = 0
+                loop.density = 0
+                loop.hypergeometric_p_value = 1
+                loop.poisson_p_value = 1
+                loop.binomial_p_value = 1
         nloops.append(loop)
     return key, nloops
 
@@ -272,6 +285,7 @@ def quantLoops(
         cut=0,
         mcut=-1,
         cpu=1,
+        offp=False,
 ):
     """
     Quantification of loops.
@@ -289,6 +303,7 @@ def quantLoops(
         tot,
         pcut=cut,
         mcut=mcut,
+        offp=offp,
     ) for key in keys)
     loops = []
     for d in ds:

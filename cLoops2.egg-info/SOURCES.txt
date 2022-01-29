@@ -1,6 +1,7 @@
 LICENSE
 MANIFEST.in
 README.md
+cLoops2.log
 cLoops2_env.yaml
 cLoops2_pip_readme.md
 setup.py
@@ -11,6 +12,7 @@ cLoops2/blockDBSCAN.py
 cLoops2/cDBSCAN2.py
 cLoops2/cLoops2.py
 cLoops2/callCisLoops.py
+cLoops2/callCisLoops.py.bk
 cLoops2/callDiffLoops.py
 cLoops2/callDomains.py
 cLoops2/callPeaks.py
