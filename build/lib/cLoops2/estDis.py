@@ -6,6 +6,7 @@ Get the observed and expected background of genomic distance vs genomic interaci
 2019-08-26: updated with parallel 
 2019-12-30: update output orders
 2020-10-27: integrate into cLoops2 main interface
+2022-02-03: update caculation
 """
 
 __date__ = "2019-08-23"
@@ -105,6 +106,7 @@ def getObsDisFreq(mat, binSize=5000):
     """
     Get the relation between genomic distance with interactions using bin size based on Numpy
     """
+    """
     minC = np.min(mat)
     a = (mat[:, 0] - minC) / binSize
     b = (mat[:, 1] - minC) / binSize
@@ -113,6 +115,10 @@ def getObsDisFreq(mat, binSize=5000):
     c = np.abs(a - b) * binSize
     c = c.astype(int)
     sso = Counter(c)
+    """
+    d = np.abs( mat[:,0] - mat[:,1] ) / binSize
+    d = d.astype(int) * binSize
+    sso = Counter( d.astype(int) )
     return sso
 
 
@@ -138,9 +144,6 @@ def preExp(f, cut=0,mcut=-1, binSize=5000):
     #old shuffing
     mat[:, 0] = a
     mat[:, 1] = b
-    #new shuffling
-    #mat[:, 1] = a
-    #mat[:, 0] = b
     sso = getObsDisFreq(mat, binSize=binSize)
     return sso
 
