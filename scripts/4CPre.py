@@ -354,7 +354,10 @@ def main():
             logger.info(
                 "Target output directory %s is not empty, may over-write some files."
                 % op.output)
+            return
 
+    
+    logger.info("Start the analysis of sample %s."%(op.output))
     bait = op.bait.upper()
     enz = op.ligationSite.upper()
 
@@ -390,6 +393,7 @@ def main():
     bdg = op.output+"/"+op.output+"_frag.bdg"
     bed2bdg(frag, bdg, log=op.log)
 
+    #step 7, generate the qc report
     rs = {
             "0_totalRawReads":tot,
             "1_rawReadsHasBait": hasBait,
@@ -404,7 +408,9 @@ def main():
             "10_validRatio": cFrags/uniqueMapped,
         }
     rs = pd.Series(rs)
-    rs.to_csv(op.output+"/"+op.output+"_report.txt",sep="\t")
+    rs.to_csv(op.output+"/"+op.output+"_report.txt",sep="\t",header=None)
+
+    logger.info("The analysis of sample %s finished."%(op.output))
 
 
 if __name__ == '__main__':
