@@ -386,7 +386,7 @@ def main():
     #step 5, map the reads to fragments 
     logger.info("%s_Step5: Map the reads to genomic fragments digested."%op.output)
     frag = op.output+"/"+op.output+"_frag.bed.gz" 
-    cFrags = bed2hicFrag(uniqueBed,op.genomeFrag,frag,chrom="chr5",cis=op.cis)
+    cFrags = bed2hicFrag(uniqueBed,op.genomeFrag,frag,chrom=vpChrom,cis=op.cis)
 
     #step 6, generate view point bedgraph
     logger.info("%s_Step6: Generate visualization bedGraph file."%op.output)
