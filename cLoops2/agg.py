@@ -8,6 +8,7 @@ Aggregated analysis related functions.
 2020-11-10: updated view points plot, no more trying of data normalization, not work well.
 2020-11-11: added new aggregation of two anchors
 2020-11-12: twoAnchor aggregation analysis should be modified to have directions, such as anchor as are CTCF + and anchor bs are CTCF -
+2022-02-07: refine of enrichment score caculation for loops
 """
 
 __author__ = "CAO Yaqiang"
