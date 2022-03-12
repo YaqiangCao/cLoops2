@@ -178,8 +178,8 @@ def parseSeq(fin, fo, bait, enz, miss=2, rlen=10):
             for r in FastqGeneralIterator(f):
                 r = list(r)
                 tot += 1
-                if tot % 100000 == 0:
-                    print("%s reads processed for %s" % (i, fo))
+                #if tot % 100000 == 0:
+                #    print("%s reads processed for %s" % (tot, fo))
                 s = r[1][:len(bait)]
                 m = match(bait, s, miss)
                 if m == False:
@@ -357,39 +357,39 @@ def main():
             return
 
     
-    logger.info("Start the analysis of sample %s."%(op.output))
+    logger.info("%s: Start the analysis of sample."%(op.output))
     bait = op.bait.upper()
     enz = op.ligationSite.upper()
 
     #step 1, get the bait genomic coordinate
-    logger.info("Step1: Get bait sequence genomic location. ")
+    logger.info("%s_Step1: Get bait sequence genomic location."%op.output)
     vpChrom, vpPos, vpStrand = getBaitPos(bait, op.ref)
 
     #step 2, pre-process fastq files to only keep the reads there are bait and remove the bait sequence
-    logger.info("Step2: Trim bait sequence and only keep the target reads.")
+    logger.info("%s_Step2: Trim bait sequence and only keep the target reads."%op.output)
     fastq = op.output+"/"+op.output+".fastq.gz"
     tot,hasBait= parseSeq(op.fq,fastq,bait, enz)
     
     #step 3, mapping the target reads to the genome
-    logger.info("Step3: Map the target reads to the reference genome. ")
+    logger.info("%s_Step3: Map the target reads to the reference genome."%op.output)
     sam = op.output+"/"+op.output+".sam"
     bam = op.output+"/"+op.output+".bam"
     mapRatio = doMap(fastq,op.ref,sam,bam,cpus=op.cpu)
 
     #step 4, get the high quality unqiue reads
-    logger.info("Step4: Get the high quality unique reads. ")
+    logger.info("%s_Step4: Get the high quality unique reads."%op.output)
     bed = op.output+"/"+op.output+".bed"
     bam2Bed(bam,bed,mapq=op.mapq)
     uniqueBed = op.output+"/"+op.output+"_unique.bed.gz"
     totMapped, uniqueMapped, uniqueCis = getUniqueBed(bed + ".gz", uniqueBed,vpChrom,cis=op.cis)
 
     #step 5, map the reads to fragments 
-    logger.info("Step5: Map the reads to genomic fragments digested. ")
+    logger.info("%s_Step5: Map the reads to genomic fragments digested."%op.output)
     frag = op.output+"/"+op.output+"_frag.bed.gz" 
     cFrags = bed2hicFrag(uniqueBed,op.genomeFrag,frag,chrom="chr5",cis=op.cis)
 
     #step 6, generate view point bedgraph
-    logger.info("Step6: Generate visualization bedGraph file.")
+    logger.info("%s_Step6: Generate visualization bedGraph file."%op.output)
     bdg = op.output+"/"+op.output+"_frag.bdg"
     bed2bdg(frag, bdg, log=op.log)
 
@@ -410,7 +410,7 @@ def main():
     rs = pd.Series(rs)
     rs.to_csv(op.output+"/"+op.output+"_report.txt",sep="\t",header=None)
 
-    logger.info("The analysis of sample %s finished."%(op.output))
+    logger.info("%s:The analysis finished."%(op.output))
 
 
 if __name__ == '__main__':
