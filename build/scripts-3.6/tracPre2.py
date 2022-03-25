@@ -1,4 +1,4 @@
-#!python
+#!/home/caoy7/anaconda2/envs/cLoops2/bin/python
 #--coding:utf-8--
 """
 tracPre.py
@@ -41,14 +41,14 @@ def help():
     Create the command line interface for the script.
     """
     description = """
-        Preprocess the raw reads of FASTQ files of Trac-looping to reference
-        geneome with bowtie2 and obtain the unqiue PETs with quality control
+        Preprocess the raw reads of FASTQ files of Hi-TrAC to reference
+        genome with bowtie2 and obtain the unqiue PETs with quality control
         results.
         Fastqs files should be named with suffix pattern as 
         _R1.fastq.gz, _R2.fastq.gz.
 
         Example:
-        tracPre.py -fqd ../1.fq -o ./ -ref ../bowtie2/hg38 -n 10 -p 5 -mapq 10
+        tracPre2.py -fqd ../1.fq -o ./ -ref ../bowtie2/hg38 -n 10 -p 5 -mapq 10
         """
     parser = argparse.ArgumentParser(description=description,
                                      formatter_class=RawTextHelpFormatter)

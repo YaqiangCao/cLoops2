@@ -135,6 +135,7 @@ cLoops2/__pycache__/utils.cpython-38.pyc
 cLoops2/__pycache__/utils.cpython-39.pyc
 data/hg19.chrom.sizes
 data/hg38.chrom.sizes
+scripts/4CPre.py
 scripts/getBedpeFBed.py
 scripts/getDI.py
 scripts/getFRiF.py

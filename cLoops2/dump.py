@@ -583,6 +583,7 @@ def ixy2virtual4C(
                 if virtual4Csig[j] != virtual4Csig[i]:
                     break
             #v = np.log2(virtual4Csig[i] / 1.0 / tot * 10**6)
+            #v = virtual4Csig[i] / 1.0 / tot * 10**6
             v = np.log2(virtual4Csig[i])
             line = [chrom[0],start+i, start+j-1,v]
             fo.write("\t".join(list(map(str, line))) + "\n")

@@ -318,6 +318,8 @@ def getBedRegion(f, chrom, start, end):
     """
     rs = []
     for line in open(f):
+        if line.startswith("#"):
+            continue
         line = line.split("\n")[0].split("\t")
         if len(line) < 3:
             continue
@@ -329,8 +331,17 @@ def getBedRegion(f, chrom, start, end):
             continue
         if c != chrom:
             continue
+        #if contins color
+        if len(line) >= 8:
+            try:
+                co = list(map(float,line[8].split(",")))
+                co = [ c/255.0 for c in co]
+            except:
+                co = None
+        else:
+            co = None
         if s >= start and e <= end:
-            rs.append([s, e])
+            rs.append([s, e,co])
     return rs
 
 
@@ -583,12 +594,19 @@ def plotRegion(ax, rs, start, end, colori=1, lencut=1000, label=""):
     @param label: str, name/label for the data
     """
     for r in rs:
-        p = patches.Rectangle((r[0], 0.2),
+        if r[-1] == None:
+            p = patches.Rectangle((r[0], 0.2),
                               r[1] - r[0],
                               0.6,
                               fill=True,
-                             color=colors[colori],
+                              color=colors[colori],
                               alpha=0.8)
+        else:
+            p = patches.Rectangle((r[0], 0.2),
+                              r[1] - r[0],
+                              0.6,
+                              fill=True,
+                              color=r[-1])
         ax.add_patch(p)
     ax.set_ylim([0, 1])
     ax.text((start + end) / 2, 0.2, label, fontsize=6)
