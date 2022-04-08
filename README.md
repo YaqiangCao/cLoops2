@@ -1984,6 +1984,9 @@ No tested bugs needed warning.
 --------
 --------
 ## cLoops2 citations
+1. Fang, Difeng, et al. “Differential regulation of transcription factor T-bet induction during NK cell development and T helper-1 cell differentiation.” Immunity (2022).  Peak-calling of ChIP-seq data. 
+2. Zhen, Tao, et al. “RUNX1 and CBFβ-SMMHC transactivate target genes together in abnormal myeloid progenitors for leukemia development.” Blood (2020). Peak-calling of ChIC-seq data. 
+3. Ramirez, Ricardo N., et al. "FoxP3 associates with enhancer-promoter loops to regulate Treg-specific gene expression." Science Immunology 7.67 (2022): eabj9836. Utility script. 
 
 --------
 --------
