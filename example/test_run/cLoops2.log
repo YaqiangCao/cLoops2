@@ -373,3 +373,31 @@
 
 
 
+2022-04-03 17:24:09 cLoops2 INFO     Command cLoops2 montage -f ./gm_samp/chr21-chr21.ixy -bed ../data/runx1.bed -ext 2.0 -o gm_runx1_all -cut 0 -mcut -1 -simple True -viewPoint  -vmin None -vmax 500.0 -ppmw 0.05 -aw 1 -no1D False
+2022-04-03 17:24:15 numexpr.utils INFO     Note: NumExpr detected 64 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+2022-04-03 17:24:15 numexpr.utils INFO     NumExpr defaulting to 8 threads.
+2022-04-03 17:54:38 cLoops2 INFO     cLoops2 montage finished. Used time: 0:30:29.332707.
+
+
+
+2022-04-03 17:54:41 cLoops2 INFO     Command cLoops2 montage -f ./k562_samp/chr21-chr21.ixy -bed ../data/runx1.bed -ext 2.0 -o k562_runx1_all -cut 0 -mcut -1 -simple True -viewPoint  -vmin None -vmax 500.0 -ppmw 0.05 -aw 1 -no1D False
+2022-04-03 17:54:47 numexpr.utils INFO     Note: NumExpr detected 64 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+2022-04-03 17:54:47 numexpr.utils INFO     NumExpr defaulting to 8 threads.
+2022-04-03 18:26:42 cLoops2 INFO     cLoops2 montage finished. Used time: 0:32:01.116875.
+
+
+
+2022-04-03 18:26:44 cLoops2 INFO     Command cLoops2 montage -f ./gm_samp/chr21-chr21.ixy -bed ../data/runx1.bed -ext 2.0 -o gm_runx1_vp -cut 0 -mcut -1 -simple True -viewPoint Promoter,E19 -vmin None -vmax 500.0 -ppmw 0.05 -aw 1 -no1D False
+2022-04-03 18:26:50 numexpr.utils INFO     Note: NumExpr detected 64 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+2022-04-03 18:26:50 numexpr.utils INFO     NumExpr defaulting to 8 threads.
+2022-04-03 18:58:31 cLoops2 INFO     cLoops2 montage finished. Used time: 0:31:47.398497.
+
+
+
+2022-04-03 18:58:34 cLoops2 INFO     Command cLoops2 montage -f ./k562_samp/chr21-chr21.ixy -bed ../data/runx1.bed -ext 2.0 -o k562_runx1_vp -cut 0 -mcut -1 -simple True -viewPoint Promoter,E19 -vmin None -vmax 500.0 -ppmw 0.05 -aw 1 -no1D False
+2022-04-03 18:58:40 numexpr.utils INFO     Note: NumExpr detected 64 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+2022-04-03 18:58:40 numexpr.utils INFO     NumExpr defaulting to 8 threads.
+2022-04-03 19:32:55 cLoops2 INFO     cLoops2 montage finished. Used time: 0:34:20.974955.
+
+
+

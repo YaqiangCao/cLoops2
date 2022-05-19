@@ -26,11 +26,14 @@ cLoops2 is designed with respect reference to [bedtools](https://bedtools.readth
 
 Please refer to our [Hi-TrAC method manuscript(in prepration)]() or [cLoops2 manuscript](https://www.biorxiv.org/content/10.1101/2021.07.20.453068v1) for what cLoops2 can do and show. 
 
+-------
+-------
+## Citation
 If you use cLoops2 in your research (the idea, the algorithm, the analysis scripts or the supplemental data), please give us a star on the GitHub repo page and cite our paper as follows:    
 
-Official verision on NAR: [Yaqiang Cao et al. "cLoops2: a full-stack comprehensive analytical tool for chromatin interactions"](https://academic.oup.com/nar/advance-article/doi/10.1093/nar/gkab1233/6470683)   
+- Official verision on NAR: [Yaqiang Cao et al. "cLoops2: a full-stack comprehensive analytical tool for chromatin interactions"](https://academic.oup.com/nar/advance-article/doi/10.1093/nar/gkab1233/6470683)   
 or     
-Preprint bioRxiv: [Yaqiang Cao et al. "cLoops2: a full-stack comprehensive analytical tool for chromatin interactions"](https://www.biorxiv.org/content/10.1101/2021.07.20.453068v1)   
+- Preprint bioRxiv: [Yaqiang Cao et al. "cLoops2: a full-stack comprehensive analytical tool for chromatin interactions"](https://www.biorxiv.org/content/10.1101/2021.07.20.453068v1)   
 
 
 -------
