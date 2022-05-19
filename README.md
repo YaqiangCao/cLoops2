@@ -3,6 +3,7 @@
 [![Language](https://img.shields.io/github/languages/top/YaqiangCao/cLoops2)](https://img.shields.io/github/languages/top/YaqiangCao/cLoops2) 
 [![Stars](https://img.shields.io/github/stars/YaqiangCao/cLoops2?logo=GitHub&color=yellow)](https://github.com/YaqiangCao/cLoops2/stargazers) 
 <img alt="ViewCount" src="https://views.whatilearened.today/views/github/YaqiangCao/cLoops2.svg">
+[![GitHub Clones](https://img.shields.io/badge/dynamic/json?color=success&label=Clone&query=count&url=https://gist.githubusercontent.com/YaqiangCao/3e13bd554104e813cad0dc10413389c3/raw/clone.json&logo=github)](https://github.com/MShawon/github-clone-count-badge) 
 [![PyPI](https://img.shields.io/pypi/v/cLoops2.svg)](https://pypi.org/project/cLoops2) 
 [![PyPI Downloads](https://pepy.tech/badge/cLoops2)](https://pepy.tech/project/cLoops2)
 [![LOC](https://tokei.rs/b1/github/YaqiangCao/cLoops2?category=code)](https://github.com/Aaronepower/tokei)
