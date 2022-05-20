@@ -192,7 +192,7 @@ def quantifyDom(f, doms, tot,cut=0,mcut=-1,hic=False):
         if len(b) == 0:
             continue
         #too few reads
-        if len(b) / (dom.end-dom.start) < md*2:
+        if len(b) / (dom.end-dom.start) < md:
             continue
         if len(n) > 0:
             e = len(b) / float(len(n))
