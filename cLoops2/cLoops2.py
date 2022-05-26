@@ -1776,7 +1776,16 @@ Examples:
         "Whether to use cutoffs for Hi-C to output significant domains.\n"\
         "Default is not. Set this option to enable, cutoffs will be more loose."
     )
- 
+    callDomains.add_argument(
+        "-strict",
+        dest="strict",
+        required=False,
+        action="store_true",
+        help=
+        "Whether to use strict cutoffs to get high confidence results. Default\n"\
+        "is not. Set this option to enable."
+    )
+
     #plot function
     plotDes = """
 Plot the interaction data as a heatmap (or arches/scatter) with additional of 
@@ -3830,7 +3839,7 @@ def main():
     #16. call domains
     if cmd == "callDomains":
         start = datetime.now()
-        report = "Command: cLoops2 {} -d {} -cut {} -mcut {} -p {} -o {} -bs {} -ws {} -hic {}".format(
+        report = "Command: cLoops2 {} -d {} -cut {} -mcut {} -p {} -o {} -bs {} -ws {} -hic {} -strict {}".format(
             cmd, 
             cliParser.predir, 
             cliParser.cut, 
@@ -3839,7 +3848,8 @@ def main():
             cliParser.fnOut,
             cliParser.binSize, 
             cliParser.winSize, 
-            cliParser.hic
+            cliParser.hic,
+            cliParser.strict,
         )
         logger.info(report)
         #check the input directory
@@ -3864,7 +3874,8 @@ def main():
             cut=cliParser.cut,
             mcut=cliParser.mcut,
             cpu=cliParser.cpu,
-            hic=cliParser.hic
+            hic=cliParser.hic,
+            strict=cliParser.strict,
             )
 
         end = datetime.now()

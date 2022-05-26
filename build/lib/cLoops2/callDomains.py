@@ -170,7 +170,7 @@ def combineDoms(doms, doms2, lrcut=0.9):
     return doms
 
 
-def quantifyDom(f, doms, tot,cut=0,mcut=-1,hic=False):
+def quantifyDom(f, doms, tot,cut=0,mcut=-1,hic=False,strict=False,tcut=1000):
     """
     Quantify domains
     """
@@ -189,23 +189,31 @@ def quantifyDom(f, doms, tot,cut=0,mcut=-1,hic=False):
         t = xy.queryPeak(dom.start, dom.end)
         b = xy.queryPeakBoth(dom.start, dom.end)
         n = t.difference(b)
-        if len(b) == 0:
-            continue
-        #too few reads
-        if len(b) / (dom.end-dom.start) < md:
+        if len(b) < tcut:
             continue
         if len(n) > 0:
             e = len(b) / float(len(n))
         else:
             e = 100
-        if hic==False and  e < 1:
-            continue 
-        if hic==False:
+        #not quite enriched
+        #affect a lot
+        if strict:
+            #too few reads
+            if len(b) / (dom.end-dom.start) < md * 2:
+                continue
+            if hic==False and  e < 1:
+                continue 
+        else:
+            if len(b) / (dom.end-dom.start) < md :
+                continue
+        """
+        if hic==False and strict:
             size = dom.end - dom.start
             pb = xy.queryPeakBoth(dom.start - size, dom.end -size)
             nb = xy.queryPeakBoth(dom.start + size, dom.end +size)
             if len(b) * 2 < len(pb)+len(nb):
                 continue
+        """
         dom.totalPETs = len(b) + len(n)
         dom.withinDomainPETs = len(b)
         dom.enrichmentScore = e
@@ -224,7 +232,8 @@ def callDomains(
         cut=0,
         mcut=-1,
         cpu=1,
-        hic=False
+        hic=False,
+        strict=False,
 ):
     """
     Call domains main funciton.
@@ -265,7 +274,8 @@ def callDomains(
         tot,
         cut,
         mcut,
-        hic
+        hic,
+        strict,
     ) for key in doms.keys())
     doms = []
     for d in ds:

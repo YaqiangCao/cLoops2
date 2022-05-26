@@ -1,15 +1,6 @@
 #!/usr/bin/env python3
 #--coding:utf-8 --
 """
-1. Insulation score does not work well for Hi-Trac/Trac-looping data.
-2. z-score normalization is much better than log2(s/mean), much stable
-3. 20k similar to 10k and 5k, 1k will not improve the quality of domains called and score showed, much time consuming.
-4. fix such as 10k and 5k, fine tune naerby 500k to 250k, will affect a lot. Better just use 10k and 500k. 
-5. Variants of insulation score, may not work as stable as SS.
-6. when caculate SS, not remove <0 as 0, will cause strange results.
-7. if multiple parameters given, call nest domains?
-8. obs/exp matrix than correlation, not work, by all means
-
 2020-03-08: update density
 2020-09-13: update multiple window size added
 2020-09-22: try to improve efficiency of function calcSS, by getting the whole chromosome contact matrix as sparse matrix. Seems sparse matrix will auto occupy multipe CPUs.
@@ -170,7 +161,7 @@ def combineDoms(doms, doms2, lrcut=0.9):
     return doms
 
 
-def quantifyDom(f, doms, tot,cut=0,mcut=-1,hic=False):
+def quantifyDom(f, doms, tot,cut=0,mcut=-1,hic=False,strict=False,tcut=1000):
     """
     Quantify domains
     """
@@ -189,23 +180,31 @@ def quantifyDom(f, doms, tot,cut=0,mcut=-1,hic=False):
         t = xy.queryPeak(dom.start, dom.end)
         b = xy.queryPeakBoth(dom.start, dom.end)
         n = t.difference(b)
-        if len(b) == 0:
-            continue
-        #too few reads
-        if len(b) / (dom.end-dom.start) < md:
+        if len(b) < tcut:
             continue
         if len(n) > 0:
             e = len(b) / float(len(n))
         else:
             e = 100
-        if hic==False and  e < 1:
-            continue 
-        if hic==False:
+        #not quite enriched
+        #affect a lot
+        if strict:
+            #too few reads
+            if len(b) / (dom.end-dom.start) < md * 2:
+                continue
+            if hic==False and  e < 1:
+                continue 
+        else:
+            if len(b) / (dom.end-dom.start) < md :
+                continue
+        """
+        if hic==False and strict:
             size = dom.end - dom.start
             pb = xy.queryPeakBoth(dom.start - size, dom.end -size)
             nb = xy.queryPeakBoth(dom.start + size, dom.end +size)
             if len(b) * 2 < len(pb)+len(nb):
                 continue
+        """
         dom.totalPETs = len(b) + len(n)
         dom.withinDomainPETs = len(b)
         dom.enrichmentScore = e
@@ -224,7 +223,8 @@ def callDomains(
         cut=0,
         mcut=-1,
         cpu=1,
-        hic=False
+        hic=False,
+        strict=False,
 ):
     """
     Call domains main funciton.
@@ -265,7 +265,8 @@ def callDomains(
         tot,
         cut,
         mcut,
-        hic
+        hic,
+        strict,
     ) for key in doms.keys())
     doms = []
     for d in ds:
