@@ -14,7 +14,6 @@ cLoops2/blockDBSCAN.py
 cLoops2/cDBSCAN2.py
 cLoops2/cLoops2.py
 cLoops2/callCisLoops.py
-cLoops2/callCisLoops.py.bk
 cLoops2/callDiffLoops.py
 cLoops2/callDomains.py
 cLoops2/callPeaks.py

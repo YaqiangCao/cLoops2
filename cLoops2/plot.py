@@ -990,6 +990,8 @@ def plotMatHeatmap(
                          ax=ax,
                          cmap=cmap,
                          cbar_ax=cax,
+                         vmin=-1,
+                         vmax=1,
                          cbar_kws={
                              'label': ano,
                              'orientation': 'horizontal',

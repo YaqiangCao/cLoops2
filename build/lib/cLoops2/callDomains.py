@@ -1,15 +1,6 @@
 #!/usr/bin/env python3
 #--coding:utf-8 --
 """
-1. Insulation score does not work well for Hi-Trac/Trac-looping data.
-2. z-score normalization is much better than log2(s/mean), much stable
-3. 20k similar to 10k and 5k, 1k will not improve the quality of domains called and score showed, much time consuming.
-4. fix such as 10k and 5k, fine tune naerby 500k to 250k, will affect a lot. Better just use 10k and 500k. 
-5. Variants of insulation score, may not work as stable as SS.
-6. when caculate SS, not remove <0 as 0, will cause strange results.
-7. if multiple parameters given, call nest domains?
-8. obs/exp matrix than correlation, not work, by all means
-
 2020-03-08: update density
 2020-09-13: update multiple window size added
 2020-09-22: try to improve efficiency of function calcSS, by getting the whole chromosome contact matrix as sparse matrix. Seems sparse matrix will auto occupy multipe CPUs.

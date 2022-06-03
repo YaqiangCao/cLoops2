@@ -1,0 +1,5 @@
+2022-05-27 20:17:01 cLoops2 INFO     Command: cLoops2 qc -f ../data/GM_HiTrac_bio1.bedpe.gz,../data/GM_HiTrac_bio2.bedpe.gz,../data/K562_HiTrac_bio1.bedpe.gz,../data/K562_HiTrac_bio2.bedpe.gz -o test_step1 -p 4 
+2022-05-27 20:17:06 cLoops2 INFO     cLoops2 qc finished. Used time: 0:00:05.072434.
+
+
+
