@@ -60,8 +60,8 @@ def calcSS(f, bs=20000, winSize=500000, cut=0,mcut=-1,hic=False):
         nmat = np.corrcoef(nmat)
         nmat = np.nan_to_num(nmat)
         nmat = nmat[int(nmat.shape[0] / 2) + 1:, :int(nmat.shape[1] / 2)]
-        if hic == False:
-            nmat[nmat < 0] = 0
+        #if hic == False:
+        nmat[nmat < 0] = 0
         s = nmat.mean()
         ss.append(s)
         r = [key[0], x, x + bs]
@@ -197,14 +197,6 @@ def quantifyDom(f, doms, tot,cut=0,mcut=-1,hic=False,strict=False,tcut=1000):
         else:
             if len(b) / (dom.end-dom.start) < md :
                 continue
-        """
-        if hic==False and strict:
-            size = dom.end - dom.start
-            pb = xy.queryPeakBoth(dom.start - size, dom.end -size)
-            nb = xy.queryPeakBoth(dom.start + size, dom.end +size)
-            if len(b) * 2 < len(pb)+len(nb):
-                continue
-        """
         dom.totalPETs = len(b) + len(n)
         dom.withinDomainPETs = len(b)
         dom.enrichmentScore = e
