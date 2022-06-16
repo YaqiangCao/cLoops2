@@ -1722,9 +1722,10 @@ Example:
     #call domain function
     callDomainsDes = """
 Call domains for the 3D genomic data based on correlation matrix and local 
-segregation score.
+segregation score. 
 
-Well tested work for Hi-TrAC/Trac-looping data.
+Well tested work for Hi-TrAC/Trac-looping data. Cutoffs may be not suitable 
+for Hi-C data.
 
 Examples:
     1. call Hi-C like TADs
@@ -1733,8 +1734,6 @@ Examples:
     2. call Hi-TrAC/Trac-looping specific small domains
         cLoops2 callDomains -d trac -o trac -bs 1000 -ws 100000 -p 20 
 
-    3. call domains for Hi-C
-        cLoops2 callDomains -d hic -o hic -bs 10000 -ws 500000 -hic 
 """
     callDomains = subparsers.add_parser(
         'callDomains',
@@ -1766,15 +1765,6 @@ Examples:
         "The half of the sliding window size used to caculate local correlation,\n"\
         "Default is 500000 (500kb). If given multiple values, callDomains will\n"\
         "try to call nested domains. Larger value may lead to larger domains."
-    )
-    callDomains.add_argument(
-        "-hic",
-        dest="hic",
-        required=False,
-        action="store_true",
-        help=
-        "Whether to use cutoffs for Hi-C to output significant domains.\n"\
-        "Default is not. Set this option to enable, cutoffs will be more loose."
     )
     callDomains.add_argument(
         "-strict",
@@ -3839,7 +3829,7 @@ def main():
     #16. call domains
     if cmd == "callDomains":
         start = datetime.now()
-        report = "Command: cLoops2 {} -d {} -cut {} -mcut {} -p {} -o {} -bs {} -ws {} -hic {} -strict {}".format(
+        report = "Command: cLoops2 {} -d {} -cut {} -mcut {} -p {} -o {} -bs {} -ws {} -strict {}".format(
             cmd, 
             cliParser.predir, 
             cliParser.cut, 
@@ -3848,7 +3838,6 @@ def main():
             cliParser.fnOut,
             cliParser.binSize, 
             cliParser.winSize, 
-            cliParser.hic,
             cliParser.strict,
         )
         logger.info(report)
@@ -3874,7 +3863,6 @@ def main():
             cut=cliParser.cut,
             mcut=cliParser.mcut,
             cpu=cliParser.cpu,
-            hic=cliParser.hic,
             strict=cliParser.strict,
             )
 

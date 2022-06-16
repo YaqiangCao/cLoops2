@@ -3,9 +3,8 @@
 """
 2020-03-08: update density
 2020-09-13: update multiple window size added
-2020-09-22: try to improve efficiency of function calcSS, by getting the whole chromosome contact matrix as sparse matrix. Seems sparse matrix will auto occupy multipe CPUs.
-2020-11-18: going to integrate insulation score for hic
 2022-05-19: fix small bugs
+2022-06-16: remove Hi-C support as not perform well
 """
 
 #sys
@@ -25,7 +24,7 @@ from cLoops2.cmat import getObsMat, xy2dict, dict2mat
 from cLoops2.settings import *
 
 
-def calcSS(f, bs=20000, winSize=500000, cut=0,mcut=-1,hic=False):
+def calcSS(f, bs=20000, winSize=500000, cut=0,mcut=-1):
     """
     Calculation of correlation matrix insulation score, output as .bedGraph file.
     @param bs: bin size
@@ -60,7 +59,6 @@ def calcSS(f, bs=20000, winSize=500000, cut=0,mcut=-1,hic=False):
         nmat = np.corrcoef(nmat)
         nmat = np.nan_to_num(nmat)
         nmat = nmat[int(nmat.shape[0] / 2) + 1:, :int(nmat.shape[1] / 2)]
-        #if hic == False:
         nmat[nmat < 0] = 0
         s = nmat.mean()
         ss.append(s)
@@ -161,7 +159,7 @@ def combineDoms(doms, doms2, lrcut=0.9):
     return doms
 
 
-def quantifyDom(f, doms, tot,cut=0,mcut=-1,hic=False,strict=False,tcut=1000):
+def quantifyDom(f, doms, tot,cut=0,mcut=-1,strict=False,tcut=1000):
     """
     Quantify domains
     """
@@ -192,8 +190,6 @@ def quantifyDom(f, doms, tot,cut=0,mcut=-1,hic=False,strict=False,tcut=1000):
             #too few reads
             if len(b) / (dom.end-dom.start) < md * 2:
                 continue
-            if hic==False and  e < 1:
-                continue 
         else:
             if len(b) / (dom.end-dom.start) < md :
                 continue
@@ -215,7 +211,6 @@ def callDomains(
         cut=0,
         mcut=-1,
         cpu=1,
-        hic=False,
         strict=False,
 ):
     """
@@ -238,7 +233,6 @@ def callDomains(
                 winSize=winSize,
                 cut=cut,
                 mcut=mcut,
-                hic=hic,
             ) for key in meta["data"]["cis"].keys())
             rs = []
             for d in ds:
@@ -257,7 +251,6 @@ def callDomains(
         tot,
         cut,
         mcut,
-        hic,
         strict,
     ) for key in doms.keys())
     doms = []
