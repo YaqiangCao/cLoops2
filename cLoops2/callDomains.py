@@ -184,6 +184,8 @@ def quantifyDom(f, doms, tot,cut=0,mcut=-1,strict=False,tcut=1000):
             e = len(b) / float(len(n))
         else:
             e = 100
+        if len(b) < len(n):
+            continue
         #not quite enriched
         #affect a lot
         if strict:
