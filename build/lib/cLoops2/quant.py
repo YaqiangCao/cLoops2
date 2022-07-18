@@ -154,7 +154,9 @@ def _quantLoops(key, loops, fixy, tot, pcut=0, mcut=-1, pseudo=1,offp=False):
         if offp:
             loop.FDR = 1
             loop.ES = 0
-            loop.density = 0
+            loop.density = float(
+                loop.rab) / (loop.x_end - loop.x_start + loop.y_end -
+                                 loop.y_start) / tot * 10.0**9
             loop.hypergeometric_p_value = 1
             loop.poisson_p_value = 1
             loop.binomial_p_value = 1
