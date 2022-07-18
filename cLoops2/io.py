@@ -915,7 +915,7 @@ def doms2txt(doms, fout):
         header = [
             "domainId", "chr", "start", "end", "length", "binSize","winSize",
             "segregationScore", "totalPETs", "withinDomainPETs",
-            "enrichmentScore","density"
+            "enrichmentScore","density","significant"
         ]
         fo.write("\t".join(header) + "\n")
         for i, dom in enumerate(doms):
@@ -936,6 +936,7 @@ def doms2txt(doms, fout):
                 dom.withinDomainPETs,
                 dom.enrichmentScore,
                 dom.density,
+                dom.significant,
             ]
             fo.write("\t".join(list(map(str, line))) + "\n")
 
@@ -947,10 +948,11 @@ def doms2bed(doms, fout):
     """
     with open(fout, "w") as fo:
         for i, dom in enumerate(doms):
-            info = "domain_%s;%sbp;ES:%.3f;SS:%.3f;binSize:%s;winSize:%s" % (
-                i, dom.length, dom.enrichmentScore, dom.ss, dom.bs,dom.ws)
-            line = [dom.chrom, dom.start, dom.end, info]
-            fo.write("\t".join(list(map(str, line))) + "\n")
+            if dom.significant:
+                info = "domain_%s;%sbp;ES:%.3f;SS:%.3f;binSize:%s;winSize:%s" % (
+                    i, dom.length, dom.enrichmentScore, dom.ss, dom.bs,dom.ws)
+                line = [dom.chrom, dom.start, dom.end, info]
+                fo.write("\t".join(list(map(str, line))) + "\n")
 
 
 def parseTxt2Domains(f):
@@ -970,6 +972,7 @@ def parseTxt2Domains(f):
         domain.start = int(float(line[2]))
         domain.end = int(float(line[3]))
         domain.length = domain.end - domain.start
+        domain.significant = "NO-TEST"
         key = domain.chrom + "-" + domain.chrom
         domains.setdefault(key, []).append(domain)
     return domains

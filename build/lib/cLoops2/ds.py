@@ -344,7 +344,8 @@ class Domain(object):
         "totalPETs",
         "withinDomainPETs",
         "enrichmentScore",
-        "density", #similar to RPKM
+        "density", #similar to RPKM,
+        "significant",
     ]
 
     def __str__(self):

@@ -106,6 +106,7 @@ def callDom(key, rs, bs, ws, cut=0, lencut=10):
                 dom.ss = np.mean([t[-1] for t in rs[i:p + 1]])
                 dom.bs = bs
                 dom.ws = ws
+                dom.significant = True
                 doms.append(dom)
             i = j
         else:
@@ -179,22 +180,22 @@ def quantifyDom(f, doms, tot,cut=0,mcut=-1,strict=False,tcut=1000):
         b = xy.queryPeakBoth(dom.start, dom.end)
         n = t.difference(b)
         if len(b) < tcut:
-            continue
+            dom.significant = False
         if len(n) > 0:
             e = len(b) / float(len(n))
         else:
             e = 100
         if len(b) < len(n):
-            continue
+            dom.significant = False
         #not quite enriched
         #affect a lot
         if strict:
             #too few reads
-            if len(b) / (dom.end-dom.start) < md * 2:
-                continue
+            if len(b) / dom.length < md * 2:
+                dom.significant = False
         else:
-            if len(b) / (dom.end-dom.start) < md :
-                continue
+            if len(b) / dom.length < md :
+                dom.significant = False
         dom.totalPETs = len(b) + len(n)
         dom.withinDomainPETs = len(b)
         dom.enrichmentScore = e
