@@ -600,7 +600,8 @@ def plotRegion(ax, rs, start, end, colori=1, lencut=1000, label=""):
                               0.6,
                               fill=True,
                               color=colors[colori],
-                              alpha=0.8)
+                              alpha=0.8
+                              )
         else:
             p = patches.Rectangle((r[0], 0.2),
                               r[1] - r[0],

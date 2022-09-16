@@ -26,7 +26,7 @@ from cLoops2.settings import *
 
 def calcSS(f, bs=20000, winSize=500000, cut=0,mcut=-1):
     """
-    Calculation of correlation matrix insulation score, output as .bedGraph file.
+    Calculation of segregation score, output as .bedGraph file.
     @param bs: bin size
     @param winSize: sliding matrix width half size
     @param cut: distance cutoff for PETs
