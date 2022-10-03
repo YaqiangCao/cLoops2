@@ -1,10 +1,14 @@
-#!python
+#!/home/caoy7/anaconda2/envs/pipi/bin/python
 #--coding:utf-8 --
 """
-getDI.py
-Calculating the Directionality Index according to the paper of Topological Domains in Mammalian Genomes Identified by Analysis of Chromatin Interactions
-DI =  (B-A) / (|B-A|) * ( (A-E)**2 + (B-E)**2 ) / E
-E = (A+B)/2
+getIS.py
+cLoops2 calcIS.py caculation the insulation score according to https://www.nature.com/articles/nature20158
+X(x,s) = number of contacts between any pair of elements in the interval (x − s, x + s )
+
+#X(x,s) = - log2{(X(x,s) − X(x + s/2,s/2) − X(x − s/2, s/2))/X(x,s)/0.5}
+modified as X(x,s) = (X(x,s) − X(x + s/2,s/2) − X(x − s/2, s/2))/(X(x+s/2,s/2)+X(x-s/2,s/2)
+directly compare the spanning and independent reads
+
 """
 __date__ = "2019-09-11"
 __modified__ = ""
@@ -33,12 +37,13 @@ def help():
     Create the command line interface for the script.
     """
     description = """
-        Caculate the Directionality Index for a specific region. 
-        The output .bdg is the bedGraph result for the regions with Directionality Index.
-        DI is defined as accroding to the formula in following paper:
-        Topological Domains in Mammalian Genomes Identified by Analysis of Chromatin Interactions
+        Caculate the insulation score for a specific region. 
+        The output .bdg is the bedGraph result for the regions with insulation score.
+        IS is defined as accroding to the formula in following paper:
+        Capturing pairwise and multi-way chromosomal conformations using chromosomal walks
+
         Example:
-        getDI.py -f GM12878_Trac/chr21-chr21.ixy -o GM12878_Trac_chr21
+        getIS.py -f GM12878_Trac/chr21-chr21.ixy -o GM12878_Trac_chr21
         """
     parser = argparse.ArgumentParser(description=description,
                                      formatter_class=RawTextHelpFormatter)
@@ -93,7 +98,7 @@ def help():
     return op
 
 
-def calcDI(f, fout, start=-1, end=-1, bs=10000, step=100000):
+def calcIS(f, fout, start=-1, end=-1, bs=10000, step=100000):
     """
     Calculation of insulation score, output as .bedGraph file.
     """
@@ -102,7 +107,7 @@ def calcDI(f, fout, start=-1, end=-1, bs=10000, step=100000):
     xy = XY(mat[:, 0], mat[:, 1])
     if key[0] != key[1]:
         print(
-            "DI can be only caculated for intra-chromosomal interactions. Return."
+            "IS can be only caculated for intra-chromosomal interactions. Return."
         )
         return
     if start == -1:
@@ -111,27 +116,34 @@ def calcDI(f, fout, start=-1, end=-1, bs=10000, step=100000):
         end = np.max(xy.ys) - step
     bins = int((end - start) / bs)
     print("caculating from %s to %s of %s bins" % (start, end, bins))
-    ds = []
     ss = []
+    ds = []
+    for i in tqdm(range(bins)):
+        x = start + i * bs
+        xc = len(xy.queryPeakBoth(x - step, x + step))
+        if xc == 0:
+            continue
+        xcright = len(xy.queryPeakBoth(x, x + step))
+        xcleft = len(xy.queryPeakBoth(x - step, x))
+        if xcright + xcleft == 0:
+            continue
+        xcbridge = xc - xcright - xcleft
+        s = xcbridge / (xcright + xcleft)
+        line = [key[0], x, x + bs, s]
+        ds.append( line )
+        ss.append( s ) 
+    ss = np.array(ss)
+    ss = (ss - np.mean(ss))/np.std(ss)
+    for i in range(len(ds)):
+        ds[i][-1] = ss[i]
     with open(fout + ".bdg", "w") as fo:
-        for i in tqdm(range(bins)):
-            x = start + i * bs
-            a = len(xy.queryPeakBoth(x - step, x))
-            b = len(xy.queryPeakBoth(x, x + step))
-            e = (a + b) / 2
-            if e == 0:
-                continue
-            if a == b:
-                di = 0
-            else:
-                di = (b - a) / np.abs(b - a) * ((a - e)**2 + (b - e)**2) / e
-            line = [key[0], x, x + bs, di]
+        for line in ds:
             fo.write("\t".join(list(map(str, line))) + "\n")
 
 
 def main():
     op = help()
-    calcDI(op.fixy,
+    calcIS(op.fixy,
            op.output,
            start=op.start,
            end=op.end,

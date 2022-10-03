@@ -397,6 +397,7 @@ def montage(
             ns.sort()
             data = data.loc[ns, ns]
             data = data.astype("float")
+            data.to_csv("%s_counts.txt" % fout, sep="\t")
             data = data / tot
             data.to_csv("%s_interactionPETsPerMillion.txt" % fout, sep="\t")
             for na in data.index:

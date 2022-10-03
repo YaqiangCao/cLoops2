@@ -599,8 +599,7 @@ def plotRegion(ax, rs, start, end, colori=1, lencut=1000, label=""):
                               r[1] - r[0],
                               0.6,
                               fill=True,
-                              #color=colors[colori],
-                              color="k",
+                              color=colors[colori],
                               alpha=0.8
                               )
         else:

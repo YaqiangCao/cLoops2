@@ -4,7 +4,7 @@
 2020-03-08: update density
 2020-09-13: update multiple window size added
 2022-05-19: fix small bugs
-2022-06-16: remove Hi-C support as not perform well
+2022-06-16: remove Hi-C support as not perform well due to cutoffs
 """
 
 #sys
@@ -26,7 +26,7 @@ from cLoops2.settings import *
 
 def calcSS(f, bs=20000, winSize=500000, cut=0,mcut=-1):
     """
-    Calculation of correlation matrix insulation score, output as .bedGraph file.
+    Calculation of segregation score, output as .bedGraph file.
     @param bs: bin size
     @param winSize: sliding matrix width half size
     @param cut: distance cutoff for PETs
