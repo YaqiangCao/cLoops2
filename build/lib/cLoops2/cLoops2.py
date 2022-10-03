@@ -8,7 +8,7 @@ __author__ = "CAO Yaqiang"
 __date__ = ""
 __modified__ = ""
 __email__ = "caoyaqiang0410@gmail.com"
-__version__ = "0.0.3"
+__version__ = "0.0.4"
 
 #sys library
 import warnings
