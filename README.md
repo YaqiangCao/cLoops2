@@ -1989,11 +1989,11 @@ No tested bugs needed warning.
 --------
 --------
 ## cLoops2 citations
-1. Cao, Yaqiang, et al. "Hi-TrAC reveals fractal nesting of super-enhancers" bioRxiv(2022). Domain-calling of Hi-TrAC, most of the data visualization. 
-1. Liu, Shuai, et al. "Hi-TrAC reveals fine-scale chromatin structures organized by transcription factors." bioRxiv (2022). Loop-calling of Hi-TrAC, most of the data visualization. 
-1. Fang, Difeng, et al. “Differential regulation of transcription factor T-bet induction during NK cell development and T helper-1 cell differentiation.” Immunity (2022).  Peak-calling of ChIP-seq data. 
-1. Zhen, Tao, et al. “RUNX1 and CBFβ-SMMHC transactivate target genes together in abnormal myeloid progenitors for leukemia development.” Blood (2020). Peak-calling of ChIC-seq data. 
-1. Ramirez, Ricardo N., et al. "FoxP3 associates with enhancer-promoter loops to regulate Treg-specific gene expression." Science Immunology 7.67 (2022): eabj9836. Utility script. 
+1. Cao, Yaqiang, et al. "Hi-TrAC reveals fractal nesting of super-enhancers" bioRxiv(2022).  ***Domain-calling of Hi-TrAC, most of the data visualization*** 
+1. Liu, Shuai, et al. "Hi-TrAC reveals fine-scale chromatin structures organized by transcription factors." bioRxiv (2022). ***Loop-calling of Hi-TrAC, most of the data visualization*** 
+1. Fang, Difeng, et al. “Differential regulation of transcription factor T-bet induction during NK cell development and T helper-1 cell differentiation.” Immunity (2022).  ***Peak-calling of ChIP-seq data*** 
+1. Zhen, Tao, et al. “RUNX1 and CBFβ-SMMHC transactivate target genes together in abnormal myeloid progenitors for leukemia development.” Blood (2020). ***Peak-calling of ChIC-seq data*** 
+1. Ramirez, Ricardo N., et al. "FoxP3 associates with enhancer-promoter loops to regulate Treg-specific gene expression." Science Immunology 7.67 (2022): eabj9836. ***Utility script*** 
 
 --------
 --------
