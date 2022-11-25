@@ -1989,6 +1989,7 @@ No tested bugs needed warning.
 --------
 --------
 ## cLoops2 citations
+1. Liang, Qianqian, et al. "Essential role of MESP1-RING1A complex in cardiac differentiation." Developmental Cell 57.22 (2022): 2533-2549. ***sample-wise similarities estimation, loop-calling for Hi-C data***
 1. Cao, Yaqiang, et al. "Hi-TrAC reveals fractal nesting of super-enhancers" bioRxiv(2022).  ***Domain-calling of Hi-TrAC, most of the data visualization*** 
 1. Liu, Shuai, et al. "Hi-TrAC reveals fine-scale chromatin structures organized by transcription factors." bioRxiv (2022). ***Loop-calling of Hi-TrAC, most of the data visualization*** 
 1. Fang, Difeng, et al. “Differential regulation of transcription factor T-bet induction during NK cell development and T helper-1 cell differentiation.” Immunity (2022).  ***Peak-calling of ChIP-seq data*** 
