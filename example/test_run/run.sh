@@ -115,3 +115,6 @@ python plotNetExample.py
 ############analysis related functions##########
 #get the singal distribution
 getSigDist.py -d gm -o gm -r 5 -plot -log
+
+#get the segregation score
+getSS.py -f gm/chr21-chr21.ixy -o gm_chr21 

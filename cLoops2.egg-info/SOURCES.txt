@@ -163,6 +163,7 @@ scripts/getIS.py
 scripts/getIntDensity.py
 scripts/getLocalIDS.py
 scripts/getPETsAno.py
+scripts/getSS.py
 scripts/getSigDist.py
 scripts/getSigEnrich.py
 scripts/hicpro2bedpe.py

@@ -94,16 +94,28 @@ def help():
         help=
         "The upstream and downstream extension to caculate insulaiton score, default is 100000 bp."
     )
+    parser.add_argument(
+        "-cut",
+        dest="cut",
+        type=int,
+        default=0,
+        help="PETs with distance > cut will be kept, default is 0.")
+    parser.add_argument(
+        "-mcut",
+        dest="mcut",
+        type=int,
+        default=-1,
+        help="PETs with distance < mcut will be kept, default is -1 no limit.")
     op = parser.parse_args()
     return op
 
 
-def calcIS(f, fout, start=-1, end=-1, bs=10000, step=100000):
+def calcIS(f, fout, start=-1, end=-1, bs=10000, step=100000,cut=0,mcut=-1):
     """
     Calculation of insulation score, output as .bedGraph file.
     """
     print("loading %s" % f)
-    key, mat = parseIxy(f, cut=0)
+    key, mat = parseIxy(f, cut=cut,mcut=mcut)
     xy = XY(mat[:, 0], mat[:, 1])
     if key[0] != key[1]:
         print(
@@ -148,7 +160,10 @@ def main():
            start=op.start,
            end=op.end,
            bs=op.binSize,
-           step=op.step)
+           step=op.step,
+           cut=op.cut,
+           mcut=op.mcut,
+           )
 
 
 if __name__ == "__main__":

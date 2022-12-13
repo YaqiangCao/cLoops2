@@ -1,5 +1,336 @@
-2022-05-27 20:17:01 cLoops2 INFO     Command: cLoops2 qc -f ../data/GM_HiTrac_bio1.bedpe.gz,../data/GM_HiTrac_bio2.bedpe.gz,../data/K562_HiTrac_bio1.bedpe.gz,../data/K562_HiTrac_bio2.bedpe.gz -o test_step1 -p 4 
-2022-05-27 20:17:06 cLoops2 INFO     cLoops2 qc finished. Used time: 0:00:05.072434.
+2022-10-18 13:36:45 cLoops2 INFO     Command: cLoops2 qc -f ../data/GM_HiTrac_bio1.bedpe.gz,../data/GM_HiTrac_bio2.bedpe.gz,../data/K562_HiTrac_bio1.bedpe.gz,../data/K562_HiTrac_bio2.bedpe.gz -o test_step1 -p 4 
+2022-10-18 13:36:56 cLoops2 INFO     cLoops2 qc finished. Used time: 0:00:11.454660.
+
+
+
+2022-10-18 13:37:00 cLoops2 INFO     Command: cLoops2 pre -f ../data/GM_HiTrac_bio1.bedpe.gz -o gm_bio1 -p 1 -c chr21 -cut 0 -mcut -1 -mapq 10 -trans False -format bedpe
+2022-10-18 13:37:00 cLoops2 INFO     Parsing PETs from ../data/GM_HiTrac_bio1.bedpe.gz, requiring initial distance cutoff >0 and <-1
+2022-10-18 13:37:13 cLoops2 INFO     Totaly 660024 PETs in target chromosomes from ../data/GM_HiTrac_bio1.bedpe.gz, in which 653771 high quality unqiue PETs
+2022-10-18 13:37:13 cLoops2 INFO     writing .ixy files
+2022-10-18 13:37:17 cLoops2 INFO     cLoops2 pre finished. Used time: 0:00:17.034785.
+
+
+
+2022-10-18 13:37:20 cLoops2 INFO     Command: cLoops2 pre -f ../data/GM_HiTrac_bio2.bedpe.gz -o gm_bio2 -p 1 -c chr21 -cut 0 -mcut -1 -mapq 10 -trans False -format bedpe
+2022-10-18 13:37:20 cLoops2 INFO     Parsing PETs from ../data/GM_HiTrac_bio2.bedpe.gz, requiring initial distance cutoff >0 and <-1
+2022-10-18 13:37:30 cLoops2 INFO     Totaly 509304 PETs in target chromosomes from ../data/GM_HiTrac_bio2.bedpe.gz, in which 504994 high quality unqiue PETs
+2022-10-18 13:37:30 cLoops2 INFO     writing .ixy files
+2022-10-18 13:37:33 cLoops2 INFO     cLoops2 pre finished. Used time: 0:00:12.818297.
+
+
+
+2022-10-18 13:37:37 cLoops2 INFO     Command: cLoops2 pre -f ../data/GM_HiTrac_bio1.bedpe.gz,../data/GM_HiTrac_bio2.bedpe.gz -o gm -p 1 -c chr21 -cut 0 -mcut -1 -mapq 10 -trans False -format bedpe
+2022-10-18 13:37:37 cLoops2 INFO     Parsing PETs from ../data/GM_HiTrac_bio1.bedpe.gz, requiring initial distance cutoff >0 and <-1
+2022-10-18 13:37:49 cLoops2 INFO     Parsing PETs from ../data/GM_HiTrac_bio2.bedpe.gz, requiring initial distance cutoff >0 and <-1
+2022-10-18 13:38:01 cLoops2 INFO     Totaly 1169328 PETs in target chromosomes from ../data/GM_HiTrac_bio1.bedpe.gz,../data/GM_HiTrac_bio2.bedpe.gz, in which 1148724 high quality unqiue PETs
+2022-10-18 13:38:01 cLoops2 INFO     writing .ixy files
+2022-10-18 13:38:07 cLoops2 INFO     cLoops2 pre finished. Used time: 0:00:30.189170.
+
+
+
+2022-10-18 13:38:10 cLoops2 INFO     Command: cLoops2 pre -f ../data/K562_HiTrac_bio1.bedpe.gz -o k562_bio1 -p 1 -c chr21 -cut 0 -mcut -1 -mapq 10 -trans False -format bedpe
+2022-10-18 13:38:10 cLoops2 INFO     Parsing PETs from ../data/K562_HiTrac_bio1.bedpe.gz, requiring initial distance cutoff >0 and <-1
+2022-10-18 13:38:19 cLoops2 INFO     Totaly 480121 PETs in target chromosomes from ../data/K562_HiTrac_bio1.bedpe.gz, in which 473446 high quality unqiue PETs
+2022-10-18 13:38:19 cLoops2 INFO     writing .ixy files
+2022-10-18 13:38:22 cLoops2 INFO     cLoops2 pre finished. Used time: 0:00:11.694464.
+
+
+
+2022-10-18 13:38:26 cLoops2 INFO     Command: cLoops2 pre -f ../data/K562_HiTrac_bio2.bedpe.gz -o k562_bio2 -p 1 -c chr21 -cut 0 -mcut -1 -mapq 10 -trans False -format bedpe
+2022-10-18 13:38:26 cLoops2 INFO     Parsing PETs from ../data/K562_HiTrac_bio2.bedpe.gz, requiring initial distance cutoff >0 and <-1
+2022-10-18 13:38:33 cLoops2 INFO     Totaly 329943 PETs in target chromosomes from ../data/K562_HiTrac_bio2.bedpe.gz, in which 326030 high quality unqiue PETs
+2022-10-18 13:38:33 cLoops2 INFO     writing .ixy files
+2022-10-18 13:38:35 cLoops2 INFO     cLoops2 pre finished. Used time: 0:00:09.397268.
+
+
+
+2022-10-18 13:38:39 cLoops2 INFO     Command: cLoops2 combine -ds k562_bio1,k562_bio2 -o k562 -keep 1 -cpu 1
+2022-10-18 13:38:39 cLoops2 INFO     Combining intra-chromosomal PETs.
+2022-10-18 13:38:43 cLoops2 INFO     Combining inter-chromosomal PETs.
+2022-10-18 13:38:43 cLoops2 INFO     cLoops2 combine finished. Used time: 0:00:03.853163.
+
+
+
+2022-10-18 13:38:46 cLoops2 INFO     Command: cLoops2 estRes -d gm -o gm -p 10 -bs 5000,1000,200 -cut 0 -mcut -1
+2022-10-18 13:38:55 cLoops2 INFO     resolution 200:  88.96% contact matrix bins only contain singleton PET, singleton PETs ratio 75.41%.
+2022-10-18 13:39:02 cLoops2 INFO     resolution 1000:  77.53% contact matrix bins only contain singleton PET, singleton PETs ratio 41.26%.
+2022-10-18 13:39:09 cLoops2 INFO     resolution 5000:  76.44% contact matrix bins only contain singleton PET, singleton PETs ratio 28.81%.
+2022-10-18 13:39:10 cLoops2 INFO     cLoops2 estRes finished. Used time: 0:00:23.394246.
+
+
+
+2022-10-18 13:39:13 cLoops2 INFO     Command: cLoops2 estRes -d k562 -o k562 -p 10 -bs 5000,1000,200 -cut 0 -mcut -1
+2022-10-18 13:39:19 cLoops2 INFO     resolution 200:  89.04% contact matrix bins only contain singleton PET, singleton PETs ratio 76.05%.
+2022-10-18 13:39:24 cLoops2 INFO     resolution 1000:  72.73% contact matrix bins only contain singleton PET, singleton PETs ratio 36.65%.
+2022-10-18 13:39:29 cLoops2 INFO     resolution 5000:  74.56% contact matrix bins only contain singleton PET, singleton PETs ratio 25.16%.
+2022-10-18 13:39:29 cLoops2 INFO     cLoops2 estRes finished. Used time: 0:00:16.136591.
+
+
+
+2022-10-18 13:39:33 cLoops2 INFO     Command: cLoops2 estDis -d gm -o gm -p 10 -bs 1000 -c  -cut 0 -mcut -1 -r 10 -plot True
+2022-10-18 13:39:49 numexpr.utils INFO     Note: NumExpr detected 64 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+2022-10-18 13:39:49 numexpr.utils INFO     NumExpr defaulting to 8 threads.
+2022-10-18 13:39:55 cLoops2 INFO     cLoops2 estDis finished. Used time: 0:00:22.247123.
+
+
+
+2022-10-18 13:39:58 cLoops2 INFO     Command: cLoops2 estSim -ds gm_bio1,gm_bio2,gm,k562_bio1,k562_bio2,k562 -o test_step4 -cpu 6 -cut 0 -mcut -1 -bs 1000 -m pcc -pcut 2 -n 2 -plot True
+2022-10-18 13:40:41 cLoops2 INFO     cLoops2 estSim finished. Used time: 0:00:42.562878.
+
+
+
+2022-10-18 13:40:44 cLoops2 INFO     Command: cLoops2 callPeaks -d gm -cut 0 -mcut 1000 -eps 50,100 -minPts 10 -pcut 0.01 -p 1 -o gm -bgd  -bgm lf -pseudo 1 -sen False -split True -splitExt 50
+2022-10-18 13:40:47 cLoops2 INFO     Clustering chr21 to find candidate peaks using eps as 50, minPts as 10.
+2022-10-18 13:40:57 numexpr.utils INFO     Note: NumExpr detected 64 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+2022-10-18 13:40:57 numexpr.utils INFO     NumExpr defaulting to 8 threads.
+2022-10-18 13:41:12 cLoops2 INFO     Clustering chr21 finished. Estimated 46202 PETs in candidate 2125 peaks.
+2022-10-18 13:41:12 cLoops2 INFO     Stiching chr21 candidate close 2125 peaks.
+2022-10-18 13:41:13 cLoops2 INFO     Merged chr21 1836 peaks
+2022-10-18 13:41:16 cLoops2 INFO     Clustering chr21 to find candidate peaks using eps as 100, minPts as 10.
+2022-10-18 13:41:56 cLoops2 INFO     Clustering chr21 finished. Estimated 144532 PETs in candidate 7206 peaks.
+2022-10-18 13:41:56 cLoops2 INFO     Stiching chr21 candidate close 7206 peaks.
+2022-10-18 13:41:57 cLoops2 INFO     Merged chr21 4725 peaks
+2022-10-18 13:42:03 cLoops2 INFO     Estimating chr21 significance with /mnt/data/caoy7/code/cLoops2/example/test_run/gm/chr21-chr21.ixy, and control None
+2022-10-18 13:42:23 cLoops2 INFO     Getting the chr21 most significant peaks for overlapped peaks.
+2022-10-18 13:42:46 cLoops2 INFO     Calling significant peaks finished for chr21, 4069 non-overlapped peaks. 
+2022-10-18 13:42:46 cLoops2 INFO     Carrying Bonferroni correction for p-values and further filtering.
+2022-10-18 13:42:46 cLoops2 INFO     Output 1444 peaks to gm_peaks.txt and gm_peaks.bed
+2022-10-18 13:42:46 cLoops2 INFO     cLoops2 callPeaks finished for gm. Used time: 0:02:01.627054.
+
+
+
+2022-10-18 13:42:50 cLoops2 INFO     Command cLoops2 agg -d gm -o gm -cut 0 -mcut -1 -p 1 -skipZeros True -peaks gm_peaks.bed -peak_ext 2500 -peak_bins 200 -peak_norm True -loops  -loop_ext 10 -loop_cut 0 -loop_norm False -loop_vmin None -loop_vmax None -viewPoints  -viewPointUp 100000 -viewPointDown 100000 -viewPointBs 1000 -viewPoint_norm False -viewPoint_vmin None -viewPoint_vmax None -twoAnchors  -twoAnchor_ext 0.1 -twoAnchor_vmin None -twoAnchor_vmax None -domains  -domain_ext 0.5 -domain_vmin None -domain_vmax None -bws  -1D False
+2022-10-18 13:43:07 numexpr.utils INFO     Note: NumExpr detected 64 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+2022-10-18 13:43:07 numexpr.utils INFO     NumExpr defaulting to 8 threads.
+2022-10-18 13:43:08 cLoops2 INFO     1444 RPM normalized 1D signal around anchors saved to gm_aggPeaks.txt
+2022-10-18 13:43:17 cLoops2 INFO     cLoops2 agg finished. Used time: 0:00:27.753147.
+
+
+
+2022-10-18 13:43:21 cLoops2 INFO     Command cLoops2 agg -d gm -o gm -cut 0 -mcut -1 -p 1 -skipZeros False -peaks  -peak_ext 5000 -peak_bins 100 -peak_norm False -loops  -loop_ext 10 -loop_cut 0 -loop_norm False -loop_vmin None -loop_vmax None -viewPoints gm_peaks.bed -viewPointUp 20000 -viewPointDown 30000 -viewPointBs 1000 -viewPoint_norm False -viewPoint_vmin None -viewPoint_vmax None -twoAnchors  -twoAnchor_ext 0.1 -twoAnchor_vmin None -twoAnchor_vmax None -domains  -domain_ext 0.5 -domain_vmin None -domain_vmax None -bws ../data/GM12878_CTCF_chr21.bw -1D True
+2022-10-18 13:45:29 cLoops2 INFO     1444 raw interaction contact matrix saved to gm_aggViewPoints.npz
+2022-10-18 13:45:29 numexpr.utils INFO     Note: NumExpr detected 64 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+2022-10-18 13:45:29 numexpr.utils INFO     NumExpr defaulting to 8 threads.
+2022-10-18 13:45:29 cLoops2 INFO     1444 RPM normalized 1D signal view points saved to gm_aggViewPoints_1D.txt
+2022-10-18 13:45:30 cLoops2 INFO     Getting the 1D bigWig signals.
+2022-10-18 13:45:40 cLoops2 INFO     cLoops2 agg finished. Used time: 0:02:19.302038.
+
+
+
+2022-10-18 13:45:43 cLoops2 INFO     Command: cLoops2 callLoops -d gm -eps 200,500,1000 -minPts 10 -p 1 -o gm -cut 0 -mcut -1 -filter False -i False -j True -w True -hic False -max_cut False -trans False -emPair False
+2022-10-18 13:45:44 cLoops2 INFO     Clustering chr21 and chr21 using eps 200, minPts 10,pre-set distance cutoff > 0
+2022-10-18 13:46:14 numexpr.utils INFO     Note: NumExpr detected 64 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+2022-10-18 13:46:14 numexpr.utils INFO     NumExpr defaulting to 8 threads.
+2022-10-18 13:46:25 cLoops2 INFO     Clustering chr21 and chr21 finished. Estimated 2599 candidate loops with 54812 PETs.
+2022-10-18 13:46:26 cLoops2 INFO     Clustering chr21 and chr21 using eps 500, minPts 10,pre-set distance cutoff > 0
+2022-10-18 13:47:49 cLoops2 INFO     Clustering chr21 and chr21 finished. Estimated 3047 candidate loops with 56646 PETs.
+2022-10-18 13:47:49 cLoops2 INFO     Clustering chr21 and chr21 using eps 1000, minPts 10,pre-set distance cutoff > 0
+2022-10-18 13:49:11 cLoops2 INFO     Clustering chr21 and chr21 finished. Estimated 1294 candidate loops with 28501 PETs.
+2022-10-18 13:49:11 cLoops2 INFO     Estimating loop statstical significance.
+2022-10-18 13:49:21 cLoops2 INFO     Estimate significance for 6923 candidate interactions in chr21-chr21 with 1148724 PETs distance > =0 and <=-1,requiring minPts >=10.
+2022-10-18 13:55:12 cLoops2 INFO     Selecting the most significant loops of overlapped ones. 
+2022-10-18 13:55:18 cLoops2 INFO     Output 1582 loops to gm_loops.txt
+2022-10-18 13:55:18 cLoops2 INFO     cLoops2 callLoops finished. Used time: 0:09:34.310382.
+
+
+
+2022-10-18 13:55:20 cLoops2 INFO     Command cLoops2 agg -d gm -o gm -cut 0 -mcut -1 -p 1 -skipZeros False -peaks  -peak_ext 5000 -peak_bins 100 -peak_norm False -loops gm_loops.txt -loop_ext 10 -loop_cut 0 -loop_norm True -loop_vmin None -loop_vmax None -viewPoints  -viewPointUp 100000 -viewPointDown 100000 -viewPointBs 1000 -viewPoint_norm False -viewPoint_vmin None -viewPoint_vmax None -twoAnchors  -twoAnchor_ext 0.1 -twoAnchor_vmin None -twoAnchor_vmax None -domains  -domain_ext 0.5 -domain_vmin None -domain_vmax None -bws ../data/GM12878_ATAC_chr21.bw,../data/GM12878_CTCF_chr21.bw -1D True
+2022-10-18 13:57:12 cLoops2 INFO     1582 raw interaction contact matrix saved to gm_aggLoops.npz
+2022-10-18 13:57:12 numexpr.utils INFO     Note: NumExpr detected 64 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+2022-10-18 13:57:12 numexpr.utils INFO     NumExpr defaulting to 8 threads.
+2022-10-18 13:57:12 cLoops2 INFO     3031 RPM normalized 1D signal around anchors saved to gm_aggLoops_1D.txt
+2022-10-18 13:57:12 cLoops2 INFO     Getting the 1D bigWig signals.
+2022-10-18 13:57:28 cLoops2 INFO     cLoops2 agg finished. Used time: 0:02:07.764009.
+
+
+
+2022-10-18 13:57:31 cLoops2 INFO     Command cLoops2 agg -d gm -o gm -cut 0 -mcut -1 -p 1 -skipZeros False -peaks  -peak_ext 5000 -peak_bins 100 -peak_norm False -loops  -loop_ext 10 -loop_cut 0 -loop_norm False -loop_vmin None -loop_vmax None -viewPoints  -viewPointUp 100000 -viewPointDown 100000 -viewPointBs 1000 -viewPoint_norm False -viewPoint_vmin None -viewPoint_vmax None -twoAnchors gm_loops.txt -twoAnchor_ext 0.5 -twoAnchor_vmin None -twoAnchor_vmax None -domains  -domain_ext 0.5 -domain_vmin None -domain_vmax None -bws ../data/GM12878_CTCF_chr21.bw,../data/GM12878_ATAC_chr21.bw -1D True
+2022-10-18 14:25:53 cLoops2 INFO     1582 raw interaction contact matrix saved to gm_aggTwoAnchors.npz
+2022-10-18 14:25:53 numexpr.utils INFO     Note: NumExpr detected 64 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+2022-10-18 14:25:53 numexpr.utils INFO     NumExpr defaulting to 8 threads.
+2022-10-18 14:25:53 cLoops2 INFO     1582 RPM normalized 1D signal around anchors saved to gm_aggTwoAnchors_1D.txt
+2022-10-18 14:25:54 cLoops2 INFO     Getting the 1D bigWig signals.
+2022-10-18 14:26:18 cLoops2 INFO     cLoops2 agg finished. Used time: 0:28:46.337608.
+
+
+
+2022-10-18 14:26:21 cLoops2 INFO     Command: cLoops2 callDomains -d gm -cut 0 -mcut -1 -p 1 -o gm -bs 5000 -ws 100000,250000 -strict False
+2022-10-18 14:27:09 cLoops2 INFO     cLoops2 callDomains finished. Used time: 0:00:47.507103.
+
+
+
+2022-10-18 14:27:13 cLoops2 INFO     Command cLoops2 agg -d gm -o gm -cut 0 -mcut -1 -p 1 -skipZeros False -peaks  -peak_ext 5000 -peak_bins 100 -peak_norm False -loops  -loop_ext 10 -loop_cut 0 -loop_norm False -loop_vmin None -loop_vmax None -viewPoints  -viewPointUp 100000 -viewPointDown 100000 -viewPointBs 1000 -viewPoint_norm False -viewPoint_vmin None -viewPoint_vmax None -twoAnchors  -twoAnchor_ext 0.1 -twoAnchor_vmin None -twoAnchor_vmax None -domains gm_domains.bed -domain_ext 0.5 -domain_vmin None -domain_vmax None -bws ../data/GM12878_CTCF_chr21.bw,gm_domains_SS_bs5k_ws100k.bw,gm_domains_SS_bs5k_ws250k.bw -1D True
+2022-10-18 14:29:39 cLoops2 INFO     103 raw interaction contact matrix saved to gm_aggDomains.npz
+2022-10-18 14:29:39 numexpr.utils INFO     Note: NumExpr detected 64 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+2022-10-18 14:29:39 numexpr.utils INFO     NumExpr defaulting to 8 threads.
+2022-10-18 14:29:39 cLoops2 INFO     103 RPM normalized 1D signal around domains saved to gm_aggDomains_1D.txt
+2022-10-18 14:29:51 cLoops2 INFO     cLoops2 agg finished. Used time: 0:02:38.590452.
+
+
+
+2022-10-18 14:29:54 cLoops2 INFO     Command cLoops2 plot -f ./gm/chr21-chr21.ixy -o gm_domain_example -chrom  -start 35800000 -end 36700000 -bs 5000 -cut 0 -mcut -1 -log True -m obs -corr True -triu False -norm False -bws ../data/GM12878_CTCF_chr21.bw -bwvs  -bwcs  -beds  -gtf  -1D True -1Dv  -loops  -loopCut 0 -domains gm_domains.bed -vmin None -vmax None -virtual4C False -view_start 0 -view_end -1 -4Cv  -arch False -aw 1 -ac 4 -aa 1 -scatter False -ss 1 -sa 1 -sc 0 -eig False -eig_r False -figWidth 4
+2022-10-18 14:30:00 cLoops2 INFO     cLoops2 plot finished. Used time: 0:00:06.096666.
+
+
+
+2022-10-18 14:30:02 cLoops2 INFO     Command cLoops2 plot -f gm/chr21-chr21.ixy -o gm_example -chrom  -start 38752604 -end 38839334 -bs 500 -cut 0 -mcut -1 -log True -m obs -corr False -triu True -norm False -bws ../data/GM12878_ATAC_chr21.bw,../data/GM12878_CTCF_chr21.bw -bwvs  -bwcs  -beds ../data/GM12878_RoadMap_hg38_Enh_chr21.bed,../data/GM12878_RoadMap_hg38_Tss_chr21.bed,gm_peaks.bed -gtf ../data/gencode_v30_chr21.gtf -1D True -1Dv  -loops gm_loops.txt -loopCut 0 -domains  -vmin None -vmax 1.0 -virtual4C False -view_start 0 -view_end -1 -4Cv  -arch False -aw 1 -ac 4 -aa 1 -scatter False -ss 1 -sa 1 -sc 0 -eig False -eig_r False -figWidth 4
+2022-10-18 14:30:08 cLoops2 INFO     cLoops2 plot finished. Used time: 0:00:05.892593.
+
+
+
+2022-10-18 14:30:11 cLoops2 INFO     Command cLoops2 plot -f  -o gm_example -chrom chr21 -start 38752604 -end 38839334 -bs 500 -cut 0 -mcut -1 -log False -m obs -corr False -triu False -norm False -bws ../data/GM12878_ATAC_chr21.bw,../data/GM12878_CTCF_chr21.bw -bwvs  -bwcs  -beds ../data/GM12878_RoadMap_hg38_Enh_chr21.bed,../data/GM12878_RoadMap_hg38_Tss_chr21.bed,gm_peaks.bed -gtf ../data/gencode_v30_chr21.gtf -1D True -1Dv  -loops gm_loops.txt -loopCut 0 -domains  -vmin None -vmax None -virtual4C False -view_start 0 -view_end -1 -4Cv  -arch False -aw 1 -ac 4 -aa 1 -scatter False -ss 1 -sa 1 -sc 0 -eig False -eig_r False -figWidth 4
+2022-10-18 14:30:13 cLoops2 INFO     Command: cLoops2 filterPETs -d gm -peak  -loop gm_loops.txt -p 1 -o gm_filtered -gap 1 -singleton False -bs 5000 -knn False -eps 1000 -minPts 5 -iv False -both False
+2022-10-18 14:30:21 cLoops2 INFO     cLoops2 filterPETs finished for gm_filtered. Used time: 0:00:08.405148.
+
+
+
+2022-10-18 14:30:24 cLoops2 INFO     Command cLoops2 plot -f gm_filtered/chr21-chr21.ixy -o gm_filtered_example -chrom  -start 38752604 -end 38839334 -bs 500 -cut 0 -mcut -1 -log True -m obs -corr False -triu True -norm False -bws  -bwvs  -bwcs  -beds  -gtf  -1D True -1Dv  -loops gm_loops.txt -loopCut 0 -domains  -vmin None -vmax None -virtual4C False -view_start 0 -view_end -1 -4Cv  -arch False -aw 1 -ac 4 -aa 1 -scatter False -ss 1 -sa 1 -sc 0 -eig False -eig_r False -figWidth 4
+2022-10-18 14:30:29 cLoops2 INFO     cLoops2 plot finished. Used time: 0:00:04.915783.
+
+
+
+2022-10-18 14:30:32 cLoops2 INFO     Command cLoops2 plot -f gm_filtered/chr21-chr21.ixy -o gm_example -chrom  -start 46228500 -end 46290000 -bs 5000 -cut 0 -mcut -1 -log False -m obs -corr False -triu False -norm False -bws  -bwvs  -bwcs  -beds  -gtf  -1D True -1Dv  -loops gm_loops.txt -loopCut 0 -domains  -vmin None -vmax None -virtual4C False -view_start 0 -view_end -1 -4Cv  -arch True -aw 0.5 -ac 4 -aa 1 -scatter False -ss 1 -sa 1 -sc 0 -eig False -eig_r False -figWidth 4
+2022-10-18 14:30:37 cLoops2 INFO     cLoops2 plot finished. Used time: 0:00:04.978058.
+
+
+
+2022-10-18 14:30:40 cLoops2 INFO     Command: cLoops2 samplePETs -d gm -o gm_samp -tot 780000 -p 1 
+2022-10-18 14:30:40 cLoops2 INFO     cLoops2 samplePETs finished. Used time: 0:00:00.163686.
+
+
+
+2022-10-18 14:30:43 cLoops2 INFO     Command: cLoops2 samplePETs -d k562 -o k562_samp -tot 780000 -p 1 
+2022-10-18 14:30:43 cLoops2 INFO     cLoops2 samplePETs finished. Used time: 0:00:00.110873.
+
+
+
+2022-10-18 14:30:46 cLoops2 INFO     Command: cLoops2 callLoops -d gm_samp -eps 200,500,1000 -minPts 10 -p 1 -o gm_samp -cut 0 -mcut -1 -filter False -i False -j True -w True -hic False -max_cut False -trans False -emPair False
+2022-10-18 14:30:46 cLoops2 INFO     Clustering chr21 and chr21 using eps 200, minPts 10,pre-set distance cutoff > 0
+2022-10-18 14:31:07 numexpr.utils INFO     Note: NumExpr detected 64 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+2022-10-18 14:31:07 numexpr.utils INFO     NumExpr defaulting to 8 threads.
+2022-10-18 14:31:11 cLoops2 INFO     Clustering chr21 and chr21 finished. Estimated 1301 candidate loops with 25139 PETs.
+2022-10-18 14:31:11 cLoops2 INFO     Clustering chr21 and chr21 using eps 500, minPts 10,pre-set distance cutoff > 0
+2022-10-18 14:31:53 cLoops2 INFO     Clustering chr21 and chr21 finished. Estimated 1994 candidate loops with 33896 PETs.
+2022-10-18 14:31:53 cLoops2 INFO     Clustering chr21 and chr21 using eps 1000, minPts 10,pre-set distance cutoff > 0
+2022-10-18 14:32:45 cLoops2 INFO     Clustering chr21 and chr21 finished. Estimated 879 candidate loops with 16517 PETs.
+2022-10-18 14:32:45 cLoops2 INFO     Estimating loop statstical significance.
+2022-10-18 14:32:50 cLoops2 INFO     Estimate significance for 4163 candidate interactions in chr21-chr21 with 780000 PETs distance > =0 and <=-1,requiring minPts >=10.
+2022-10-18 14:34:48 cLoops2 INFO     Selecting the most significant loops of overlapped ones. 
+2022-10-18 14:34:50 cLoops2 INFO     Output 874 loops to gm_samp_loops.txt
+2022-10-18 14:34:50 cLoops2 INFO     cLoops2 callLoops finished. Used time: 0:04:03.943726.
+
+
+
+2022-10-18 14:34:53 cLoops2 INFO     Command: cLoops2 callLoops -d k562_samp -eps 200,500,1000 -minPts 10 -p 1 -o k562_samp -cut 0 -mcut -1 -filter False -i False -j True -w True -hic False -max_cut False -trans False -emPair False
+2022-10-18 14:34:53 cLoops2 INFO     Clustering chr21 and chr21 using eps 200, minPts 10,pre-set distance cutoff > 0
+2022-10-18 14:35:18 numexpr.utils INFO     Note: NumExpr detected 64 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+2022-10-18 14:35:18 numexpr.utils INFO     NumExpr defaulting to 8 threads.
+2022-10-18 14:35:25 cLoops2 INFO     Clustering chr21 and chr21 finished. Estimated 1704 candidate loops with 34487 PETs.
+2022-10-18 14:35:25 cLoops2 INFO     Clustering chr21 and chr21 using eps 500, minPts 10,pre-set distance cutoff > 0
+2022-10-18 14:36:28 cLoops2 INFO     Clustering chr21 and chr21 finished. Estimated 2441 candidate loops with 42975 PETs.
+2022-10-18 14:36:28 cLoops2 INFO     Clustering chr21 and chr21 using eps 1000, minPts 10,pre-set distance cutoff > 0
+2022-10-18 14:37:35 cLoops2 INFO     Clustering chr21 and chr21 finished. Estimated 795 candidate loops with 15049 PETs.
+2022-10-18 14:37:35 cLoops2 INFO     Estimating loop statstical significance.
+2022-10-18 14:37:41 cLoops2 INFO     Estimate significance for 4932 candidate interactions in chr21-chr21 with 780000 PETs distance > =0 and <=-1,requiring minPts >=10.
+2022-10-18 14:40:14 cLoops2 INFO     Selecting the most significant loops of overlapped ones. 
+2022-10-18 14:40:18 cLoops2 INFO     Output 1034 loops to k562_samp_loops.txt
+2022-10-18 14:40:18 cLoops2 INFO     cLoops2 callLoops finished. Used time: 0:05:24.894215.
+
+
+
+2022-10-18 14:40:22 cLoops2 INFO     Command: cLoops2 callDiffLoops -tloop gm_samp_loops.txt -cloop k562_samp_loops.txt -td gm_samp -cd k562_samp -pcut 0.01 -igp False -noPCorr False -fdr 0.1 -o gm_vs_k562 -p 1 -j True -w True -customize False -cacut 0.0 -cmcut 0.0 -vmin None -vmax None -cmap summer
+2022-10-18 14:42:14 numexpr.utils INFO     Note: NumExpr detected 64 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+2022-10-18 14:42:14 numexpr.utils INFO     NumExpr defaulting to 8 threads.
+2022-10-18 14:43:16 cLoops2 INFO     cLoops2 callDiffLoops finished. Used time: 0:02:54.650929.
+
+
+
+2022-10-18 14:43:20 cLoops2 INFO     Command: cLoops2 dump -d gm -o gm -cut 0 -mcut -1 -bed True -bed_ext 50 -bedpe False -bedpe_ext 50 -hic False -hic_org hg38 -hic_res 1000,5000,25000,50000,100000,200000 -washU False -washU_ext 50 -ucsc False -ucsc_ext 50 -ucsc_cs  -bdg False -bdg_ext 50 -bdg_pe False -mat False -mat_res 5000 -mat_chrom  -mat_start -1 -mat_end -1 -log False -m obs -corr False -norm False -virtual4C False -virtual4C_chrom  -virtual4C_start -1 -virtual4C_end -1 -virtual4C_viewStart 0 -virtual4C_viewEnd -1
+2022-10-18 14:43:20 cLoops2 INFO     Converting gm to BED file.
+2022-10-18 14:43:37 cLoops2 INFO     Converting to BED file gm_reads.bed.gz finished.
+2022-10-18 14:43:37 cLoops2 INFO     cLoops2 dump finished. Used time: 0:00:17.580881.
+
+
+
+2022-10-18 14:43:41 cLoops2 INFO     Command: cLoops2 dump -d gm -o gm -cut 0 -mcut -1 -bed False -bed_ext 50 -bedpe True -bedpe_ext 50 -hic False -hic_org hg38 -hic_res 1000,5000,25000,50000,100000,200000 -washU False -washU_ext 50 -ucsc False -ucsc_ext 50 -ucsc_cs  -bdg False -bdg_ext 50 -bdg_pe False -mat False -mat_res 5000 -mat_chrom  -mat_start -1 -mat_end -1 -log False -m obs -corr False -norm False -virtual4C False -virtual4C_chrom  -virtual4C_start -1 -virtual4C_end -1 -virtual4C_viewStart 0 -virtual4C_viewEnd -1
+2022-10-18 14:43:41 cLoops2 INFO     Converting gm to BEDPE file.
+2022-10-18 14:44:07 cLoops2 INFO     Converting to BEDPE file gm_PETs.bedpe.gz finished.
+2022-10-18 14:44:07 cLoops2 INFO     cLoops2 dump finished. Used time: 0:00:26.582375.
+
+
+
+2022-10-18 14:44:11 cLoops2 INFO     Command: cLoops2 dump -d gm -o gm -cut 0 -mcut -1 -bed False -bed_ext 50 -bedpe False -bedpe_ext 50 -hic False -hic_org hg38 -hic_res 1000,5000,25000,50000,100000,200000 -washU False -washU_ext 50 -ucsc False -ucsc_ext 50 -ucsc_cs  -bdg True -bdg_ext 50 -bdg_pe False -mat False -mat_res 5000 -mat_chrom  -mat_start -1 -mat_end -1 -log False -m obs -corr False -norm False -virtual4C False -virtual4C_chrom  -virtual4C_start -1 -virtual4C_end -1 -virtual4C_viewStart 0 -virtual4C_viewEnd -1
+2022-10-18 14:44:11 cLoops2 INFO     Converting gm to bedGraph, normalized as RPM.
+2022-10-18 14:45:15 cLoops2 INFO     Converting to bedGraph track gm.bdg finished.
+2022-10-18 14:45:15 cLoops2 INFO     cLoops2 dump finished. Used time: 0:01:03.748530.
+
+
+
+2022-10-18 14:45:18 cLoops2 INFO     Command: cLoops2 dump -d gm -o gm -cut 0 -mcut -1 -bed False -bed_ext 50 -bedpe False -bedpe_ext 50 -hic False -hic_org hg38 -hic_res 1000,5000,25000,50000,100000,200000 -washU True -washU_ext 50 -ucsc False -ucsc_ext 50 -ucsc_cs  -bdg False -bdg_ext 50 -bdg_pe False -mat False -mat_res 5000 -mat_chrom  -mat_start -1 -mat_end -1 -log False -m obs -corr False -norm False -virtual4C False -virtual4C_chrom  -virtual4C_start -1 -virtual4C_end -1 -virtual4C_viewStart 0 -virtual4C_viewEnd -1
+2022-10-18 14:45:18 cLoops2 INFO     Converting gm to washU track.
+2022-10-18 14:45:55 cLoops2 INFO     Converting to washU long-range track gm_PETs_washU.txt finished.
+2022-10-18 14:45:55 cLoops2 INFO     cLoops2 dump finished. Used time: 0:00:37.373983.
+
+
+
+2022-10-18 14:45:59 cLoops2 INFO     Command: cLoops2 dump -d gm -o gm -cut 0 -mcut -1 -bed False -bed_ext 50 -bedpe False -bedpe_ext 50 -hic True -hic_org hg38 -hic_res 200000,25000,5000 -washU False -washU_ext 50 -ucsc False -ucsc_ext 50 -ucsc_cs  -bdg False -bdg_ext 50 -bdg_pe False -mat False -mat_res 5000 -mat_chrom  -mat_start -1 -mat_end -1 -log False -m obs -corr False -norm False -virtual4C False -virtual4C_chrom  -virtual4C_start -1 -virtual4C_end -1 -virtual4C_viewStart 0 -virtual4C_viewEnd -1
+2022-10-18 14:45:59 cLoops2 INFO     Converting gm to .hic file which could be loaded in juicebox
+2022-10-18 14:46:39 cLoops2 INFO     Converting to juicer's hic file gm finished.
+2022-10-18 14:46:39 cLoops2 INFO     cLoops2 dump finished. Used time: 0:00:40.563559.
+
+
+
+2022-10-18 14:46:43 cLoops2 INFO     Command: cLoops2 dump -d gm -o gm -cut 0 -mcut -1 -bed False -bed_ext 50 -bedpe False -bedpe_ext 50 -hic False -hic_org hg38 -hic_res 1000,5000,25000,50000,100000,200000 -washU False -washU_ext 50 -ucsc False -ucsc_ext 50 -ucsc_cs  -bdg False -bdg_ext 50 -bdg_pe False -mat True -mat_res 10000 -mat_chrom chr21-chr21 -mat_start 36000000 -mat_end 40000000 -log True -m obs -corr True -norm True -virtual4C False -virtual4C_chrom  -virtual4C_start -1 -virtual4C_end -1 -virtual4C_viewStart 0 -virtual4C_viewEnd -1
+2022-10-18 14:46:45 cLoops2 INFO     Converting to contact matrix txt gm_cmat.txt finished.
+2022-10-18 14:46:45 cLoops2 INFO     cLoops2 dump finished. Used time: 0:00:01.751711.
+
+
+
+2022-10-18 14:46:48 cLoops2 INFO     Command cLoops2 quant -d k562 -o k562_gm -cut 0 -mcut -1 -p 1 -peaks gm_peaks.bed -loops  -offp False -domains  -domain_bs 10000 -domain_ws 500000 -domain_bdg False
+2022-10-18 14:46:57 cLoops2 INFO     cLoops2 quant finished. Used time: 0:00:08.386418.
+
+
+
+2022-10-18 14:47:00 cLoops2 INFO     Command cLoops2 quant -d k562 -o k562_gm -cut 0 -mcut -1 -p 1 -peaks  -loops gm_loops.txt -offp False -domains  -domain_bs 10000 -domain_ws 500000 -domain_bdg False
+2022-10-18 14:48:15 cLoops2 INFO     cLoops2 quant finished. Used time: 0:01:15.347282.
+
+
+
+2022-10-18 14:48:18 cLoops2 INFO     Command cLoops2 quant -d k562 -o k562_gm -cut 0 -mcut -1 -p 1 -peaks  -loops  -offp False -domains gm_domains.txt -domain_bs 5000 -domain_ws 100000 -domain_bdg False
+2022-10-18 14:48:36 cLoops2 INFO     cLoops2 quant finished. Used time: 0:00:18.174183.
+
+
+
+2022-10-18 14:48:39 cLoops2 INFO     Command cLoops2 montage -f ./gm_samp/chr21-chr21.ixy -bed ../data/runx1.bed -ext 2.0 -o gm_runx1_all -cut 0 -mcut -1 -simple True -viewPoint  -vmin None -vmax 500.0 -ppmw 0.05 -aw 1 -no1D False
+2022-10-18 14:48:56 numexpr.utils INFO     Note: NumExpr detected 64 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+2022-10-18 14:48:56 numexpr.utils INFO     NumExpr defaulting to 8 threads.
+2022-10-18 15:34:03 cLoops2 INFO     cLoops2 montage finished. Used time: 0:45:23.548146.
+
+
+
+2022-10-18 15:34:08 cLoops2 INFO     Command cLoops2 montage -f ./k562_samp/chr21-chr21.ixy -bed ../data/runx1.bed -ext 2.0 -o k562_runx1_all -cut 0 -mcut -1 -simple True -viewPoint  -vmin None -vmax 500.0 -ppmw 0.05 -aw 1 -no1D False
+2022-10-18 15:34:24 numexpr.utils INFO     Note: NumExpr detected 64 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+2022-10-18 15:34:24 numexpr.utils INFO     NumExpr defaulting to 8 threads.
+2022-10-18 16:13:04 cLoops2 INFO     cLoops2 montage finished. Used time: 0:38:55.812557.
+
+
+
+2022-10-18 16:13:08 cLoops2 INFO     Command cLoops2 montage -f ./gm_samp/chr21-chr21.ixy -bed ../data/runx1.bed -ext 2.0 -o gm_runx1_vp -cut 0 -mcut -1 -simple True -viewPoint Promoter,E19 -vmin None -vmax 500.0 -ppmw 0.05 -aw 1 -no1D False
+2022-10-18 16:13:20 numexpr.utils INFO     Note: NumExpr detected 64 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+2022-10-18 16:13:20 numexpr.utils INFO     NumExpr defaulting to 8 threads.
+2022-10-18 16:45:36 cLoops2 INFO     cLoops2 montage finished. Used time: 0:32:28.692282.
+
+
+
+2022-10-18 16:45:40 cLoops2 INFO     Command cLoops2 montage -f ./k562_samp/chr21-chr21.ixy -bed ../data/runx1.bed -ext 2.0 -o k562_runx1_vp -cut 0 -mcut -1 -simple True -viewPoint Promoter,E19 -vmin None -vmax 500.0 -ppmw 0.05 -aw 1 -no1D False
+2022-10-18 16:45:50 numexpr.utils INFO     Note: NumExpr detected 64 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+2022-10-18 16:45:50 numexpr.utils INFO     NumExpr defaulting to 8 threads.
+2022-10-18 17:19:56 cLoops2 INFO     cLoops2 montage finished. Used time: 0:34:16.556455.
+
+
+
+2022-10-18 17:19:59 cLoops2 INFO     Command cLoops2 anaLoops -loops gm_loops.txt -o gm_loops -gtf ../data/gencode_v30_chr21.gtf -tid False -p 1 -pdis 2000 -net True -gap 1
+2022-10-18 17:20:06 cLoops2 INFO     cLoops2 anaLoops finished. Used time: 0:00:06.931207.
 
 
 
