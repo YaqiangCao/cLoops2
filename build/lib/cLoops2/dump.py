@@ -438,9 +438,16 @@ def ixy2bdg(
                 if cov[i] == False:  #find the non 0 start
                     i += 1
                     continue
+                j = i+1
+                while j < len(cov) - 1:
+                    if cov[j] != cov[i]:
+                        break
+                    j += 1
+                """
                 for j in range(i + 1, len(cov)):  #find the same value stop
                     if cov[j] != cov[i]:
                         break
+                """
                 v = cov[i] / 1.0 / tot * 10**6
                 v = "%.3f"%v
                 line = [key[0], i, j - 1, v]
