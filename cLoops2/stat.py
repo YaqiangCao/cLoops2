@@ -1,9 +1,13 @@
 #!/usr/bin/env python3
 #--coding:utf-8 --
 
+#sys
 from math import ceil
+
+#3rd
 import numpy as np
 from scipy import linalg
+from scipy.stats import chi2
 
 
 def lowess(x, y, f=2. / 3., iter=3):
@@ -52,3 +56,30 @@ def getBonPvalues(ps):
     ps = ps * len(ps)
     ps[ps > 1.0] = 1.0
     return ps
+
+
+def mahalanobis(mat):
+    """
+    Caculate the mahalanobis distance.
+
+    according to: https://www.statology.org/mahalanobis-distance-python/
+
+    @param mat: np.array, row is each item and column is each variable 
+
+    @return dis: np.array,Mahalanobis distance
+    @return ps: np.array, chi-square test p-values
+    """
+    #covariance matrix 
+    cov = np.cov(mat, rowvar=False)
+    #inverse covariance matrix 
+    invCov = np.linalg.inv(cov)
+    #center 
+    center = np.mean(mat, axis=0)
+    #mahalanobis distance
+    mu = mat - center
+    dis = np.dot( np.dot(mu,invCov), mu.T ).diagonal()
+    #Chi-square test p-values for detecting outliers 
+    ps = 1 - chi2.cdf(dis, mat.shape[1]-1)
+    return dis, ps
+
+
