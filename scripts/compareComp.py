@@ -23,7 +23,7 @@ from scipy.stats import chi2
 from matplotlib import patches
 
 #cLoops2
-from cLoops2.stat import mahalanobis
+from cLoops2.stat import twoPassesMDTest
 from cLoops2.settings import *
 
 
@@ -35,7 +35,7 @@ def help():
         Pair-wisely compare compartments PC1 based on two-passes Mahalanobis distance. 
 
         Example:
-        compareComp.py -a young_pc1.bdg -b old_pc1.bdg -o youngVsOld -na Young -b Old -pcut 0.01
+        compareComp.py -a young_pc1.bdg -b old_pc1.bdg -o youngVsOld -na Young -b Old -pcut 0.01 -gtf mm10.gtf
         """
     parser = argparse.ArgumentParser(description=description,
                                      formatter_class=RawTextHelpFormatter)
@@ -161,39 +161,6 @@ def readBdg(f):
         ds[k] = v
     ds = pd.Series(ds)
     return ds
-
-
-def twoPassesMDTest(data, pcut):
-    """
-    Perform MD test with two passes. First pass use all data, second pass using cov and center from data without outliers. 
-    @param data: pd.DataFrame
-    @param pcut: Chi-Square p-value cutoffs
-    """
-    #first pass test
-    #mahalanobis distance and pvaues
-    dis, ps = mahalanobis(data.values)
-    dis = pd.Series(dis, index=data.index)
-    ps = pd.Series(ps, index=data.index)
-    inds = ps[ps < pcut].index
-
-    #second pass test, only using data without outliers to caculate cov matrix and center
-    ndata = data.drop(inds)
-    #covariance matrix
-    cov = np.cov(ndata.values, rowvar=False)
-    #inverse covariance matrix
-    invCov = np.linalg.inv(cov)
-    #center
-    center = np.mean(ndata.values, axis=0)
-
-    #mahalanobis distance for all data
-    mu = data.values - center
-    dis = np.dot(np.dot(mu, invCov), mu.T).diagonal()
-    #Chi-square test p-values for detecting outliers from all data
-    ps = 1 - chi2.cdf(dis, data.shape[1] - 1)
-
-    dis = pd.Series(dis, index=data.index)
-    ps = pd.Series(ps, index=data.index)
-    return dis, ps
 
 
 def getFlips(sa, sb, ps, inds):
