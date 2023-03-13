@@ -1763,6 +1763,8 @@ The following analysis application scripts are available when cLoops2 is install
 
 - [tracPre2.py](https://github.com/YaqiangCao/cLoops2/blob/master/scripts/tracPre2.py): pre-process the raw reads of FASTQ files of Hi-TrAC data to the reference genome and obtain the unique PETs with quality control results.
 
+- [compareComp.py](https://github.com/YaqiangCao/cLoops2/blob/master/scripts/compareComp.py): compare compartment PC1 values based on Mahalanobis distance and annotate the significant flips/switch bins
+
 -----
 ------
 ## Input, Intermediate, Output Files
