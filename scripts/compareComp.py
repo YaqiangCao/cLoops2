@@ -16,11 +16,9 @@ from argparse import RawTextHelpFormatter
 
 #3rd library
 import pylab
+import HTSeq
 import pandas as pd
 import numpy as np
-import HTSeq
-from scipy.stats import chi2
-from matplotlib import patches
 
 #cLoops2
 from cLoops2.stat import twoPassesMDTest
