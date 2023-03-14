@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: cLoops2
-Version: 0.0.4
+Version: 0.0.5
 Summary: Loop-calling and peak-calling for sequencing-based interaction data, including related analysis utilities.
 Home-page: https://github.com/YaqiangCao/cLoops2
 Author: Yaqiang Cao
