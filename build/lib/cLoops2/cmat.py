@@ -152,6 +152,25 @@ def get1DSig(xy, start, end, ext=50):
     return ss
 
 
+def get1DSigPE(xy, start, end, ext=50):
+    """
+    Get the overlayed 1D signal for paired-end tags.
+    @param xy, cLoops2.ds.XY object
+    @param start: int, start coordinate
+    @param end: int, end coordinate
+    @param ext: int, extention of each tag
+    """
+    ss = np.zeros(end - start)
+    ps = list(xy.queryPeakBoth(start, end))
+    for p in ps:
+        x = xy.mat[p,0]
+        y = xy.mat[p,1]
+        pa = max(0, x - start - ext)
+        pb = min(max(0, y - start + ext), end)
+        ss[pa:pb] += 1
+    return ss
+
+
 def getBinMean(s, bins=100):
     """
     Get the mean of bins for a array.

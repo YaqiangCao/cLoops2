@@ -156,10 +156,10 @@ class XY(object):
             x2i.setdefault(x, []).append(i)
         for i, y in enumerate(ys):
             y2i.setdefault(y, []).append(i)
-        self.mat = np.array( [[xs[i],ys[i]] for i in range(len(xs)) ] )
-        self.xs = np.sort(np.array(xs))
-        self.ys = np.sort(np.array(ys))
-        self.x2i = x2i
+        self.mat = np.array( [[xs[i],ys[i]] for i in range(len(xs)) ] ) #orgianl 
+        self.xs = np.sort(np.array(xs)) #sorted xs
+        self.ys = np.sort(np.array(ys)) #sorted ys
+        self.x2i = x2i #original index for values
         self.y2i = y2i
 
     def _query(self, cor, cor2i, left, right):

@@ -2,7 +2,6 @@ CLONE.md
 LICENSE
 MANIFEST.in
 README.md
-cLoops2.log
 cLoops2_env.yaml
 cLoops2_pip_readme.md
 files.txt
@@ -157,6 +156,7 @@ data/hg19.chrom.sizes
 data/hg38.chrom.sizes
 scripts/4CPre.py
 scripts/compareComp.py
+scripts/compareDom.py
 scripts/getBedpeFBed.py
 scripts/getDI.py
 scripts/getFRiF.py

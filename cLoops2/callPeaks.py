@@ -20,6 +20,7 @@ callPeaks.py
 2020-07-29: -cut and -mcut integrated. -split added, only using single-end as bed for calling peaks, sometimes usefule for Trac-looping or HiChIP
 2020-12-17: refined re-search of significant peaks.
 2021-04-01: adding summit
+2023-03-21: improved summit calling
 """
 
 #sys
@@ -41,7 +42,8 @@ from cLoops2.ds import Peak, XY
 from cLoops2.geo import stichPeaks, checkPeakOverlap
 from cLoops2.io import parseIxy, ixy2pet, peaks2txt, peaks2bed
 from cLoops2.blockDBSCAN import blockDBSCAN as DBSCAN
-from cLoops2.cmat import get1DSig
+#from cLoops2.cmat import get1DSig
+from cLoops2.cmat import get1DSigPE as get1DSig
 
 #gloabl settings
 logger = None
@@ -270,7 +272,8 @@ def findSigPeaks(
         sig = get1DSig(xy, peak.start, peak.end)
         p = np.argmax( sig )
         peak.summit = peak.start + p
-
+        
+        #other information
         peak.density = counts / 1.0 / peak.length / totalPets * 10.0**9  #RPKM
         peak.poisson_p_value = []
         peak.enrichment_score = []

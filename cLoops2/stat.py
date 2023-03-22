@@ -6,6 +6,7 @@ from math import ceil
 
 #3rd
 import numpy as np
+import pandas as pd
 from scipy import linalg
 from scipy.stats import chi2
 
