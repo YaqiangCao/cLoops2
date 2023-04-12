@@ -4,7 +4,7 @@
 
 compareDom.py
 cLoops2 compareDom.py quantify and compare Hi-C domains between two conditions.
-
+2023-04-10: modified test without MA conversion
 """
 
 __date__ = "2023-03-14"
@@ -116,7 +116,7 @@ def help():
         type=str,
         default=None,
         help=
-        "X-axis limitations for the MA-plot, default is autodetermined, set as '1,-1'."
+        "X-axis limitations for the scatter plot, default is autodetermined, set as '1,-1'."
     )
     parser.add_argument(
         "-ylim",
@@ -125,7 +125,7 @@ def help():
         type=str,
         default=None,
         help=
-        "Y-axis limitations for the MA-plot, default is autodetermined, set as '1,-1'."
+        "Y-axis limitations for the scatter plot, default is autodetermined, set as '1,-1'."
     )
     parser.add_argument("-vmin",
                         dest="vmin",
@@ -217,30 +217,30 @@ def summary(domsa, domsb, na, nb):
     return data
 
 
-def plotMA(data, na, nb, ra, rb, pcut, output, xlim=None, ylim=None):
+def plotChanges(data, na, nb, ra, rb, pcut, output, xlim=None, ylim=None):
     """
     Plot the domain changes with MA-plot.
     """
-    a = data["A"]
-    m = data["M"]
+    sa = data[f"{na}_ES"]
+    sb = data[f"{nb}_ES"]
 
     #plot the raw dots
     fig, ax = pylab.subplots(figsize=(3.2, 2.2))
-    ax.scatter(data["A"],
-               data["M"],
+    ax.scatter(sa,
+               sb,
                s=0.5,
                color="gray",
                alpha=0.6,
                label="total %s domains" % data.shape[0])
     #plot the changes
-    ax.scatter(data["A"][ra],
-               data["M"][ra],
+    ax.scatter(sa[ra],
+               sb[ra],
                s=2,
                color=colors[0],
                alpha=0.8,
                label="%s domains" % len(ra))
-    ax.scatter(data["A"][rb],
-               data["M"][rb],
+    ax.scatter(sa[rb],
+               sb[rb],
                s=2,
                color=colors[1],
                alpha=0.8,
@@ -250,10 +250,12 @@ def plotMA(data, na, nb, ra, rb, pcut, output, xlim=None, ylim=None):
                     labelcolor=["gray", colors[0], colors[1]])
     for h in leg.legendHandles:
         h._sizes = [10]
-    ax.axhline(0, color="gray", linestyle="--")
-    ax.set_xlabel(f"({na}+{nb})/2")
-    ax.set_ylabel(f"log2({nb}/{na})")
+    ax.set_xlabel(f"{na} domain ES")
+    ax.set_ylabel(f"{nb} domain ES")
     ax.set_title(f"ES comparsion\nMahalanobis distance P-value < {pcut}")
+    s = np.min([np.min(sa), np.min(sb)])
+    e = np.max([np.max(sa), np.max(sb)])
+    ax.plot([s, e], [s, e], color="gray", linestyle="--")
     if xlim is not None:
         xlim = list(map(float, xlim.split(",")))
         xlim.sort()
@@ -262,7 +264,7 @@ def plotMA(data, na, nb, ra, rb, pcut, output, xlim=None, ylim=None):
         ylim = list(map(float, ylim.split(",")))
         ylim.sort()
         ax.set_ylim(ylim)
-    pylab.savefig(f"{output}_MA.pdf")
+    pylab.savefig(f"{output}_domainChanges.pdf")
 
 
 def writeBed(rs, fo):
@@ -293,8 +295,8 @@ def plotDiffAggDomains(fa, fb, tota, totb, na, nb, fout, vmin=None, vmax=None):
     mat = np.array(mat)
     mat = np.mean(mat, axis=0)
     label = f"normalized log2({nb}/{na})"
-    if vmin == None:
-        vmin = 0
+    #if vmin == None:
+    #    vmin = 0
     fig, ax = pylab.subplots(figsize=(4, 4))
     cmap = sns.color_palette("RdBu_r", 11).as_hex()
     cmap[int(len(cmap) / 2)] = "#FFFFFF"
@@ -329,16 +331,10 @@ def parseGtfFeature(t):
     return ds
 
 
-def readDomGenes(domf, gtf):
+def readGenes(gtf):
     """
-    Read compartment and gene sets regions as HTSeq.GenomicArrayOfSets.
+    Read gene sets regions as HTSeq.GenomicArrayOfSets.
     """
-    #read domains
-    doms = HTSeq.GenomicArrayOfSets("auto", stranded=False)
-    for line in open(domf):
-        line = line.split("\n")[0].split("\t")
-        iv = HTSeq.GenomicInterval(line[0], int(line[1]), int(line[2]))
-        doms[iv] += line[3]
     #read gtf
     genes = HTSeq.GenomicArrayOfSets("auto", stranded=False)
     gs = {}
@@ -364,10 +360,10 @@ def readDomGenes(domf, gtf):
     for g, v in gs.items():
         iv = HTSeq.GenomicInterval(v[0], v[1], v[2])
         genes[iv] += g
-    return doms, genes
+    return genes
 
 
-def anoBins(data, na, nb, s, doms, genes, fout):
+def anoBins(data, na, nb, s, genes, fout):
     """
     Annotate changed bins.
     """
@@ -378,7 +374,6 @@ def anoBins(data, na, nb, s, doms, genes, fout):
         start = t.split(":")[1].split("-")[0]
         end = t.split(":")[1].split("-")[1]
         iv = HTSeq.GenomicInterval(chrom, int(start), int(end))
-        dom = list(list(doms[iv].steps())[0][1])[0]
         gs = set()
         for i, g in genes[iv].steps():
             gs.update(g)
@@ -456,7 +451,8 @@ def compareDom(
     m = np.log2(sbn/sa)
     """
 
-    esdata = pd.DataFrame({"A": a, "M": m})
+    #esdata = pd.DataFrame({"A": a, "M": m})
+    esdata = pd.DataFrame({f"{na}_ES": sa, f"{nb}_ES": sb})
     dis, ps = twoPassesMDTest(esdata, pcut)
     ps[ps < 1e-300] = 1e-300
     inds = ps[ps < pcut].index
@@ -470,14 +466,14 @@ def compareDom(
     rb = sb[sb > sa].index.intersection(inds)
     rb = m[rb].sort_values(inplace=False, ascending=False).index
 
-    data["ES_M"] = esdata["M"]
-    data["ES_A"] = esdata["A"]
+    #data["ES_M"] = esdata["M"]
+    #data["ES_A"] = esdata["A"]
     data["Mahalanobis distance"] = esdata["Mahalanobis distance"]
     data["Chi-Square test P-value"] = esdata["Chi-Square test P-value"]
     data = pd.read_csv(f"{output}_domainQuant.txt", index_col=0, sep="\t")
 
     #step 3 show the changes
-    plotMA(esdata, na, nb, ra, rb, pcut, output, xlim, ylim)
+    plotChanges(esdata, na, nb, ra, rb, pcut, output, xlim, ylim)
 
     #step 4 output the bed files
     writeBed(ra, f"{output}_{na}_specific.bed")
@@ -494,19 +490,16 @@ def compareDom(
         os.system(c)
     plotDiffAggDomains(f"{output}_{na}_specific_{na}_aggDomains.npz",
                        f"{output}_{na}_specific_{nb}_aggDomains.npz", tota,
-                       totb, na, nb, f"{output}_{na}_specific_diffAgg", vmin,
-                       vmax)
+                       totb, na, nb, f"{output}_{na}_specific", vmin, vmax)
     plotDiffAggDomains(f"{output}_{nb}_specific_{na}_aggDomains.npz",
                        f"{output}_{nb}_specific_{nb}_aggDomains.npz", tota,
-                       totb, na, nb, f"{output}_{nb}_specific_diffAgg", vmin,
-                       vmax)
+                       totb, na, nb, f"{output}_{nb}_specific", vmin, vmax)
 
     #step 6 annotate the domains
     print("Step 4: Annotating specific domains.")
-    adoms, genes = readDomGenes(f"{output}_{na}_specific.bed", gtf)
-    bdoms, genes = readDomGenes(f"{output}_{nb}_specific.bed", gtf)
-    anoBins(data, na, nb, ra, adoms, genes, f"{output}_{na}_specificDomains")
-    anoBins(data, na, nb, rb, bdoms, genes, f"{output}_{nb}_specificDomains")
+    genes = readGenes(gtf)
+    anoBins(data, na, nb, ra, genes, f"{output}_{na}_specificDomains")
+    anoBins(data, na, nb, rb, genes, f"{output}_{nb}_specificDomains")
 
     print("Finished")
 
