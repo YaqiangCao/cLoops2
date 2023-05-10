@@ -52,7 +52,7 @@ cLoops2 is written purely in Python3 (cLoops was written in Python2). If you are
 # for most updated code, or download the release version 
 git clone --depth=1 https://github.com/YaqiangCao/cLoops2
 cd cLoops2
-conda env create --name cLoops2 --file cLoops2_env.yaml
+conda create --name cLoops2 --file cLoops2_env.yaml
 conda activate cLoops2 
 python3 setup.py install
 ```
