@@ -2,6 +2,7 @@ CLONE.md
 LICENSE
 MANIFEST.in
 README.md
+cLoops2.log
 cLoops2_env.yaml
 cLoops2_pip_readme.md
 files.txt

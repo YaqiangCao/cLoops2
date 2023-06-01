@@ -78,6 +78,7 @@ def mergeLoops(aloops, samplea, bloops, sampleb):
                     if checkLoopOverlap(aloop, bloop):
                         flag = False
                         p = j
+                        break
                 #no overlapped loops find, just add it
                 if flag == True:
                     aloop.id = aloop.id + "|" + samplea
