@@ -130,14 +130,26 @@ def preFqs(fastqRoot):
     return data
 
 
+def getRCSeq(seq):
+    """
+    Get the reverse complementary sequence
+    """
+    tab = str.maketrans("ACTG","TGAC")
+    return seq.translate( tab )[::-1]
+
+
 def findLinker(seq, linker):
     """
     Match the linker in the read sequence.
     """
+    linkerrc = getRCSeq(linker)
     pos = -1
     for i in range(len(seq) - 9):
         seed = seq[i:i + 9]
         if linker.startswith(seed):
+            pos = i
+            break
+        if linkerrc.startswith(seed):
             pos = i
             break
     return pos
