@@ -63,7 +63,7 @@ tqdm
 numpy 
 scipy 
 pandas
-sklearn
+scikit-learn
 seaborn
 pyBigWig
 matplotlib
