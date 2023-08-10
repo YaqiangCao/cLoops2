@@ -1,4 +1,4 @@
-#!/home/caoy7/anaconda2/envs/cLoops2/bin/python
+#!python
 #--coding:utf-8 --
 """
 """
