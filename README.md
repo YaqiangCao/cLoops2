@@ -24,7 +24,7 @@ cLoops2 is an extension of our previous work, [cLoops](https://github.com/Yaqian
 
 cLoops2 is designed with respect reference to [bedtools](https://bedtools.readthedocs.io/en/latest/) and [Samtools](http://www.htslib.org/) for command-line style programming. If you have experience with them, you will find cLoops2 easy and efficient to use and combine commands, integrate as steps in your processing pipeline. 
 
-Please refer to our [Hi-TrAC method manuscript](https://www.biorxiv.org/content/10.1101/2022.06.01.494329v1), [Hi-TrAC domain-centric analysis manuscript](https://www.biorxiv.org/content/10.1101/2022.07.13.499926v1), and [cLoops2 manuscript](https://www.biorxiv.org/content/10.1101/2021.07.20.453068v1) for what cLoops2 can do and show. 
+Please refer to our [Hi-TrAC method manuscript bioRxiv](https://www.biorxiv.org/content/10.1101/2022.06.01.494329v1) [official version](https://www.nature.com/articles/s41467-022-34276-8), [Hi-TrAC domain-centric analysis manuscript bioRxiv](https://www.biorxiv.org/content/10.1101/2022.07.13.499926v1) [official version](https://academic.oup.com/nar/advance-article/doi/10.1093/nar/gkad378/7161543), and [cLoops2 manuscript bioRxiv](https://www.biorxiv.org/content/10.1101/2021.07.20.453068v1) [official version](https://academic.oup.com/nar/advance-article/doi/10.1093/nar/gkab1233/6470683) for what cLoops2 can do and show. 
 
 -------
 -------
@@ -1046,12 +1046,12 @@ optional arguments:
                       default is 50.
 ```
 
-Examples of peaks for ChIC-seq data:
+In the cLoops2 manuscript, we presented comparisons of cLoops2 callPeaks with other state-of-the-art methods such as MACS2, HOMER, SICER, and SEACR for CUT&Tag-like data, showing the accuracy and sensitivity. Here are some examples. 
+
 <p align="center">
 <img align="center" src="https://github.com/YaqiangCao/cLoops2/blob/master/pngs/ChIC-seq.png">
 </p>   
 
-Examples of peaks for CUT&Tag data:
 <p align="center">
 <img align="center" src="https://github.com/YaqiangCao/cLoops2/blob/master/pngs/CUTandTAG.png">
 </p>   
