@@ -1046,6 +1046,15 @@ optional arguments:
                       default is 50.
 ```
 
+Examples of peaks for ChIC-seq data:
+<p align="center">
+<img align="center" src="https://github.com/YaqiangCao/cLoops2/blob/master/pngs/ChIC-seq.png">
+</p>   
+
+Examples of peaks for CUT&Tag data:
+<p align="center">
+<img align="center" src="https://github.com/YaqiangCao/cLoops2/blob/master/pngs/CUTandTAG.png">
+</p>   
 
 ------
 ### 11. Call loops
