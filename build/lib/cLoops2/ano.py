@@ -119,6 +119,7 @@ def findOverlapOrNearest(gs, ts, tree, start, end):
     @param tree: KDTree from TSSs
     @param start: query start
     @param end: query end
+
     return gene and distance
     """
     #step 1, find overlaps
@@ -502,28 +503,4 @@ def anaLoops(loopf,
                                      pdis=pdis,
                                      gap=gap,
                                      cpu=cpu)
-### annotate peaks
-def anaPeaks(peakf,
-             fout,
-             gtf=None,
-             tid=False,
-             pdis=2000,
-             gap=1,
-             cpu=1):
-    """
-    Annotate peaks.
-    @param peakf: str, name of loops file,  _loops.txt or _dloops.txt file
-    @param fout: str, output prefix
-    @param gtf: str, GTF file name 
-    @param tid: bool, if set true, use transcript id for alternative TSS
-    @param pdis: <=distance nearest TSS to define as promoter
-    @param net: bool, whether use network search for all linked anchors/enhancers/promoters for target gene
-    @param gap: int, gap for merge anchors
-    @param cpu: int, number of CPU to run analysis
-    """
-    if gtf is not None and gtf != "":
-        if not os.path.isfile(gtf):
-            print("Input %s not exists, continue to other analysis." % gtf)
-        else:
-            #gene annotions, {chrom:{tss:g}}, tss is int
-            genes = readGenes(gtf, tid=tid)
+

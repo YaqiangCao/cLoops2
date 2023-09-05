@@ -156,6 +156,7 @@ cLoops2/__pycache__/utils.cpython-39.pyc
 data/hg19.chrom.sizes
 data/hg38.chrom.sizes
 scripts/4CPre.py
+scripts/anoPeaks.py
 scripts/compareComp.py
 scripts/compareDom.py
 scripts/getBedpeFBed.py

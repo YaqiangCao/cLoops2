@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/home/caoy7/anaconda2/envs/cLoops2/bin/python
 #--coding:utf-8 --
 """
 anoPeaks.py
@@ -22,7 +22,7 @@ from scipy.spatial import KDTree
 
 #cLoops2
 from cLoops2.ano import readGenes, findOverlapOrNearest
-from cLoops2.ds import Peak
+from cLoops2.ds import Exon, Gene, Peak
 
 
 def help():
