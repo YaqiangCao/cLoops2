@@ -1757,7 +1757,7 @@ The following analysis application scripts are available when cLoops2 is install
 - [getBedpeFBed.py](https://github.com/YaqiangCao/cLoops2/blob/master/scripts/getBedpeFBed.py): convert single-end reads in BED format to paired-end reads in BEDPE format with expected fragment size as input of cLoops2 to call peaks.    
 
 ---
-### Analysis without plot
+### Analysis Scripts
 - [getDI.py](https://github.com/YaqiangCao/cLoops2/blob/master/scripts/getDI.py): calculate the [Directionality Index](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3356448/) as <img align="center" src="https://latex.codecogs.com/svg.latex?\Large&space;DI_{x}=\frac{(B-A)}{|B+A|}*\frac{(A-E)^2+(B-E)^2}{E},E=\frac{A+B}{2}"/>, where **x** is the bin and **A** is the interaction reads within the region from specific upstream to bin **x**, and **B** is the downstream reads.  
 
 - [getFRiF.py](https://github.com/YaqiangCao/cLoops2/blob/master/scripts/getFRiF.py): calculate the **F**raction of **R**eads **i**n **F**eatures (FRiF), the features could be domains and peaks annotated with .bed file or domains/stripes/loops with .txt file such as the \_loop.txt file.
@@ -1773,6 +1773,12 @@ The following analysis application scripts are available when cLoops2 is install
 - [tracPre2.py](https://github.com/YaqiangCao/cLoops2/blob/master/scripts/tracPre2.py): pre-process the raw reads of FASTQ files of Hi-TrAC data to the reference genome and obtain the unique PETs with quality control results.
 
 - [compareComp.py](https://github.com/YaqiangCao/cLoops2/blob/master/scripts/compareComp.py): compare compartment PC1 values based on Mahalanobis distance and annotate the significant flips/switch bins
+
+- [compareDom.py](https://github.com/YaqiangCao/cLoops2/blob/master/scripts/compareDom.py): compare domain enrichment scores based on Mahalanobis distance and annotate the significant changed domains
+
+- [anoPeaks.py](https://github.com/YaqiangCao/cLoops2/blob/master/scripts/anoPeaks.py): annotate peaks with distance/overlaps with nearest TSS; find target genes for peaks
+
+- [plotDiffHeatmap.py](https://github.com/YaqiangCao/cLoops2/blob/master/scripts/plotDiffHeatmap.py): plot difference heatmap for comparing two contact matrix 
 
 -----
 ------
