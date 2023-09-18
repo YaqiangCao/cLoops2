@@ -1,7 +1,7 @@
 #!/home/caoy7/anaconda3/envs/astroBoy/bin/python
 #--coding:utf-8--
 """
-tracPre.py
+tracPre2.py
 Pre-processing code for Hi-Trac data, implemented with cLoops2, from fastq to bedpe files and qc report.
 2020-02-27: finished and well tested.
 2020-06-30: add linker filter, new stat, and changing mapping to end-to-end
@@ -357,9 +357,11 @@ def main():
     Batch converting from bam to bedpe.
     """
     #prepare everything
+    global logger
     op = help()
     date = time.strftime(' %Y-%m-%d', time.localtime(time.time()))
     logger = getLogger(fn=op.output + "/" + date.strip() + "_" + os.path.basename(__file__) + ".log")
+
     for t in ["bowtie2", "samtools", "bamToBed"]:
         if not isTool(t):
             logger.error("%s not exits! Please install through conda." % t)
