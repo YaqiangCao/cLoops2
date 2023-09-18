@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/home/caoy7/anaconda3/envs/astroBoy/bin/python
 #--coding:utf-8--
 """
 tracPre.py
