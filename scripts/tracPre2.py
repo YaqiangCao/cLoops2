@@ -32,9 +32,7 @@ from cLoops2.utils import getLogger, callSys, isTool
 
 #global settings
 #logger
-date = time.strftime(' %Y-%m-%d', time.localtime(time.time()))
-logger = getLogger(fn=os.getcwd() + "/" + date.strip() + "_" +
-                   os.path.basename(__file__) + ".log")
+logger = None
 
 
 def help():
@@ -250,6 +248,9 @@ def tracMapping(sample, fqs, ref, outdir, cpus=25):
     output = [t for t in output if not t.startswith("Warning")]
     output = "\n".join(output)
     logger.info("FLAG_A:" + sample + "\n" + output + "\nFLAG_A\n")
+    lines = output.split("\n")
+    totalReads = int(lines[1].split(";")[0].split()[0])
+    mapRatio = float(lines[-1].split("%")[0])
     return sample, sam
 
 
@@ -338,9 +339,7 @@ def sParseBowtie(lines):
     return d, s
 
 
-def parseBowtielog(logs=None):
-    if logs == None:
-        logs = glob("*.log")
+def parseBowtielog(logs):
     data = {}
     for log in logs:
         lines = open(log).read().split("FLAG_A\n")
@@ -358,6 +357,9 @@ def main():
     Batch converting from bam to bedpe.
     """
     #prepare everything
+    date = time.strftime(' %Y-%m-%d', time.localtime(time.time()))
+    logger = getLogger(fn=op.output + "/" + date.strip() + "_" + os.path.basename(__file__) + ".log")
+
     op = help()
     for t in ["bowtie2", "samtools", "bamToBed"]:
         if not isTool(t):
@@ -451,7 +453,9 @@ def main():
 
     #step 6, combine report
     logger.info("Step5: Generate report. ")
-    mata = parseBowtielog()
+    logs = glob(op.output+"/*%s*.log"%os.path.basename(__file__))
+    mata = parseBowtielog(logs)
+
     matb = pd.read_csv("%s/allBedpeQc_bedpeQc.txt"%op.output, index_col=0, sep="\t")
     matb.index = [i.split("_all")[0] for i in matb.index]
     matc = pd.read_csv("%s/uniNonBgBedpeQc_bedpeQc.txt"%op.output, index_col=0, sep="\t")

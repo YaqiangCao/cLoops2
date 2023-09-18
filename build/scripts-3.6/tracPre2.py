@@ -1,10 +1,11 @@
-#!python
+#!/home/caoy7/anaconda2/envs/cLoops2/bin/python
 #--coding:utf-8--
 """
 tracPre.py
 Pre-processing code for Hi-Trac data, implemented with cLoops2, from fastq to bedpe files and qc report.
 2020-02-27: finished and well tested.
 2020-06-30: add linker filter, new stat, and changing mapping to end-to-end
+2023-09-11: summary report output prefix added
 """
 
 __author__ = "CAO Yaqiang"
@@ -31,9 +32,7 @@ from cLoops2.utils import getLogger, callSys, isTool
 
 #global settings
 #logger
-date = time.strftime(' %Y-%m-%d', time.localtime(time.time()))
-logger = getLogger(fn=os.getcwd() + "/" + date.strip() + "_" +
-                   os.path.basename(__file__) + ".log")
+logger = None
 
 
 def help():
@@ -249,6 +248,9 @@ def tracMapping(sample, fqs, ref, outdir, cpus=25):
     output = [t for t in output if not t.startswith("Warning")]
     output = "\n".join(output)
     logger.info("FLAG_A:" + sample + "\n" + output + "\nFLAG_A\n")
+    lines = output.split("\n")
+    totalReads = int(lines[1].split(";")[0].split()[0])
+    mapRatio = float(lines[-1].split("%")[0])
     return sample, sam
 
 
@@ -337,9 +339,7 @@ def sParseBowtie(lines):
     return d, s
 
 
-def parseBowtielog(logs=None):
-    if logs == None:
-        logs = glob("*.log")
+def parseBowtielog(logs):
     data = {}
     for log in logs:
         lines = open(log).read().split("FLAG_A\n")
@@ -357,6 +357,9 @@ def main():
     Batch converting from bam to bedpe.
     """
     #prepare everything
+    date = time.strftime(' %Y-%m-%d', time.localtime(time.time()))
+    logger = getLogger(fn=op.output + "/" + date.strip() + "_" + os.path.basename(__file__) + ".log")
+
     op = help()
     for t in ["bowtie2", "samtools", "bamToBed"]:
         if not isTool(t):
@@ -438,27 +441,29 @@ def main():
 
     #step 4, all PETs cLoops2 qc
     logger.info("Step4: All mapped PETs QC. ")
-    cmd = "cLoops2 qc -f %s -o allBedpeQc -p %s" % (",".join(allBedpes),
+    cmd = "cLoops2 qc -f %s -o %s/allBedpeQc -p %s" % (",".join(allBedpes),op.output,
                                                     min(len(allBedpes), cpus))
     callSys([cmd], logger)
 
     #step 5, unqiue PETs cLoops2 qc
     logger.info("Step5: Unique non-background PETs QC. ")
-    cmd = "cLoops2 qc -f %s -o uniNonBgBedpeQc -p %s" % (
-        ",".join(uniBedpes), min(len(uniBedpes), cpus))
+    cmd = "cLoops2 qc -f %s -o %s/uniNonBgBedpeQc -p %s" % (
+        ",".join(uniBedpes), op.output, min(len(uniBedpes), cpus))
     callSys([cmd], logger)
 
     #step 6, combine report
     logger.info("Step5: Generate report. ")
-    mata = parseBowtielog()
-    matb = pd.read_csv("allBedpeQc_bedpeQc.txt", index_col=0, sep="\t")
+    logs = glob(op.output+"/*%s*.log"%os.path.basename(__file__))
+    mata = parseBowtielog(logs)
+
+    matb = pd.read_csv("%s/allBedpeQc_bedpeQc.txt"%op.output, index_col=0, sep="\t")
     matb.index = [i.split("_all")[0] for i in matb.index]
-    matc = pd.read_csv("uniNonBgBedpeQc_bedpeQc.txt", index_col=0, sep="\t")
+    matc = pd.read_csv("%s/uniNonBgBedpeQc_bedpeQc.txt"%op.output, index_col=0, sep="\t")
     matc.index = [i.split("_unique")[0] for i in matc.index]
 
     for c in matb.columns:
         mata[c] = matb[c]
-    mata.to_csv("tracPre_summary.txt", sep="\t")
+    mata.to_csv("%s/tracPre_summary.txt"%op.output, sep="\t")
 
     mat = {}
     mat["total raw sequences"] = data["totalRaw"]
@@ -502,8 +507,8 @@ def main():
         "unique noBg mapped PETs distal ratio (10kb<distance)",
     ]
     mat = mat[columns]
-    mat.to_csv("tracPre_summary.txt", sep="\t")
-    cmd = "rm *_bedpeQc.txt"
+    mat.to_csv("%s/tracPre_summary.txt"%op.output, sep="\t")
+    cmd = "rm %s/*_bedpeQc.txt"%op.output
     os.system(cmd)
 
 

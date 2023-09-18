@@ -22,7 +22,7 @@ from scipy.spatial import KDTree
 
 #cLoops2
 from cLoops2.ano import readGenes, findOverlapOrNearest
-from cLoops2.ds import Exon, Gene, Peak
+from cLoops2.ds import Peak
 
 
 def help():
