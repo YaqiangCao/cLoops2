@@ -10,6 +10,7 @@ cLoops IO module.
 2020-07-30: DiffLoop object to washU, UCSC, Juicebox added.
 2020-11-08: improving parseBedpe, to get the unique PETs from each txt file by parallel.
 2021-08-20: adding parsePairs, pairs defined as https://pairtools.readthedocs.io/en/latest/formats.html#pairs
+2023-10-16: updated dparsePairs in case there is no 8th columns
 """
 
 __author__ = "CAO Yaqiang"
@@ -191,11 +192,20 @@ def parsePairs(fs, fout, logger, cs=[], cut=0,mcut=-1, cis=False,cpu=1):
             if line.startswith("#"):
                 continue
             line = line.split("\n")[0].split("\t")
-            if line[7] not in [ "UU", "MR","MU","RU","UR" ]:
-                continue
-            try:
-                pet = Pair(line)
-            except:
+            if len(line) == 8:
+                if line[7] not in [ "UU", "MR","MU","RU","UR" ]:
+                    continue
+                try:
+                    pet = Pair(line)
+                except:
+                    continue
+            elif len(line) == 7:
+                try:
+                    pet = Pair(line)
+                except:
+                    continue
+            else:
+                print("Missing information for record as .pair file: %s"%"\t".join(line)) 
                 continue
             #filtering unwanted PETs in chroms
             if len(cs) > 0 and (not (pet.chromA in cs and pet.chromB in cs)):
