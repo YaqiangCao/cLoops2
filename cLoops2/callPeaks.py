@@ -579,7 +579,7 @@ def callPeaks(
             mcut=mcut,
             split=split,
             splitExt=splitExt,
-        ) for key in meta["data"]["cis"].keys())
+        ) for key in meta["data"]["cis"].keys() if key in metabg["data"]["cis"].keys())
         peaks = {}
         for d in ds:
             if d is not None:
