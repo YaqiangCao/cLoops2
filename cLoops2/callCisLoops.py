@@ -22,6 +22,7 @@ callCisLoops.py
 2021-05-20: try to speed up permutation background query speed; tested with K562 Hi-TrAC chr21, 5 fold speed up.
 2021-08-24: for some very small anchors (<100bp), a lot of problem , for Hi-TrAC and Trac-looping data
 2021-11-18: remove estimated cutoffs
+2024-07-31: for some test data, reported by Sohyoung Kim, there will be duplicated loops, so add a function to remove duplicated loops
 """
 
 #sys
@@ -153,6 +154,20 @@ def filterLoopsByDis(loops, cut):
                 nr.append(loop)
         loops[key] = nr
     return loops
+
+
+def filterDupLoops(loops, cut):
+    """
+    Filter duplicated loops.
+    """
+    for key in loops:
+        nr = {}
+        for loop in loops[key]:
+            k = [ loop.chromX, loop.x_start, loop.x_end, loop.chromY, loop.y_start, loop.y_end ]
+            nr[k] = loop
+        loops[key] = list(nr.values())
+    return loops
+
 
 
 def getPerRegions(loop, xy, win=5):
@@ -535,6 +550,7 @@ def callCisLoops(
                 )
                 loops = combineLoops(loops, loops_2)
     loops = filterLoopsByDis(loops,cut)
+    loops = filterDupLoops(loops)
 
     ## step 2 determine the statstical significance of candidate loops
     logger.info("Estimating loop statstical significance.")

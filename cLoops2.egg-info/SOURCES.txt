@@ -199,6 +199,7 @@ scripts/hicpro2bedpe.py
 scripts/juicerLong2bedpe.py
 scripts/mergeDomains.py
 scripts/plotDiffHeatmap.py
+scripts/showAggVPs.py
 scripts/tow.py
 scripts/tracPre.py
 scripts/tracPre2.py
