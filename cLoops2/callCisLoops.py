@@ -156,14 +156,14 @@ def filterLoopsByDis(loops, cut):
     return loops
 
 
-def filterDupLoops(loops, cut):
+def filterDupLoops(loops):
     """
     Filter duplicated loops.
     """
     for key in loops:
         nr = {}
         for loop in loops[key]:
-            k = [ loop.chromX, loop.x_start, loop.x_end, loop.chromY, loop.y_start, loop.y_end ]
+            k = ( loop.chromX, loop.x_start, loop.x_end, loop.chromY, loop.y_start, loop.y_end )
             nr[k] = loop
         loops[key] = list(nr.values())
     return loops
