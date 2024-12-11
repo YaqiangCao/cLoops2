@@ -133,7 +133,6 @@ def runDBSCANPeaks(fixy, eps, minPts, cut=0,mcut=-1,split=False,splitExt=50):
     logger.info(report)
     report = "Stiching %s candidate close %s peaks." % (key[0], len(peaks))
     logger.info(report)
-    #peaks = stichPeaks(peaks, margin=eps / 2)
     peaks = stichPeaks(peaks, margin=eps)
     logger.info("Merged %s %s peaks" % (key[0], len(peaks)))
     return peaks
@@ -229,6 +228,8 @@ def findSigPeaks(
             peaks.extend(speaks)
     if len(peaks) == 0:
         return None
+    if sen:
+        exts = [10,20]
     #remove identical peaks
     peaks = removeSamePeaks(peaks)
 
@@ -340,12 +341,17 @@ def findSigPeaks(
                 peak.control_local_counts.append(r)
 
         #determine significance
-        if max(
-                peak.poisson_p_value
-        ) <= pcut and peak.length >= lencut:  #if using the min(peak.poisson_p_value), will called more peaks
-            peak.significant = 1
+        if sen:
+            #if using the min(peak.poisson_p_value), will called more peaks
+            if min( peak.poisson_p_value) <= pcut and peak.length >= lencut:
+                peak.significant = 1
+            else:
+                continue
         else:
-            continue
+            if max( peak.poisson_p_value) <= pcut and peak.length >= lencut:  
+                peak.significant = 1
+            else:
+                continue
         mpeaks.append(peak)
     return key, mpeaks
 
@@ -585,6 +591,16 @@ def callPeaks(
             if d is not None:
                 peaks[d[0]] = d[1]
 
+        #used for testing
+        """
+        _peaks = []
+        for d in ds:
+            _peaks.extend(d[1])
+        peaks2txt(_peaks, fout + "_raw_peaks.txt")
+        peaks2bed(_peaks, fout + "_raw_peaks.bed")
+        """
+
+
         #estimating scaling factor
         bgsf =  totalPets / float(totalControlPets)
         fitsf = getFitSf( peaks ,cpu=cpu)
@@ -605,6 +621,15 @@ def callPeaks(
         for d in ds:
             if d is not None:
                 peaks[d[0]] = d[1]
+    
+    #used for testing
+    """
+    _peaks = []
+    for k,v in peaks.items():
+        _peaks.extend(v)
+    peaks2txt(_peaks, fout + "_raw2_peaks.txt")
+    peaks2bed(_peaks, fout + "_raw2_peaks.bed")
+    """
 
     #for overlapped peaks, furthur get the unique sets
     ds = Parallel(n_jobs=cpu,backend="multiprocessing")(delayed(selSigPeaks)(
