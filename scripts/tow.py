@@ -468,7 +468,7 @@ def getGmm(fg, bg, bw, ax, title, ext=5000, bins=5):
     #plot
     sns.kdeplot(bgS, label="background", fill=False, ax=ax)
     sns.kdeplot(fgS, label="peaks", fill=False, ax=ax)
-    sns.kdeplot(mixS, label="peak and nearby", fill=False, ax=ax)
+    sns.kdeplot(mixS, label="peaks nearby", fill=False, ax=ax)
     #train gmm
     gmm = GMM(n_components=2,
               covariance_type="full",
