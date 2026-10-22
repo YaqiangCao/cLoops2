@@ -78,7 +78,7 @@ def runCisDBSCANLoops(fixy, eps, minPts, cut=0, mcut=-1):
         mat = mat[p, :]
         closeDistance.extend(list(d[d < cut]))
     if len(mat) == 0:
-        report = "No PETs found in %s, maybe due to cut > %" % (fixy, cut)
+        report = "No PETs found in %s, maybe due to cut > %s" % (fixy, cut)
         logger.info(report)
         return None  #no data to call loops
     report = "Clustering %s and %s using eps %s, minPts %s,pre-set distance cutoff > %s" % (
